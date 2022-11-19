@@ -1,5 +1,5 @@
 ---
-name: Basic builds
+name: Builds
 
 "on":
   push:
@@ -186,7 +186,7 @@ jobs:
           - name: Cygwin
             os: windows-latest
             preset: GNU
-    name: ${{ matrix.name }}
+    name: CMake ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
       ### SETUP
