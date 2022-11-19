@@ -39,25 +39,28 @@ jobs:
       - name: CodeQL Analysis
         uses: github/codeql-action/analyze@v2
 
-  automake:
+  autotools:
     strategy:
       matrix:
         include:
-          # Mac OSX
-          - os: macos-latest
+          - name: Mac GNU
+            os: macos-latest
             cc: gcc
             cxx: g++
-          - os: macos-latest
+          - name: Mac Clang
+            os: macos-latest
             cc: clang
             cxx: clang++
-          # Linux
-          - os: ubuntu-latest
+          - name: Linux GNU
+            os: ubuntu-latest
             cc: gcc
             cxx: g++
-          - os: ubuntu-latest
+          - name: Linux Clang
+            os: ubuntu-latest
             cc: clang
             cxx: clang++
     runs-on: ${{ matrix.os }}
+    name: Autotools ${{ matrix.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -283,6 +286,7 @@ jobs:
     strategy:
       matrix:
         version: [15, 16, 17, 18]
+    name: GTest ${{ matrix.version }}
     steps:
       - name: Install Python 2
         uses: actions/setup-python@v4
@@ -299,6 +303,7 @@ jobs:
 
   make_dos:
     runs-on: ubuntu-latest
+    name: Make DOS
     steps:
       - name: Checkout
         uses: actions/checkout@main
