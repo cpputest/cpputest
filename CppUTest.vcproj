@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\include\Platforms\VisualCpp,.\include"
+				AdditionalIncludeDirectories=".\CppUTest\include,.\CppUTestExt\include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -112,7 +112,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories=".\include\Platforms\VisualCpp,.\include"
+				AdditionalIncludeDirectories=".\CppUTest\include,.\CppUTestExt\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -161,7 +161,7 @@
 			Filter="cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 			>
 			<File
-				RelativePath="src\CppUTestExt\CodeMemoryReportFormatter.cpp"
+				RelativePath="CppUTestExt\src\CodeMemoryReportFormatter.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -183,7 +183,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\GTest.cpp"
+				RelativePath="CppUTestExt\src\GTest.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -205,7 +205,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\CommandLineArguments.cpp"
+				RelativePath="CppUTest\src\CommandLineArguments.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -227,7 +227,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\CommandLineTestRunner.cpp"
+				RelativePath="CppUTest\src\CommandLineTestRunner.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -249,33 +249,11 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\src\CppUTestExt\IEEE754ExceptionsPlugin.cpp"
+				RelativePath="CppUTestExt\src\IEEE754ExceptionsPlugin.cpp"
 				>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\JUnitTestOutput.cpp"
-				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-					/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="SRC\CPPUTEST\MemoryLeakDetector.cpp"
+				RelativePath="CppUTest\src\JUnitTestOutput.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -297,7 +275,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\MemoryLeakWarningPlugin.cpp"
+				RelativePath="CppUTest\src\MemoryLeakDetector.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -319,7 +297,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MemoryReportAllocator.cpp"
+				RelativePath="CppUTest\src\MemoryLeakWarningPlugin.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -341,7 +319,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MemoryReporterPlugin.cpp"
+				RelativePath="CppUTestExt\src\MemoryReportAllocator.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -363,7 +341,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MemoryReportFormatter.cpp"
+				RelativePath="CppUTestExt\src\MemoryReporterPlugin.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -385,7 +363,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockActualCall.cpp"
+				RelativePath="CppUTestExt\src\MemoryReportFormatter.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -407,7 +385,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockExpectedCall.cpp"
+				RelativePath="CppUTestExt\src\MockActualCall.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -429,7 +407,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockExpectedCallsList.cpp"
+				RelativePath="CppUTestExt\src\MockExpectedCall.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -451,7 +429,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockFailure.cpp"
+				RelativePath="CppUTestExt\src\MockExpectedCallsList.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -473,7 +451,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockNamedValue.cpp"
+				RelativePath="CppUTestExt\src\MockFailure.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -495,7 +473,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockSupport.cpp"
+				RelativePath="CppUTestExt\src\MockNamedValue.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -517,7 +495,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockSupport_c.cpp"
+				RelativePath="CppUTestExt\src\MockSupport.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -539,7 +517,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\MockSupportPlugin.cpp"
+				RelativePath="CppUTestExt\src\MockSupport_c.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -561,7 +539,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\CppUTestExt\OrderedTest.cpp"
+				RelativePath="CppUTestExt\src\MockSupportPlugin.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -583,7 +561,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\SimpleMutex.cpp"
+				RelativePath="CppUTestExt\src\OrderedTest.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -605,7 +583,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\SimpleString.cpp"
+				RelativePath="CppUTest\src\SimpleMutex.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -627,7 +605,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\SimpleStringInternalCache.cpp"
+				RelativePath="CppUTest\src\SimpleString.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -649,7 +627,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TeamCityTestOutput.cpp"
+				RelativePath="CppUTest\src\SimpleStringInternalCache.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -671,7 +649,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestFailure.cpp"
+				RelativePath="CppUTest\src\TeamCityTestOutput.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -693,7 +671,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestFilter.cpp"
+				RelativePath="CppUTest\src\TestFailure.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -715,7 +693,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestHarness_c.cpp"
+				RelativePath="CppUTest\src\TestFilter.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -737,7 +715,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestMemoryAllocator.cpp"
+				RelativePath="CppUTest\src\TestHarness_c.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -759,7 +737,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestOutput.cpp"
+				RelativePath="CppUTest\src\TestMemoryAllocator.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -781,7 +759,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestPlugin.cpp"
+				RelativePath="CppUTest\src\TestOutput.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -803,7 +781,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestRegistry.cpp"
+				RelativePath="CppUTest\src\TestPlugin.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -825,7 +803,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="SRC\CPPUTEST\TestResult.cpp"
+				RelativePath="CppUTest\src\TestRegistry.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -847,11 +825,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath=".\src\CppUTest\TestTestingFixture.cpp"
-				>
-			</File>
-			<File
-				RelativePath="SRC\CPPUTEST\Utest.cpp"
+				RelativePath="CppUTest\src\TestResult.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -873,7 +847,33 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="src\Platforms\VisualCpp\UtestPlatform.cpp"
+				RelativePath="CppUTest\src\TestTestingFixture.cpp"
+				>
+			</File>
+			<File
+				RelativePath="CppUTest\src\Utest.cpp"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions=""
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="CppUTest\Platforms\VisualCpp\UtestPlatform.cpp"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -900,195 +900,195 @@
 			Filter="h;hpp;hxx;hm;inl"
 			>
 			<File
-				RelativePath="include\CppUTestExt\CodeMemoryReportFormatter.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\CodeMemoryReportFormatter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\CommandLineArguments.h"
+				RelativePath="CppUTest\include\CppUTest\CommandLineArguments.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\CommandLineTestRunner.h"
+				RelativePath="CppUTest\include\CppUTest\CommandLineTestRunner.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\CppUTestConfig.h"
+				RelativePath="CppUTest\include\CppUTest\CppUTestConfig.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\CppUTestGeneratedConfig.h"
+				RelativePath="CppUTest\include\CppUTest\CppUTestGeneratedConfig.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\GMock.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\GMock.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTestExt\GTest.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\GTest.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTestExt\GTestSupport.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\GTestSupport.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\GTestConvertor.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\GTestConvertor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTestExt\IEEE754ExceptionsPlugin.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\IEEE754ExceptionsPlugin.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\JunitTestOutput.h"
+				RelativePath="CppUTest\include\CppUTest\JunitTestOutput.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\MemoryLeakDetector.h"
+				RelativePath="CppUTest\include\CppUTest\MemoryLeakDetector.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
+				RelativePath="CppUTest\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\MemoryLeakDetectorNewMacros.h"
+				RelativePath="CppUTest\include\CppUTest\MemoryLeakDetectorNewMacros.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\MemoryLeakWarningPlugin.h"
+				RelativePath="CppUTest\include\CppUTest\MemoryLeakWarningPlugin.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MemoryReportAllocator.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MemoryReportAllocator.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MemoryReporterPlugin.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MemoryReporterPlugin.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MemoryReportFormatter.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MemoryReportFormatter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTestExt\MockActualCall.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockActualCall.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockCheckedActualCall.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockCheckedActualCall.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockCheckedExpectedCall.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockCheckedExpectedCall.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTestExt\MockExpectedCall.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockExpectedCall.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockExpectedCallsList.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockExpectedCallsList.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockFailure.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockFailure.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockNamedValue.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockNamedValue.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockSupport.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockSupport.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockSupport_c.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockSupport_c.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\MockSupportPlugin.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\MockSupportPlugin.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTestExt\OrderedTest.h"
+				RelativePath="CppUTestExt\include\CppUTestExt\OrderedTest.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\PlatformSpecificFunctions.h"
+				RelativePath="CppUTest\include\CppUTest\PlatformSpecificFunctions.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\PlatformSpecificFunctions_c.h"
+				RelativePath="CppUTest\include\CppUTest\PlatformSpecificFunctions_c.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\SimpleMutex.h"
+				RelativePath="CppUTest\include\CppUTest\SimpleMutex.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\SimpleString.h"
+				RelativePath="CppUTest\include\CppUTest\SimpleString.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\SimpleStringInternalCache.h"
+				RelativePath="CppUTest\include\CppUTest\SimpleStringInternalCache.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\StandardCLibrary.h"
+				RelativePath="CppUTest\include\CppUTest\StandardCLibrary.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\TeamCityTestOutput.h"
+				RelativePath="CppUTest\include\CppUTest\TeamCityTestOutput.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\TestFailure.h"
+				RelativePath="CppUTest\include\CppUTest\TestFailure.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\TestFilter.h"
+				RelativePath="CppUTest\include\CppUTest\TestFilter.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestHarness.h"
+				RelativePath="CppUTest\include\CppUTest\TestHarness.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestHarness_c.h"
+				RelativePath="CppUTest\include\CppUTest\TestHarness_c.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\TestMemoryAllocator.h"
+				RelativePath="CppUTest\include\CppUTest\TestMemoryAllocator.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestOutput.h"
+				RelativePath="CppUTest\include\CppUTest\TestOutput.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestPlugin.h"
+				RelativePath="CppUTest\include\CppUTest\TestPlugin.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestRegistry.h"
+				RelativePath="CppUTest\include\CppUTest\TestRegistry.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\TestResult.h"
+				RelativePath="CppUTest\include\CppUTest\TestResult.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\TestTestingFixture.h"
+				RelativePath="CppUTest\include\CppUTest\TestTestingFixture.h"
 				>
 			</File>
 			<File
-				RelativePath="include\CppUTest\Utest.h"
+				RelativePath="CppUTest\include\CppUTest\Utest.h"
 				>
 			</File>
 			<File
-				RelativePath=".\include\CppUTest\UtestMacros.h"
+				RelativePath="CppUTest\include\CppUTest\UtestMacros.h"
 				>
 			</File>
 		</Filter>

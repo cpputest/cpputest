@@ -74,7 +74,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\include;.\include\Platforms\VisualCpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\CppUTest\include;.\CppUTestExt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;WIN32;_DEBUG;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -106,7 +106,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\include;.\include\Platforms\VisualCpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\CppUTest\include;.\CppUTestExt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_LIB;WIN32;_DEBUG;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -138,7 +138,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\include;.\include\Platforms\VisualCpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\CppUTest\include;.\CppUTestExt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -173,7 +173,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>.\include;.\include\Platforms\VisualCpp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.\CppUTest\include;.\CppUTestExt\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;STDC_WANT_SECURE_LIB;CPPUTEST_USE_LONG_LONG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -206,91 +206,91 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\CppUTestExt\CodeMemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\GTest.cpp" />
-    <ClCompile Include="src\CppUTestExt\IEEE754ExceptionsPlugin.cpp" />
-    <ClCompile Include="src\CppUTestExt\MemoryReportAllocator.cpp" />
-    <ClCompile Include="src\CppUTestExt\MemoryReporterPlugin.cpp" />
-    <ClCompile Include="src\CppUTestExt\MemoryReportFormatter.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockActualCall.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockExpectedCall.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockExpectedCallsList.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockFailure.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockNamedValue.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockSupport.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockSupportPlugin.cpp" />
-    <ClCompile Include="src\CppUTestExt\MockSupport_c.cpp" />
-    <ClCompile Include="src\CppUTestExt\OrderedTest.cpp" />
-    <ClCompile Include="src\CppUTest\CommandLineArguments.cpp" />
-    <ClCompile Include="src\CppUTest\CommandLineTestRunner.cpp" />
-    <ClCompile Include="src\CppUTest\JUnitTestOutput.cpp" />
-    <ClCompile Include="src\CppUTest\TeamCityTestOutput.cpp" />
-    <ClCompile Include="src\CppUTest\MemoryLeakDetector.cpp" />
-    <ClCompile Include="src\CppUTest\MemoryLeakWarningPlugin.cpp" />
-    <ClCompile Include="src\CppUTest\SimpleMutex.cpp" />
-    <ClCompile Include="src\CppUTest\SimpleString.cpp" />
-    <ClCompile Include="src\CppUTest\SimpleStringInternalCache.cpp" />
-    <ClCompile Include="src\CppUTest\TestFailure.cpp" />
-    <ClCompile Include="src\CppUTest\TestFilter.cpp" />
-    <ClCompile Include="src\CppUTest\TestHarness_c.cpp" />
-    <ClCompile Include="src\CppUTest\TestMemoryAllocator.cpp" />
-    <ClCompile Include="src\CppUTest\TestOutput.cpp" />
-    <ClCompile Include="src\CppUTest\TestPlugin.cpp" />
-    <ClCompile Include="src\CppUTest\TestRegistry.cpp" />
-    <ClCompile Include="src\CppUTest\TestResult.cpp" />
-    <ClCompile Include="src\CppUTest\TestTestingFixture.cpp" />
-    <ClCompile Include="src\CppUTest\Utest.cpp" />
-    <ClCompile Include="src\Platforms\VisualCpp\UtestPlatform.cpp" />
+    <ClCompile Include="CppUTestExt\src\CodeMemoryReportFormatter.cpp" />
+    <ClCompile Include="CppUTestExt\src\GTest.cpp" />
+    <ClCompile Include="CppUTestExt\src\IEEE754ExceptionsPlugin.cpp" />
+    <ClCompile Include="CppUTestExt\src\MemoryReportAllocator.cpp" />
+    <ClCompile Include="CppUTestExt\src\MemoryReporterPlugin.cpp" />
+    <ClCompile Include="CppUTestExt\src\MemoryReportFormatter.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockActualCall.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockExpectedCall.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockExpectedCallsList.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockFailure.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockNamedValue.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockSupport.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockSupportPlugin.cpp" />
+    <ClCompile Include="CppUTestExt\src\MockSupport_c.cpp" />
+    <ClCompile Include="CppUTestExt\src\OrderedTest.cpp" />
+    <ClCompile Include="CppUTest\src\CommandLineArguments.cpp" />
+    <ClCompile Include="CppUTest\src\CommandLineTestRunner.cpp" />
+    <ClCompile Include="CppUTest\src\JUnitTestOutput.cpp" />
+    <ClCompile Include="CppUTest\src\TeamCityTestOutput.cpp" />
+    <ClCompile Include="CppUTest\src\MemoryLeakDetector.cpp" />
+    <ClCompile Include="CppUTest\src\MemoryLeakWarningPlugin.cpp" />
+    <ClCompile Include="CppUTest\src\SimpleMutex.cpp" />
+    <ClCompile Include="CppUTest\src\SimpleString.cpp" />
+    <ClCompile Include="CppUTest\src\SimpleStringInternalCache.cpp" />
+    <ClCompile Include="CppUTest\src\TestFailure.cpp" />
+    <ClCompile Include="CppUTest\src\TestFilter.cpp" />
+    <ClCompile Include="CppUTest\src\TestHarness_c.cpp" />
+    <ClCompile Include="CppUTest\src\TestMemoryAllocator.cpp" />
+    <ClCompile Include="CppUTest\src\TestOutput.cpp" />
+    <ClCompile Include="CppUTest\src\TestPlugin.cpp" />
+    <ClCompile Include="CppUTest\src\TestRegistry.cpp" />
+    <ClCompile Include="CppUTest\src\TestResult.cpp" />
+    <ClCompile Include="CppUTest\src\TestTestingFixture.cpp" />
+    <ClCompile Include="CppUTest\src\Utest.cpp" />
+    <ClCompile Include="CppUTest\Platforms\VisualCpp\UtestPlatform.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\CppUTestExt\CodeMemoryReportFormatter.h" />
-    <ClInclude Include="include\CppUTestExt\GMock.h" />
-    <ClInclude Include="include\CppUTestExt\GTest.h" />
-    <ClInclude Include="include\CppUTestExt\GTestSupport.h" />
-    <ClInclude Include="include\CppUTestExt\GTestConvertor.h" />
-    <ClInclude Include="include\cpputestext\ieee754exceptionsplugin.h" />
-    <ClInclude Include="include\CppUTestExt\MemoryReportAllocator.h" />
-    <ClInclude Include="include\CppUTestExt\MemoryReporterPlugin.h" />
-    <ClInclude Include="include\CppUTestExt\MemoryReportFormatter.h" />
-    <ClInclude Include="include\CppUTestExt\MockActualCall.h" />
-    <ClInclude Include="include\CppUTestExt\MockCheckedActualCall.h" />
-    <ClInclude Include="include\CppUTestExt\MockCheckedExpectedCall.h" />
-    <ClInclude Include="include\CppUTestExt\MockExpectedCall.h" />
-    <ClInclude Include="include\CppUTestExt\MockExpectedCallsList.h" />
-    <ClInclude Include="include\CppUTestExt\MockFailure.h" />
-    <ClInclude Include="include\CppUTestExt\MockNamedValue.h" />
-    <ClInclude Include="include\CppUTestExt\MockSupport.h" />
-    <ClInclude Include="include\CppUTestExt\MockSupportPlugin.h" />
-    <ClInclude Include="include\CppUTestExt\MockSupport_c.h" />
-    <ClInclude Include="include\CppUTestExt\OrderedTest.h" />
-    <ClInclude Include="include\CppUTest\CommandLineArguments.h" />
-    <ClInclude Include="include\CppUTest\CommandLineTestRunner.h" />
-    <ClInclude Include="include\cpputest\cpputestconfig.h" />
-    <ClInclude Include="include\CppUTest\CppUTestGeneratedConfig.h" />
-    <ClInclude Include="include\CppUTest\JUnitTestOutput.h" />
-    <ClInclude Include="include\cpputest\platformspecificfunctions_c.h" />
-    <ClInclude Include="include\CppUTest\TeamCityTestOutput.h" />
-    <ClInclude Include="include\CppUTest\MemoryLeakDetector.h" />
-    <ClInclude Include="include\CppUTest\MemoryLeakDetectorMallocMacros.h" />
-    <ClInclude Include="include\CppUTest\MemoryLeakDetectorNewMacros.h" />
-    <ClInclude Include="include\CppUTest\MemoryLeakWarningPlugin.h" />
-    <ClInclude Include="include\CppUTest\PlatformSpecificFunctions.h" />
-    <ClInclude Include="include\CppUTest\SimpleMutex.h" />
-    <ClInclude Include="include\CppUTest\SimpleString.h" />
-    <ClInclude Include="include\CppUTest\SimpleStringInternalCache.h" />
-    <ClInclude Include="include\CppUTest\StandardCLibrary.h" />
-    <ClInclude Include="include\CppUTest\TestFailure.h" />
-    <ClInclude Include="include\CppUTest\TestFilter.h" />
-    <ClInclude Include="include\CppUTest\TestHarness.h" />
-    <ClInclude Include="include\CppUTest\TestHarness_c.h" />
-    <ClInclude Include="include\CppUTest\TestMemoryAllocator.h" />
-    <ClInclude Include="include\CppUTest\TestOutput.h" />
-    <ClInclude Include="include\CppUTest\TestPlugin.h" />
-    <ClInclude Include="include\CppUTest\TestRegistry.h" />
-    <ClInclude Include="include\CppUTest\TestResult.h" />
-    <ClInclude Include="include\CppUTest\TestTestingFixture.h" />
-    <ClInclude Include="include\CppUTest\Utest.h" />
-    <ClInclude Include="include\CppUTest\UtestMacros.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\CodeMemoryReportFormatter.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\GMock.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\GTest.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\GTestSupport.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\GTestConvertor.h" />
+    <ClInclude Include="CppUTestExt\include\cpputestext\ieee754exceptionsplugin.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MemoryReportAllocator.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MemoryReporterPlugin.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MemoryReportFormatter.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockActualCall.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockCheckedActualCall.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockCheckedExpectedCall.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockExpectedCall.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockExpectedCallsList.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockFailure.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockNamedValue.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockSupport.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockSupportPlugin.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\MockSupport_c.h" />
+    <ClInclude Include="CppUTestExt\include\CppUTestExt\OrderedTest.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\CommandLineArguments.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\CommandLineTestRunner.h" />
+    <ClInclude Include="CppUTest\include\cpputest\cpputestconfig.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\CppUTestGeneratedConfig.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\JUnitTestOutput.h" />
+    <ClInclude Include="CppUTest\include\cpputest\platformspecificfunctions_c.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TeamCityTestOutput.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\MemoryLeakDetector.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\MemoryLeakDetectorMallocMacros.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\MemoryLeakDetectorNewMacros.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\MemoryLeakWarningPlugin.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\PlatformSpecificFunctions.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\SimpleMutex.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\SimpleString.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\SimpleStringInternalCache.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\StandardCLibrary.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestFailure.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestFilter.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestHarness.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestHarness_c.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestMemoryAllocator.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestOutput.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestPlugin.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestRegistry.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestResult.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\TestTestingFixture.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\Utest.h" />
+    <ClInclude Include="CppUTest\include\CppUTest\UtestMacros.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
