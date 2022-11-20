@@ -3,7 +3,7 @@ AC_PREREQ([2.68])
 AC_INIT([CppUTest], [4.0], [https://github.com/cpputest/cpputest])
 AC_CONFIG_AUX_DIR([.])
 AM_INIT_AUTOMAKE([subdir-objects])
-AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
+AC_CONFIG_SRCDIR([CppUTest/src/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AX_PREFIX_CONFIG_H(generated/CppUTestGeneratedConfig.h)
 AC_CONFIG_FILES([cpputest.pc])
@@ -474,8 +474,8 @@ fi
 if test "x${memory_leak_detection}" = xno; then
 	AC_DEFINE([MEM_LEAK_DETECTION_DISABLED], 1, [memory leak detection disabled])
 else
-	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorNewMacros.h"
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${srcdir}/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} -include ${srcdir}/CppUTest/include/CppUTest/MemoryLeakDetectorNewMacros.h"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -include ${srcdir}/CppUTest/include/CppUTest/MemoryLeakDetectorMallocMacros.h"
 fi
 
 # Disabling long long support
@@ -551,7 +551,11 @@ fi
 
 CPPUTEST_CFLAGS="${CPPUTEST_CFLAGS} ${CPPUTEST_CWARNINGFLAGS}"
 CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CXXWARNINGFLAGS}"
-CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include ${CPPUTEST_CPPWARNINGFLAGS}"
+CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/CppUTest/include ${CPPUTEST_CPPWARNINGFLAGS}"
+
+if test "x${cpputest_ext}" = xyes; then
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include"
+fi
 
 if test "x${cpputest_flags}" = xno; then
 	CPPUTEST_CFLAGS=""

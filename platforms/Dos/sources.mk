@@ -1,24 +1,24 @@
 CPPU_OBJECTS := \
-  $(CPPUTEST_HOME)/src/CppUTest/CommandLineArguments.o \
-  $(CPPUTEST_HOME)/src/CppUTest/CommandLineTestRunner.o \
-  $(CPPUTEST_HOME)/src/CppUTest/JUnitTestOutput.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TeamCityTestOutput.o \
-  $(CPPUTEST_HOME)/src/CppUTest/MemoryLeakDetector.o \
-  $(CPPUTEST_HOME)/src/CppUTest/MemoryLeakWarningPlugin.o \
-  $(CPPUTEST_HOME)/src/CppUTest/SimpleMutex.o \
-  $(CPPUTEST_HOME)/src/CppUTest/SimpleString.o \
-  $(CPPUTEST_HOME)/src/CppUTest/SimpleStringInternalCache.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestFailure.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestFilter.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestHarness_c.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestMemoryAllocator.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestOutput.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestPlugin.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestRegistry.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestTestingFixture.o \
-  $(CPPUTEST_HOME)/src/CppUTest/TestResult.o \
-  $(CPPUTEST_HOME)/src/CppUTest/Utest.o \
-  $(CPPUTEST_HOME)/src/Platforms/Dos/UtestPlatform.o
+  $(CPPUTEST_HOME)/CppUTest/src/CommandLineArguments.o \
+  $(CPPUTEST_HOME)/CppUTest/src/CommandLineTestRunner.o \
+  $(CPPUTEST_HOME)/CppUTest/src/JUnitTestOutput.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TeamCityTestOutput.o \
+  $(CPPUTEST_HOME)/CppUTest/src/MemoryLeakDetector.o \
+  $(CPPUTEST_HOME)/CppUTest/src/MemoryLeakWarningPlugin.o \
+  $(CPPUTEST_HOME)/CppUTest/src/SimpleMutex.o \
+  $(CPPUTEST_HOME)/CppUTest/src/SimpleString.o \
+  $(CPPUTEST_HOME)/CppUTest/src/SimpleStringInternalCache.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestFailure.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestFilter.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestHarness_c.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestMemoryAllocator.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestOutput.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestPlugin.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestRegistry.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestTestingFixture.o \
+  $(CPPUTEST_HOME)/CppUTest/src/TestResult.o \
+  $(CPPUTEST_HOME)/CppUTest/src/Utest.o \
+  $(CPPUTEST_HOME)/CppUTest/Platforms/Dos/UtestPlatform.o
 
 CPPUX_OBJECTS := \
   $(CPPUTEST_HOME)/src/CppUTestExt/CodeMemoryReportFormatter.o \
