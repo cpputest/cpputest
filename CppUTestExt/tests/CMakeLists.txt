@@ -1,40 +1,41 @@
 add_executable(CppUTestExtTests
-    AllTests.cpp
-    CodeMemoryReporterTest.cpp
-    GMockTest.cpp
-    GTest1Test.cpp
-    IEEE754PluginTest.cpp
-    IEEE754PluginTest_c.c
-    MemoryReportAllocatorTest.cpp
-    MemoryReporterPluginTest.cpp
-    MemoryReportFormatterTest.cpp
-    MockActualCallTest.cpp
-    MockCheatSheetTest.cpp
-    MockCallTest.cpp
-    MockComparatorCopierTest.cpp
-    MockExpectedCallTest.cpp
-    ExpectedFunctionsListTest.cpp
-    MockFailureReporterForTest.cpp
-    MockFailureTest.cpp
-    MockHierarchyTest.cpp
-    MockNamedValueTest.cpp
-    MockParameterTest.cpp
-    MockPluginTest.cpp
-    MockSupportTest.cpp
-    MockSupport_cTestCFile.c
-    MockSupport_cTest.cpp
-    MockStrictOrderTest.cpp
-    MockReturnValueTest.cpp
-    OrderedTestTest_c.c
-    OrderedTestTest.cpp
+    src/AllTests.cpp
+    src/CodeMemoryReporterTest.cpp
+    src/GMockTest.cpp
+    src/GTest1Test.cpp
+    src/IEEE754PluginTest.cpp
+    src/IEEE754PluginTest_c.c
+    src/MemoryReportAllocatorTest.cpp
+    src/MemoryReporterPluginTest.cpp
+    src/MemoryReportFormatterTest.cpp
+    src/MockActualCallTest.cpp
+    src/MockCheatSheetTest.cpp
+    src/MockCallTest.cpp
+    src/MockComparatorCopierTest.cpp
+    src/MockExpectedCallTest.cpp
+    src/ExpectedFunctionsListTest.cpp
+    src/MockFailureReporterForTest.cpp
+    src/MockFailureTest.cpp
+    src/MockHierarchyTest.cpp
+    src/MockNamedValueTest.cpp
+    src/MockParameterTest.cpp
+    src/MockPluginTest.cpp
+    src/MockSupportTest.cpp
+    src/MockSupport_cTestCFile.c
+    src/MockSupport_cTest.cpp
+    src/MockStrictOrderTest.cpp
+    src/MockReturnValueTest.cpp
+    src/OrderedTestTest_c.c
+    src/OrderedTestTest.cpp
 )
 
 if(CPPUTEST_STD_C_LIB_DISABLED)
-    target_sources(CppUTestExtTests
-        PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/../DummyUTestPlatform/DummyUTestPlatform.cpp
-    )
+    target_link_libraries(CppUTestExtTests PRIVATE DummyUTestPlatform)
 endif()
+
+target_include_directories(CppUTestExtTests
+    PRIVATE include
+)
 
 if(CPPUTEST_TEST_GTEST)
     find_package(GTest)

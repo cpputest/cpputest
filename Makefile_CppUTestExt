@@ -15,7 +15,7 @@ WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default 
 
 SRC_DIRS = CppUTestExt/src
 	
-TEST_SRC_DIRS = tests/CppUTestExt
+TEST_SRC_DIRS = CppUTestExt/tests/src
 
 INCLUDE_DIRS = \
 	$(CPPUTEST_HOME)/CppUTestExt/include \

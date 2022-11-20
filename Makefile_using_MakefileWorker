@@ -19,7 +19,7 @@ SRC_DIRS = \
 	CppUTest/Platforms/$(CPP_PLATFORM)
 
 TEST_SRC_DIRS = \
-	tests/CppUTest
+	CppUTest/tests/src
 
 INCLUDE_DIRS =\
   CppUTest/include

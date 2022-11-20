@@ -16,8 +16,3 @@ function(add_mapfile target)
         endif()
     endif()
 endfunction()
-
-add_subdirectory(CppUTest)
-if (CPPUTEST_EXTENSIONS)
-    add_subdirectory(CppUTestExt)
-endif ()

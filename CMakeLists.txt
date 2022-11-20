@@ -98,6 +98,7 @@ endif()
 if(PROJECT_IS_TOP_LEVEL)
   include(cmake/warnings.cmake)
 endif()
+include(cmake/mapfile.cmake)
 include(GNUInstallDirs)
 
 # Check for symbols before setting a lot of stuff
@@ -135,10 +136,6 @@ target_compile_definitions(CppUTest
   PUBLIC
     HAVE_CONFIG_H
 )
-
-if (CPPUTEST_BUILD_TESTING)
-    add_subdirectory(tests)
-endif ()
 
 if (CPPUTEST_EXAMPLES)
   add_subdirectory(examples)
