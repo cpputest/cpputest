@@ -106,46 +106,46 @@ lib_libCppUTestExt_a_CFLAGS = $(lib_libCppUTest_a_CFLAGS)
 lib_libCppUTestExt_a_CXXFLAGS = $(lib_libCppUTest_a_CXXFLAGS)
 
 lib_libCppUTestExt_a_SOURCES = \
-   src/CppUTestExt/CodeMemoryReportFormatter.cpp \
-   src/CppUTestExt/GTest.cpp \
-   src/CppUTestExt/IEEE754ExceptionsPlugin.cpp \
-   src/CppUTestExt/MemoryReportAllocator.cpp \
-   src/CppUTestExt/MemoryReporterPlugin.cpp \
-   src/CppUTestExt/MemoryReportFormatter.cpp \
-   src/CppUTestExt/MockActualCall.cpp \
-   src/CppUTestExt/MockExpectedCall.cpp \
-   src/CppUTestExt/MockExpectedCallsList.cpp \
-   src/CppUTestExt/MockFailure.cpp \
-   src/CppUTestExt/MockNamedValue.cpp \
-   src/CppUTestExt/MockSupport.cpp \
-   src/CppUTestExt/MockSupportPlugin.cpp \
-   src/CppUTestExt/MockSupport_c.cpp \
-   src/CppUTestExt/OrderedTest.cpp
+   CppUTestExt/src/CodeMemoryReportFormatter.cpp \
+   CppUTestExt/src/GTest.cpp \
+   CppUTestExt/src/IEEE754ExceptionsPlugin.cpp \
+   CppUTestExt/src/MemoryReportAllocator.cpp \
+   CppUTestExt/src/MemoryReporterPlugin.cpp \
+   CppUTestExt/src/MemoryReportFormatter.cpp \
+   CppUTestExt/src/MockActualCall.cpp \
+   CppUTestExt/src/MockExpectedCall.cpp \
+   CppUTestExt/src/MockExpectedCallsList.cpp \
+   CppUTestExt/src/MockFailure.cpp \
+   CppUTestExt/src/MockNamedValue.cpp \
+   CppUTestExt/src/MockSupport.cpp \
+   CppUTestExt/src/MockSupportPlugin.cpp \
+   CppUTestExt/src/MockSupport_c.cpp \
+   CppUTestExt/src/OrderedTest.cpp
 
 if INCLUDE_CPPUTEST_EXT
-include_cpputestextdir = $(includedir)/CppUTestExt
+include_cpputestextdir = $(srcdir)/CppUTestExt/include
 
 include_cpputestext_HEADERS = \
-  include/CppUTestExt/CodeMemoryReportFormatter.h \
-	include/CppUTestExt/GMock.h \
-	include/CppUTestExt/GTest.h \
-	include/CppUTestExt/GTestSupport.h \
-	include/CppUTestExt/GTestConvertor.h \
-	include/CppUTestExt/IEEE754ExceptionsPlugin.h \
-	include/CppUTestExt/MemoryReportAllocator.h \
-	include/CppUTestExt/MemoryReporterPlugin.h \
-	include/CppUTestExt/MemoryReportFormatter.h \
-	include/CppUTestExt/MockActualCall.h \
-	include/CppUTestExt/MockCheckedActualCall.h \
-	include/CppUTestExt/MockCheckedExpectedCall.h \
-	include/CppUTestExt/MockExpectedCall.h \
-	include/CppUTestExt/MockExpectedCallsList.h \
-	include/CppUTestExt/MockFailure.h \
-	include/CppUTestExt/MockNamedValue.h \
-	include/CppUTestExt/MockSupport.h \
-	include/CppUTestExt/MockSupportPlugin.h \
-	include/CppUTestExt/MockSupport_c.h \
-	include/CppUTestExt/OrderedTest.h
+	CppUTestExt/include/CppUTestExt/CodeMemoryReportFormatter.h \
+	CppUTestExt/include/CppUTestExt/GMock.h \
+	CppUTestExt/include/CppUTestExt/GTest.h \
+	CppUTestExt/include/CppUTestExt/GTestSupport.h \
+	CppUTestExt/include/CppUTestExt/GTestConvertor.h \
+	CppUTestExt/include/CppUTestExt/IEEE754ExceptionsPlugin.h \
+	CppUTestExt/include/CppUTestExt/MemoryReportAllocator.h \
+	CppUTestExt/include/CppUTestExt/MemoryReporterPlugin.h \
+	CppUTestExt/include/CppUTestExt/MemoryReportFormatter.h \
+	CppUTestExt/include/CppUTestExt/MockActualCall.h \
+	CppUTestExt/include/CppUTestExt/MockCheckedActualCall.h \
+	CppUTestExt/include/CppUTestExt/MockCheckedExpectedCall.h \
+	CppUTestExt/include/CppUTestExt/MockExpectedCall.h \
+	CppUTestExt/include/CppUTestExt/MockExpectedCallsList.h \
+	CppUTestExt/include/CppUTestExt/MockFailure.h \
+	CppUTestExt/include/CppUTestExt/MockNamedValue.h \
+	CppUTestExt/include/CppUTestExt/MockSupport.h \
+	CppUTestExt/include/CppUTestExt/MockSupportPlugin.h \
+	CppUTestExt/include/CppUTestExt/MockSupport_c.h \
+	CppUTestExt/include/CppUTestExt/OrderedTest.h
 
 endif
 

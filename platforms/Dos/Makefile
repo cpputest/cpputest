@@ -22,7 +22,7 @@ CFLAGS := \
   -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -wcd=472 -ml -zm \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
   -i$(call convert_paths,$(CPPUTEST_HOME)/CppUTest/include) \
-  -i$(call convert_paths,$(CPPUTEST_HOME)/include) \
+  -i$(call convert_paths,$(CPPUTEST_HOME)/CppUTestExt/include) \
   -i$(call convert_paths,$(WATCOM)/h) -i$(call convert_paths,$(WATCOM)/h/nt) \
 
 CXXFLAGS := $(CFLAGS) -xds
