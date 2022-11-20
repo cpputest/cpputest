@@ -128,6 +128,19 @@
       }
     },
     {
+      "name": "asan",
+      "inherits": ["Clang"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true
+      },
+      "environment": {
+        "CFLAGS": "-fsanitize=address -fno-omit-frame-pointer",
+        "CXXFLAGS": "-fsanitize=address -fno-omit-frame-pointer",
+        "LDFLAGS": "-fsanitize=address"
+      }
+    },
+    {
       "name": "detailed",
       "inherits": ["defaults"],
       "cacheVariables": {
