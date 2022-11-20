@@ -37,130 +37,130 @@ CPPUX_OBJECTS := \
   $(CPPUTEST_HOME)/CppUTestExt/src/MockSupport.o
 
 CPPU1_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllocLetTestFree.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllocLetTestFreeTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/CheatSheetTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/CompatabilityTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/CommandLineArgumentsTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/CommandLineTestRunnerTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/JUnitOutputTest.o
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllocLetTestFree.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllocLetTestFreeTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/CheatSheetTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/CompatabilityTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/CommandLineArgumentsTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/CommandLineTestRunnerTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/JUnitOutputTest.o
 
 CPPU2_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/DummyMemoryLeakDetector.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/MemoryLeakWarningTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/PluginTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/PreprocessorTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SetPluginTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SimpleMutexTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TeamCityOutputTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestFailureNaNTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestFailureTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestResultTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/DummyMemoryLeakDetector.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/MemoryLeakWarningTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/PluginTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/PreprocessorTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/SetPluginTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/SimpleMutexTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TeamCityOutputTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestFailureNaNTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestFailureTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestResultTest.o \
 
 CPPU3_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/MemoryLeakDetectorTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/SimpleStringCacheTest.o
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/MemoryLeakDetectorTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/SimpleStringTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/SimpleStringCacheTest.o
 
 CPPU4_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestOutputTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestRegistryTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestOutputTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestRegistryTest.o \
 
 CPPU5_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllocationInCFile.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllocationInCppFile.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/MemoryOperatorOverloadTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TeamCityOutputTest.o
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllocationInCFile.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllocationInCppFile.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/MemoryOperatorOverloadTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TeamCityOutputTest.o
 
 CPPU6_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestFilterTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestHarness_cTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestHarness_cTestCFile.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestInstallerTest.o
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestFilterTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestHarness_cTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestHarness_cTestCFile.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestInstallerTest.o
 
 CPPU7_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestMemoryAllocatorTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestUTestMacro.o
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestMemoryAllocatorTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestUTestMacro.o
 
 CPPU8_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/UtestPlatformTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/UtestTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTest/TestUTestStringMacro.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/UtestPlatformTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/UtestTest.o \
+  $(CPPUTEST_HOME)/CppUTest/tests/src/TestUTestStringMacro.o \
 
 CPPUX1_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/GMockTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/GTest1Test.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/GTest2ConvertorTest.o
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/ExpectedFunctionsListTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/GMockTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/GTest1Test.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/GTest2ConvertorTest.o
 
 CPPUX2_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReportAllocatorTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReportFormatterTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MemoryReporterPluginTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockActualCallTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockCheatSheetTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockExpectedCallTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MemoryReportAllocatorTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MemoryReportFormatterTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MemoryReporterPluginTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockActualCallTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockCheatSheetTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockComparatorCopierTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockExpectedCallTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockHierarchyTest.o
 
 CPPUX3_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/CodeMemoryReporterTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/OrderedTestTest_c.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/CodeMemoryReporterTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/OrderedTestTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/OrderedTestTest_c.o \
 
 CPPUX4_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockNamedValueTest.o 
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockReturnValueTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockNamedValueTest.o 
 
 CPPUX5_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockPluginTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupport_cTestCFile.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockPluginTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockSupport_cTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockSupport_cTestCFile.o \
 
 CPPUX6_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/ExpectedFunctionsListTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockCallTest.o
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/ExpectedFunctionsListTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockCallTest.o
 
 CPPUX7_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockParameterTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockComparatorCopierTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockHierarchyTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockParameterTest.o \
 
 CPPUX8_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/IEEE754PluginTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/IEEE754PluginTest_c.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockComparatorCopierTest.o
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/IEEE754PluginTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/IEEE754PluginTest_c.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockComparatorCopierTest.o
 
 CPPUX9_OBJECTS := \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/AllTests.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureReporterForTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockFailureTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockHierarchyTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockPluginTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockReturnValueTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockStrictOrderTest.o \
-  $(CPPUTEST_HOME)/tests/CppUTestExt/MockSupportTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/AllTests.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureReporterForTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockFailureTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockHierarchyTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockPluginTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockReturnValueTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockStrictOrderTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/tests/src/MockSupportTest.o \

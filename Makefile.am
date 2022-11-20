@@ -156,41 +156,41 @@ CppUTestTests_LDADD = lib/libCppUTest.a $(CPPUTEST_LDADD)
 CppUTestTests_LDFLAGS = $(AM_LDFLAGS) $(CPPUTEST_LDFLAGS) $(CPPUTEST_ADDITIONAL_LDFLAGS)
 
 CppUTestTests_SOURCES = \
-	tests/CppUTest/AllocationInCFile.c \
-	tests/CppUTest/AllocationInCppFile.cpp \
-	tests/CppUTest/AllocLetTestFree.c \
-	tests/CppUTest/AllocLetTestFreeTest.cpp \
-	tests/CppUTest/AllTests.cpp \
-	tests/CppUTest/CheatSheetTest.cpp \
-	tests/CppUTest/CompatabilityTests.cpp \
-	tests/CppUTest/CommandLineArgumentsTest.cpp \
-	tests/CppUTest/CommandLineTestRunnerTest.cpp \
-	tests/CppUTest/DummyMemoryLeakDetector.cpp \
-	tests/CppUTest/JUnitOutputTest.cpp \
-	tests/CppUTest/MemoryLeakDetectorTest.cpp \
-	tests/CppUTest/MemoryOperatorOverloadTest.cpp \
-	tests/CppUTest/MemoryLeakWarningTest.cpp \
-	tests/CppUTest/PluginTest.cpp \
-	tests/CppUTest/PreprocessorTest.cpp \
-	tests/CppUTest/SetPluginTest.cpp \
-	tests/CppUTest/SimpleStringTest.cpp \
-	tests/CppUTest/SimpleStringCacheTest.cpp \
-	tests/CppUTest/SimpleMutexTest.cpp \
-	tests/CppUTest/TeamCityOutputTest.cpp \
-	tests/CppUTest/TestFailureNaNTest.cpp \
-	tests/CppUTest/TestFailureTest.cpp \
-	tests/CppUTest/TestFilterTest.cpp \
-	tests/CppUTest/TestHarness_cTest.cpp \
-	tests/CppUTest/TestHarness_cTestCFile.c \
-	tests/CppUTest/TestInstallerTest.cpp \
-	tests/CppUTest/TestMemoryAllocatorTest.cpp \
-	tests/CppUTest/TestOutputTest.cpp \
-	tests/CppUTest/TestRegistryTest.cpp \
-	tests/CppUTest/TestResultTest.cpp \
-	tests/CppUTest/TestUTestMacro.cpp \
-	tests/CppUTest/TestUTestStringMacro.cpp \
-	tests/CppUTest/UtestTest.cpp \
-	tests/CppUTest/UtestPlatformTest.cpp
+	CppUTest/tests/src/AllocationInCFile.c \
+	CppUTest/tests/src/AllocationInCppFile.cpp \
+	CppUTest/tests/src/AllocLetTestFree.c \
+	CppUTest/tests/src/AllocLetTestFreeTest.cpp \
+	CppUTest/tests/src/AllTests.cpp \
+	CppUTest/tests/src/CheatSheetTest.cpp \
+	CppUTest/tests/src/CompatabilityTests.cpp \
+	CppUTest/tests/src/CommandLineArgumentsTest.cpp \
+	CppUTest/tests/src/CommandLineTestRunnerTest.cpp \
+	CppUTest/tests/src/DummyMemoryLeakDetector.cpp \
+	CppUTest/tests/src/JUnitOutputTest.cpp \
+	CppUTest/tests/src/MemoryLeakDetectorTest.cpp \
+	CppUTest/tests/src/MemoryOperatorOverloadTest.cpp \
+	CppUTest/tests/src/MemoryLeakWarningTest.cpp \
+	CppUTest/tests/src/PluginTest.cpp \
+	CppUTest/tests/src/PreprocessorTest.cpp \
+	CppUTest/tests/src/SetPluginTest.cpp \
+	CppUTest/tests/src/SimpleStringTest.cpp \
+	CppUTest/tests/src/SimpleStringCacheTest.cpp \
+	CppUTest/tests/src/SimpleMutexTest.cpp \
+	CppUTest/tests/src/TeamCityOutputTest.cpp \
+	CppUTest/tests/src/TestFailureNaNTest.cpp \
+	CppUTest/tests/src/TestFailureTest.cpp \
+	CppUTest/tests/src/TestFilterTest.cpp \
+	CppUTest/tests/src/TestHarness_cTest.cpp \
+	CppUTest/tests/src/TestHarness_cTestCFile.c \
+	CppUTest/tests/src/TestInstallerTest.cpp \
+	CppUTest/tests/src/TestMemoryAllocatorTest.cpp \
+	CppUTest/tests/src/TestOutputTest.cpp \
+	CppUTest/tests/src/TestRegistryTest.cpp \
+	CppUTest/tests/src/TestResultTest.cpp \
+	CppUTest/tests/src/TestUTestMacro.cpp \
+	CppUTest/tests/src/TestUTestStringMacro.cpp \
+	CppUTest/tests/src/UtestTest.cpp \
+	CppUTest/tests/src/UtestPlatformTest.cpp
 
 CppUTestExtTests_CPPFLAGS = $(lib_libCppUTestExt_a_CPPFLAGS)
 CppUTestExtTests_CFLAGS = $(lib_libCppUTestExt_a_CFLAGS)
@@ -199,36 +199,36 @@ CppUTestExtTests_LDADD = lib/libCppUTestExt.a lib/libCppUTest.a $(CPPUTEST_LDADD
 CppUTestExtTests_LDFLAGS = $(CppUTestTests_LDFLAGS)
 
 CppUTestExtTests_SOURCES = \
-	tests/CppUTestExt/AllTests.cpp \
-	tests/CppUTestExt/CodeMemoryReporterTest.cpp \
-	tests/CppUTestExt/GMockTest.cpp \
-	tests/CppUTestExt/GTest1Test.cpp \
-	tests/CppUTestExt/GTest2ConvertorTest.cpp \
-	tests/CppUTestExt/IEEE754PluginTest.cpp \
-	tests/CppUTestExt/IEEE754PluginTest_c.c \
-	tests/CppUTestExt/MemoryReportAllocatorTest.cpp \
-	tests/CppUTestExt/MemoryReporterPluginTest.cpp \
-	tests/CppUTestExt/MemoryReportFormatterTest.cpp \
-	tests/CppUTestExt/MockActualCallTest.cpp \
-	tests/CppUTestExt/MockCheatSheetTest.cpp \
-	tests/CppUTestExt/MockCallTest.cpp \
-	tests/CppUTestExt/MockComparatorCopierTest.cpp \
-	tests/CppUTestExt/MockExpectedCallTest.cpp \
-	tests/CppUTestExt/ExpectedFunctionsListTest.cpp \
-	tests/CppUTestExt/MockFailureReporterForTest.cpp \
-	tests/CppUTestExt/MockFailureTest.cpp \
-	tests/CppUTestExt/MockHierarchyTest.cpp \
-	tests/CppUTestExt/MockNamedValueTest.cpp \
-	tests/CppUTestExt/MockParameterTest.cpp \
-	tests/CppUTestExt/MockPluginTest.cpp \
-	tests/CppUTestExt/MockSupportTest.cpp \
-	tests/CppUTestExt/MockSupport_cTest.cpp \
-	tests/CppUTestExt/MockSupport_cTestCFile.c \
-	tests/CppUTestExt/MockStrictOrderTest.cpp \
-	tests/CppUTestExt/MockReturnValueTest.cpp \
-	tests/CppUTestExt/OrderedTestTest.cpp \
-	tests/CppUTestExt/OrderedTestTest_c.c \
-	tests/CppUTestExt/MockFakeLongLong.cpp
+	CppUTestExt/tests/src/AllTests.cpp \
+	CppUTestExt/tests/src/CodeMemoryReporterTest.cpp \
+	CppUTestExt/tests/src/GMockTest.cpp \
+	CppUTestExt/tests/src/GTest1Test.cpp \
+	CppUTestExt/tests/src/GTest2ConvertorTest.cpp \
+	CppUTestExt/tests/src/IEEE754PluginTest.cpp \
+	CppUTestExt/tests/src/IEEE754PluginTest_c.c \
+	CppUTestExt/tests/src/MemoryReportAllocatorTest.cpp \
+	CppUTestExt/tests/src/MemoryReporterPluginTest.cpp \
+	CppUTestExt/tests/src/MemoryReportFormatterTest.cpp \
+	CppUTestExt/tests/src/MockActualCallTest.cpp \
+	CppUTestExt/tests/src/MockCheatSheetTest.cpp \
+	CppUTestExt/tests/src/MockCallTest.cpp \
+	CppUTestExt/tests/src/MockComparatorCopierTest.cpp \
+	CppUTestExt/tests/src/MockExpectedCallTest.cpp \
+	CppUTestExt/tests/src/ExpectedFunctionsListTest.cpp \
+	CppUTestExt/tests/src/MockFailureReporterForTest.cpp \
+	CppUTestExt/tests/src/MockFailureTest.cpp \
+	CppUTestExt/tests/src/MockHierarchyTest.cpp \
+	CppUTestExt/tests/src/MockNamedValueTest.cpp \
+	CppUTestExt/tests/src/MockParameterTest.cpp \
+	CppUTestExt/tests/src/MockPluginTest.cpp \
+	CppUTestExt/tests/src/MockSupportTest.cpp \
+	CppUTestExt/tests/src/MockSupport_cTest.cpp \
+	CppUTestExt/tests/src/MockSupport_cTestCFile.c \
+	CppUTestExt/tests/src/MockStrictOrderTest.cpp \
+	CppUTestExt/tests/src/MockReturnValueTest.cpp \
+	CppUTestExt/tests/src/OrderedTestTest.cpp \
+	CppUTestExt/tests/src/OrderedTestTest_c.c \
+	CppUTestExt/tests/src/MockFakeLongLong.cpp
 
 DISTCLEANFILES = \
 	filename.map.txt \
@@ -244,7 +244,7 @@ if INCLUDE_GMOCKTESTS
 
 #GTestTests_SOURCES = \
 	$(GMOCK_HOME)/test/gmock-spec-builders_test.cc \
-	tests/CppUTestExt/AllTests.cpp
+	CppUTestExt/tests/src/AllTests.cpp
 endif
 
 RUN_CPPUTEST_TESTS = ./$(CPPUTEST_TESTS)

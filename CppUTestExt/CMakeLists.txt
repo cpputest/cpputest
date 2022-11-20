@@ -48,6 +48,10 @@ target_include_directories(${CppUTestExtLibName}
 
 add_library(CppUTest::CppUTestExt ALIAS ${CppUTestExtLibName})
 
+if(CPPUTEST_BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
+
 if(PROJECT_IS_TOP_LEVEL)
     install(
         TARGETS ${CppUTestExtLibName}

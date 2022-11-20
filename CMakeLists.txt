@@ -152,10 +152,6 @@ target_compile_definitions(${CppUTestLibName}
     HAVE_CONFIG_H
 )
 
-if (CPPUTEST_BUILD_TESTING)
-    add_subdirectory(tests)
-endif ()
-
 if (CPPUTEST_EXAMPLES)
   add_subdirectory(examples)
 endif()

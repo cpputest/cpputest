@@ -98,6 +98,10 @@ if(NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
     )
 endif()
 
+if(CPPUTEST_BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
+
 # Installation
 if(PROJECT_IS_TOP_LEVEL)
     install(
