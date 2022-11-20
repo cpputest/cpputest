@@ -123,7 +123,9 @@ configure_file (
 )
 
 add_subdirectory(CppUTest)
-add_subdirectory(src)
+if(CPPUTEST_EXTENSIONS)
+    add_subdirectory(CppUTestExt)
+endif()
 
 target_include_directories(CppUTest
     PUBLIC

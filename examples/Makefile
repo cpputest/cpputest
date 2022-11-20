@@ -30,6 +30,7 @@ INCLUDE_DIRS =\
   .\
   ApplicationLib\
   $(CPPUTEST_HOME)/CppUTest/include\
+  $(CPPUTEST_HOME)/CppUTestExt/include\
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 

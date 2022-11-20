@@ -554,7 +554,7 @@ CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CXXWARNINGFLAGS}"
 CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/CppUTest/include ${CPPUTEST_CPPWARNINGFLAGS}"
 
 if test "x${cpputest_ext}" = xyes; then
-	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/include"
+	CPPUTEST_CPPFLAGS="${CPPUTEST_CPPFLAGS} -I ${srcdir}/CppUTestExt/include"
 fi
 
 if test "x${cpputest_flags}" = xno; then

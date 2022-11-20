@@ -13,11 +13,13 @@ CPP_PLATFORM = Gcc
 
 WARNINGFLAGS = -pedantic-errors -Wall -Wextra -Werror -Wshadow -Wswitch-default -Wswitch-enum -Wconversion
 
-SRC_DIRS = src/CppUTestExt
+SRC_DIRS = CppUTestExt/src
 	
 TEST_SRC_DIRS = tests/CppUTestExt
 
-INCLUDE_DIRS = $(CPPUTEST_HOME)/include
+INCLUDE_DIRS = \
+	$(CPPUTEST_HOME)/CppUTestExt/include \
+	$(CPPUTEST_HOME)/CppUTest/include
 
 LD_LIBRARIES += -lstdc++ -L$(CPPUTEST_LIB_DIR)/$(TARGET_PLATFORM) -lCppUTest
 

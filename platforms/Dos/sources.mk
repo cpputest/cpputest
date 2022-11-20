@@ -21,20 +21,20 @@ CPPU_OBJECTS := \
   $(CPPUTEST_HOME)/CppUTest/Platforms/Dos/UtestPlatform.o
 
 CPPUX_OBJECTS := \
-  $(CPPUTEST_HOME)/src/CppUTestExt/CodeMemoryReportFormatter.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReporterPlugin.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/IEEE754ExceptionsPlugin.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockFailure.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockSupportPlugin.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockActualCall.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockSupport_c.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReportAllocator.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockExpectedCall.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockNamedValue.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/OrderedTest.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MemoryReportFormatter.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockExpectedCallsList.o \
-  $(CPPUTEST_HOME)/src/CppUTestExt/MockSupport.o
+  $(CPPUTEST_HOME)/CppUTestExt/src/CodeMemoryReportFormatter.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MemoryReporterPlugin.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/IEEE754ExceptionsPlugin.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockFailure.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockSupportPlugin.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockActualCall.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockSupport_c.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MemoryReportAllocator.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockExpectedCall.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockNamedValue.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/OrderedTest.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MemoryReportFormatter.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockExpectedCallsList.o \
+  $(CPPUTEST_HOME)/CppUTestExt/src/MockSupport.o
 
 CPPU1_OBJECTS := \
   $(CPPUTEST_HOME)/tests/CppUTest/AllTests.o \
