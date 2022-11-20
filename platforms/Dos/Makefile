@@ -21,8 +21,8 @@ include $(CPPUTEST_HOME)/platforms/Dos/sources.mk
 CFLAGS := \
   -q -c -os -oc -d0 -we -w=3 -wcd=13 -wcd=367 -wcd=368 -wcd391 -wcd=472 -ml -zm \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
+  -i$(call convert_paths,$(CPPUTEST_HOME)/CppUTest/include) \
   -i$(call convert_paths,$(CPPUTEST_HOME)/include) \
-  -i$(call convert_paths,$(CPPUTEST_HOME)/include/Platforms/Dos) \
   -i$(call convert_paths,$(WATCOM)/h) -i$(call convert_paths,$(WATCOM)/h/nt) \
 
 CXXFLAGS := $(CFLAGS) -xds
@@ -34,7 +34,7 @@ all: CPPU.LIB CPPUX.LIB \
      CPPUX1.EXE CPPUX2.EXE CPPUX3.EXE CPPUX4.EXE CPPUX5.EXE CPPUX6.EXE CPPUX7.EXE CPPUX8.EXE CPPUX9.EXE
 
 clean:
-	rm -rf ../src/CppUTest/*.o ../src/CppUTestExt/*.o \
+	rm -rf ../CppUTest/src/*.o ../src/CppUTestExt/*.o \
     ../src/Platforms/dos/*.o ../tests/*.o ../tests/CppUTestExt/*.o \
     *.o *.map *.txt *.LOG *.EXE *.err *.LIB *.LST
 

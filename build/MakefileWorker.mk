@@ -306,10 +306,10 @@ ifeq ($(CPPUTEST_USE_MEM_LEAK_DETECTION), N)
 	CPPUTEST_CPPFLAGS += -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED
 else
     ifndef CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE
-	    	CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorNewMacros.h
+	    	CPPUTEST_MEMLEAK_DETECTOR_NEW_MACRO_FILE = -include $(CPPUTEST_HOME)/CppUTest/include/CppUTest/MemoryLeakDetectorNewMacros.h
     endif
     ifndef CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE
-	    CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE = -include $(CPPUTEST_HOME)/include/CppUTest/MemoryLeakDetectorMallocMacros.h
+	    CPPUTEST_MEMLEAK_DETECTOR_MALLOC_MACRO_FILE = -include $(CPPUTEST_HOME)/CppUTest/include/CppUTest/MemoryLeakDetectorMallocMacros.h
 	endif
 endif
 

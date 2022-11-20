@@ -122,6 +122,7 @@ configure_file (
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
 )
 
+add_subdirectory(CppUTest)
 add_subdirectory(src)
 
 target_include_directories(CppUTest

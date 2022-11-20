@@ -29,7 +29,7 @@ TEST_SRC_DIRS = \
 INCLUDE_DIRS =\
   .\
   ApplicationLib\
-  $(CPPUTEST_HOME)/include\
+  $(CPPUTEST_HOME)/CppUTest/include\
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 

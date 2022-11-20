@@ -15,14 +15,14 @@ MAKE_CMD = make -f $(CPPUTEST_HOME)/Makefile_using_MakefileWorker
 CPPUTEST_ENABLE_DEBUG = Y
 
 SRC_DIRS = \
-	src/CppUTest \
-	src/Platforms/$(CPP_PLATFORM)
+	CppUTest/src \
+	CppUTest/Platforms/$(CPP_PLATFORM)
 
 TEST_SRC_DIRS = \
 	tests/CppUTest
 
 INCLUDE_DIRS =\
-  include
+  CppUTest/include
 
 include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 
@@ -47,7 +47,7 @@ test_all: start
 	$(TIME) $(MAKE_CMD) CPPUTEST_ENABLE_DEBUG=N extensions
 	$(MAKE_CMD) CPPUTEST_ENABLE_DEBUG=N cleanExtensions
 	@echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
-	$(TIME) $(MAKE_CMD) CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
+	$(TIME) $(MAKE_CMD) CFLAGS="" CXXFLAGS="" CPPFLAGS="-ICppUTest/include"
 	$(MAKE_CMD) CFLAGS="" CXXFLAGS="" clean
 	@echo Building without Standard C library includes
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_STD_C_LIB=N all_no_tests
@@ -55,7 +55,7 @@ test_all: start
 	@echo Building with a different TARGET_PLATFORM
 	$(MAKE_CMD) TARGET_PLATFORM=real_platform
 	@echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
-	$(TIME) $(MAKE_CMD) CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
+	$(TIME) $(MAKE_CMD) CFLAGS="" CXXFLAGS="" CPPFLAGS="-ICppUTest/include -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	$(MAKE_CMD) CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
 	@echo Building examples
 	$(MAKE_CMD) cleanExamples
