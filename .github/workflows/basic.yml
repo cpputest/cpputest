@@ -172,6 +172,10 @@ jobs:
             cpp_version: 98
             preset: DOS
             apt_packages: dosbox
+          - name: Cygwin
+            os: windows-latest
+            cpp_version: 98
+            preset: GNU
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -197,10 +201,24 @@ jobs:
           version: "2.0"
         if: ${{ matrix.name == 'OpenWatcom DOS' }}
 
-      ## BUILD AND TEST
-
+      - run: git config --global core.autocrlf input
+        if: ${{ matrix.name == 'Cygwin' }}
       - name: Checkout
         uses: actions/checkout@main
+
+      - name: Install Cygwin
+        uses: cygwin/cygwin-install-action@master
+        with:
+          platform: x86
+          packages: >
+            cmake
+            gcc-core
+            gcc-g++
+            make
+        if: ${{ matrix.name == 'Cygwin' }}
+
+      ## BUILD AND TEST
+
       - name: Configure
         run: cmake --preset ${{ matrix.preset }} -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
       - name: Build
