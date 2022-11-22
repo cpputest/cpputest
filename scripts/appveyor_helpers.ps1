@@ -28,16 +28,6 @@ function Get-ClangToolchainFilename() {
     }
 }
 
-# Helper function to provide the bin-folder path to cygwin
-function Get-CygwinBin() {
-    if ($env:Platform -like '*64') {
-        Write-Output 'C:\cygwin64\bin'
-    }
-    else {
-        Write-Output 'C:\cygwin\bin'
-    }
-}
-
 function Add-PathFolder($folder)
 {
     if (-not (Test-Path $folder))

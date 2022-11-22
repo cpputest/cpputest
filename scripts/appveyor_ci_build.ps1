@@ -20,24 +20,6 @@ function Invoke-BuildCommand($command, $directory = '.')
     Pop-Location
 }
 
-function Invoke-CygwinCommand($command, $directory = '.')
-{
-    # Assume cygwin is located at C:\cygwin on x86 and C:\cygwin64 on x64 for now
-    $cygwin_bin = Get-CygwinBin
-
-    $cygwin_directory = (. "${cygwin_bin}\cygpath.exe" (Resolve-Path $directory))
-    $command_wrapped = "${cygwin_bin}\bash.exe --login -c 'cd $cygwin_directory ; $command'"
-
-    Write-Host "Executing <$command> in <$cygwin_directory>"
-    Invoke-Expression $command_wrapped
-
-    if ($LASTEXITCODE -ne 0)
-    {
-        Write-Host "Command Returned error: $LASTEXITCODE"
-        Exit $LASTEXITCODE
-    }
-}
-
 # The project files that will get built
 $VS2008ProjectFiles = @( 'CppUTest.vcproj' , 'tests\AllTests.vcproj'  )
 $VS2010ProjectFiles = @( 'CppUTest.vcxproj', 'tests\AllTests.vcxproj' )
@@ -62,13 +44,6 @@ Remove-PathFolder "C:\Program Files (x86)\Git\usr\bin"
 
 switch -Wildcard ($env:Platform)
 {
-    'Cygwin*'
-    {
-        Invoke-CygwinCommand "autoreconf -i .." "cpputest_build"
-        Invoke-CygwinCommand "../configure" "cpputest_build"
-        Invoke-CygwinCommand "make CppUTestTests.exe CppUTestExtTests.exe" "cpputest_build"
-    }
-
     'MinGW*'
     {
         $mingw_path = Get-MinGWBin

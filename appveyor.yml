@@ -11,7 +11,6 @@ cache:
 environment:
   Configuration: Release
   matrix:
-  - Platform: Cygwin32
   - Platform: MinGW32
     PlatformToolset: 4.8.5
   - Platform: MinGW64
