@@ -209,7 +209,7 @@ jobs:
       - name: Configure
         run: cmake --preset ${{ matrix.preset }} ${{ matrix.cmake_args }}
       - name: Build
-        run: cmake --build cpputest_build --verbose
+        run: cmake --build cpputest_build --verbose -j
       - name: Test
         run: ctest --test-dir cpputest_build ${{ matrix.ctest_args }}
 
