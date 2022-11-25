@@ -53,14 +53,24 @@ if(CPPUTEST_BUILD_TESTING)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
+    # Library
     install(
         TARGETS CppUTestExt
         EXPORT CppUTestTargets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
+
+    # Headers
     install(
         DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/CppUTestExt"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
+
+    # Pkg-config file
+    configure_file(cpputestext.pc.in cpputestext.pc)
+    install(
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/cpputestext.pc"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
     )
 endif()

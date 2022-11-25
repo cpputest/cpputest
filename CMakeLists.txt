@@ -142,5 +142,49 @@ if (CPPUTEST_EXAMPLES)
 endif()
 
 if(PROJECT_IS_TOP_LEVEL)
-  include(cmake/install.cmake)
+    set(CPPUTEST_CONFIG_DEST "${CMAKE_INSTALL_LIBDIR}/CppUTest/cmake")
+
+    include(CMakePackageConfigHelpers)
+    configure_package_config_file(
+        cmake/CppUTestConfig.cmake.in
+        ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
+        INSTALL_DESTINATION
+            "${CPPUTEST_CONFIG_DEST}"
+    )
+    write_basic_package_version_file(
+        ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
+        COMPATIBILITY
+            SameMajorVersion
+    )
+    install(
+        FILES
+            ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfig.cmake
+            ${CMAKE_CURRENT_BINARY_DIR}/install/CppUTestConfigVersion.cmake
+        DESTINATION
+            "${CPPUTEST_CONFIG_DEST}"
+    )
+
+    install(
+        EXPORT
+            CppUTestTargets
+        NAMESPACE
+            CppUTest::
+        DESTINATION
+            "${CPPUTEST_CONFIG_DEST}"
+    )
+
+    install(
+        FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake
+        DESTINATION
+            "${CPPUTEST_CONFIG_DEST}/Scripts"
+    )
+    install(
+        FILES
+            ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+            ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/CppUTest.cmake
+            ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/_CppUTestDiscovery.cmake
+        DESTINATION
+            "${CPPUTEST_CONFIG_DEST}/Modules"
+    )
 endif()

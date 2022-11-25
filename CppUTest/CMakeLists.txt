@@ -110,14 +110,28 @@ endif()
 
 # Installation
 if(PROJECT_IS_TOP_LEVEL)
+    # Library
     install(
         TARGETS CppUTest
         EXPORT CppUTestTargets
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     )
+
+    # Headers
     install(
         DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/include/CppUTest"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+    )
+    install(
+        FILES "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/generated"
+    )
+
+    # Pkg-config file
+    configure_file(cpputest.pc.in cpputest.pc)
+    install(
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/cpputest.pc"
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
     )
 endif()
