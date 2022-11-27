@@ -13,5 +13,5 @@ jobs:
         with:
           artifact: test-results
           name: JUnit Tests
-          path: "cpputest_build/**/cpputest_*.xml"
+          path: "**/cpputest_*.xml"
           reporter: java-junit
