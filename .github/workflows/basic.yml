@@ -57,121 +57,112 @@ jobs:
         include:
           - name: MSVC install
             os: windows-latest
-            cpp_version: 17
             preset: MSVC
             install: true
             ctest_args: -C Debug
           - name: MSVC 20
             os: windows-latest
-            cpp_version: 20
+            cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: MSVC
             ctest_args: -C Debug
           - name: ClangCL
             os: windows-latest
-            cpp_version: 17
+            cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: ClangCL
             ctest_args: -C Debug
           - name: Linux Clang 98
             os: ubuntu-latest
-            cpp_version: 98
+            cmake_args: -DCMAKE_CXX_STANDARD=98
             preset: Clang
           - name: Linux Clang 11
             os: ubuntu-latest
-            cpp_version: 11
+            cmake_args: -DCMAKE_CXX_STANDARD=11
             preset: Clang
           - name: Linux Clang 14
             os: ubuntu-latest
-            cpp_version: 14
+            cmake_args: -DCMAKE_CXX_STANDARD=14
             preset: Clang
           - name: Linux Clang 17
             os: ubuntu-latest
-            cpp_version: 17
+            cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: Clang
           - name: Linux Clang 20
             os: ubuntu-latest
-            cpp_version: 20
+            cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: Clang
           - name: Linux GNU 98
             os: ubuntu-latest
-            cpp_version: 98
+            cmake_args: -DCMAKE_CXX_STANDARD=98
             preset: GNU
           - name: No long long
             os: ubuntu-latest
-            cpp_version: 98
             preset: no-long-long
           - name: Detailed
             os: ubuntu-latest
-            cpp_version: 98
             preset: detailed
           - name: Linux GNU Install
             os: ubuntu-latest
-            cpp_version: 11
+            cmake_args: -DCMAKE_CXX_STANDARD=11
             preset: GNU
             install: true
           - name: Linux GNU 14
             os: ubuntu-latest
-            cpp_version: 14
+            cmake_args: -DCMAKE_CXX_STANDARD=14
             preset: GNU
           - name: Linux GNU 17
             os: ubuntu-latest
-            cpp_version: 17
+            cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: GNU
           - name: Linux GNU 20
             os: ubuntu-latest
-            cpp_version: 20
+            cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: GNU
           - name: MinGW
             os: ubuntu-latest
-            cpp_version: 11
             preset: MinGW
             apt_packages: mingw-w64 wine64
           - name: No C++ Standard Library
             os: ubuntu-latest
-            cpp_version: 98
             preset: no-std-cpp
           - name: No RTTI
             os: ubuntu-latest
-            cpp_version: 98
             preset: no-rtti
           - name: No Exceptions
             os: ubuntu-latest
-            cpp_version: 98
             preset: no-exceptions
           - name: No C Standard Library
             os: ubuntu-latest
-            cpp_version: 98
             preset: no-std-c
           - name: Coverage
             os: ubuntu-latest
-            cpp_version: 11
             preset: coverage
             apt_packages: lcov
           - name: GCC ARM embedded
             os: ubuntu-latest
-            cpp_version: 11
             preset: arm-embedded
           - name: Mac install
             os: macos-latest
-            cpp_version: 98
             preset: defaults
             install: true
           - name: Apple Clang 17
             os: macos-latest
-            cpp_version: 17
+            cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: Clang
           - name: Apple Clang 20
             os: macos-latest
-            cpp_version: 20
+            cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: Clang
           - name: Mac GNU 14
             os: macos-latest
-            cpp_version: 14
+            cmake_args: -DCMAKE_CXX_STANDARD=14
             preset: GNU
           - name: OpenWatcom DOS
             os: ubuntu-latest
-            cpp_version: 98
             preset: DOS
             apt_packages: dosbox
+          - name: Cygwin
+            os: windows-latest
+            preset: GNU
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
@@ -197,14 +188,28 @@ jobs:
           version: "2.0"
         if: ${{ matrix.name == 'OpenWatcom DOS' }}
 
-      ## BUILD AND TEST
-
+      - run: git config --global core.autocrlf input
+        if: ${{ matrix.name == 'Cygwin' }}
       - name: Checkout
         uses: actions/checkout@main
+
+      - name: Install Cygwin
+        uses: cygwin/cygwin-install-action@master
+        with:
+          platform: x86
+          packages: >
+            cmake
+            gcc-core
+            gcc-g++
+            make
+        if: ${{ matrix.name == 'Cygwin' }}
+
+      ## BUILD AND TEST
+
       - name: Configure
-        run: cmake --preset ${{ matrix.preset }} -D CMAKE_CXX_STANDARD=${{ matrix.cpp_version }}
+        run: cmake --preset ${{ matrix.preset }} ${{ matrix.cmake_args }}
       - name: Build
-        run: cmake --build cpputest_build --verbose
+        run: cmake --build cpputest_build --verbose -j
       - name: Test
         run: ctest --test-dir cpputest_build ${{ matrix.ctest_args }}
 
