@@ -8,18 +8,15 @@ jobs:
   test_report:
     runs-on: ubuntu-latest
     steps:
-      - name: Install tools
-        run: sudo apt-get install -y ant-optional
-      - name: Checkout
-        uses: actions/checkout@main
-      - run: |
-          autoreconf -i .
-          ./configure
-          make check
-          ./CppUTestTests -ojunit
-          ./CppUTestExtTests -ojunit
-          cp ./scripts/generate_junit_report_ant.xml .
-          ant -f generate_junit_report_ant.xml
+      - uses: actions/checkout@main
+      - run: cmake --preset=defaults -DCPPUTEST_JUNIT_REPORT=TRUE
+      - run: cmake --build cpputest_build -j
+      - run: ctest --test-dir cpputest_build
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: test-results
+          path: "cpputest_build/**/cpputest_*.xml"
 
   gtest:
     runs-on: ubuntu-latest
