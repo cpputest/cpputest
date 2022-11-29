@@ -186,7 +186,7 @@ jobs:
       - name: Install QEMU
         # The version in the ubuntu repositories (6.2) is broken.
         run: |
-          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2_amd64.deb -O qemu.deb
+          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2+b3_amd64.deb -O qemu.deb
           sudo dpkg --install qemu.deb
           rm -f qemu.deb
         if: ${{ matrix.name == 'GCC ARM embedded' }}
