@@ -71,3 +71,54 @@ jobs:
           ./configure --disable-longlong
       - name: Build and test
         run: make tdd
+
+  cmake_msys:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    env:
+      LDFLAGS: -static
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >
+            git
+            mingw-w64-x86_64-cc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
+      - name: Configure
+        run: cmake --preset=GNU
+      - name: Build
+        run: cmake --build cpputest_build -j
+      - name: Test
+        run: ctest --test-dir cpputest_build --output-on-failure
+
+  autotools_msys:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    env:
+      LDFLAGS: -static
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >
+            git
+            mingw-w64-x86_64-autotools
+            mingw-w64-x86_64-cc
+            mingw-w64-x86_64-make
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure
+      - name: Build and test
+        run: make tdd
