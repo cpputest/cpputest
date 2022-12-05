@@ -101,7 +101,7 @@ public:
  *
  */
 #define GTEST_IMPLEMENTATION_ 1
-#include "src/gtest-internal-inl.h"
+#include "../src/gtest-internal-inl.h"
 
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestFailure.h"
