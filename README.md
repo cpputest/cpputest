@@ -1,8 +1,7 @@
 CppUTest
 ========
 
-[![Github basic build](https://github.com/cpputest/cpputest/actions/workflows/basic.yml/badge.svg)](https://github.com/cpputest/cpputest/actions/workflows/basic.yml)
-[![Github extended build](https://github.com/cpputest/cpputest/actions/workflows/extended.yml/badge.svg)](https://github.com/cpputest/cpputest/actions/workflows/extended.yml)
+[![Github Actions](https://github.com/cpputest/cpputest/actions/workflows/basic.yml/badge.svg)](https://github.com/cpputest/cpputest/actions/workflows/basic.yml)
 [![AppveyorBuild status](https://ci.appveyor.com/api/projects/status/irh38i4wblsb5tew?svg=true)](https://ci.appveyor.com/project/basvodde/cpputest)
 [![CircleCI status](https://circleci.com/gh/cpputest/cpputest.svg?style=svg)](https://app.circleci.com/pipelines/github/cpputest)
 [![Coverage Status](https://coveralls.io/repos/cpputest/cpputest/badge.svg?branch=master&service=github)](https://coveralls.io/github/cpputest/cpputest?branch=master)
