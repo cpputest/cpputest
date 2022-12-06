@@ -71,8 +71,7 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-ll") listTestLocations_ = true;
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument == "-f") crashOnFail_ = true;
-        else if (argument == "-e") rethrowExceptions_ = false;
-        else if (argument == "-ci") rethrowExceptions_ = false;
+        else if ((argument == "-e") || (argument == "-ci")) rethrowExceptions_ = false;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-t", false, false);

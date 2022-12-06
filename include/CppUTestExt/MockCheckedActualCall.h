@@ -150,7 +150,7 @@ private:
     MockOutputParametersListNode* outputParameterExpectations_;
 
     virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr);
-    virtual void cleanUpOutputParameterList();
+    void cleanUpOutputParameterList();
 };
 
 class MockActualCallTrace : public MockActualCall

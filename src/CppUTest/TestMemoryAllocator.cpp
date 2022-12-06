@@ -418,7 +418,7 @@ MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationN
 
 void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node) const
 {
-    allocator_->free_memory((char*) node, sizeof(node), __FILE__, __LINE__);
+    allocator_->free_memory((char*) node, sizeof(*node), __FILE__, __LINE__);
 }
 
 MemoryAccountant::MemoryAccountant()
@@ -479,9 +479,9 @@ MemoryAccountantAllocationNode* MemoryAccountant::findNodeOfSize(size_t size) co
 {
     if (useCacheSizes_) {
         for (MemoryAccountantAllocationNode* node = head_; node; node = node->next_) {
-            if (size > node->size_ && node->next_ == NULLPTR)
-                return node;
-            else if (size <= node->size_ && !(node->next_->size_ != 0 && node->next_->size_ <= size))
+            if (((size > node->size_) && (node->next_ == NULLPTR))
+                || ((size <= node->size_) &&
+                    !((node->next_->size_ != 0) && (node->next_->size_ <= size))))
                 return node;
         }
     }

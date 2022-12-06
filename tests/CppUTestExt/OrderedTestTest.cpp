@@ -82,7 +82,7 @@ TEST_GROUP(TestOrderedTest)
 
 TEST(TestOrderedTest, TestInstallerSetsFields)
 {
-    OrderedTestInstaller(orderedTest, "testgroup", "testname", "this.cpp", 10, 5);
+    OrderedTestInstaller installer(orderedTest, "testgroup", "testname", "this.cpp", 10, 5);
     STRCMP_EQUAL("testgroup", orderedTest.getGroup().asCharString());
     STRCMP_EQUAL("testname", orderedTest.getName().asCharString());
     STRCMP_EQUAL("this.cpp", orderedTest.getFile().asCharString());

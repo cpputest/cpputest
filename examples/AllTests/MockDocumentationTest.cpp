@@ -125,8 +125,8 @@ TEST(MockDocumentation, ObjectParameters)
 TEST(MockDocumentation, returnValue)
 {
     mock().expectOneCall("function").andReturnValue(10);
-    int value = mock().actualCall("function").returnValue().getIntValue();
-    value = mock().returnValue().getIntValue();
+    mock().actualCall("function").returnValue().getIntValue();
+    int value = mock().returnValue().getIntValue();
     LONGS_EQUAL(10, value);
 }
 

@@ -30,6 +30,14 @@
       }
     },
     {
+      "name": "clang-tidy",
+      "inherits": ["Clang"],
+      "cacheVariables": {
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
+        "CMAKE_C_CLANG_TIDY": "clang-tidy"
+      }
+    },
+    {
       "name": "MSVC",
       "inherits": ["defaults"],
       "environment": {

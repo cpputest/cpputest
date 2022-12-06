@@ -126,7 +126,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSepa
 
 static int accessViolationTestFunction_()
 {
-    return *(volatile int*) NULLPTR;
+    return *(volatile int*) NULLPTR; // NOLINT(clang-analyzer-core.NullDereference)
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolationInSeparateProcessWorks)
