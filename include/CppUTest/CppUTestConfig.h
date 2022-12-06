@@ -167,7 +167,7 @@
  * Predominantly works on non-Visual C++ compilers and Visual C++ 2008 and newer
  */
 #ifndef CPPUTEST_HAVE_FENV
-  #if __STDC_IEC_559__ && CPPUTEST_USE_STD_C_LIB
+  #if (defined(__STDC_IEC_559__) && __STDC_IEC_559__) && CPPUTEST_USE_STD_C_LIB
     #define CPPUTEST_HAVE_FENV 1
   #else
     #define CPPUTEST_HAVE_FENV 0
