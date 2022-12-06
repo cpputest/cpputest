@@ -170,6 +170,9 @@ jobs:
             preset: gtest
             ctest_args: -C Debug
             apt_packages: python2 ninja-build
+          - name: Address Sanitizer
+            os: ubuntu-latest
+            preset: asan
           - name: GCC ARM embedded
             os: ubuntu-latest
             preset: arm-embedded

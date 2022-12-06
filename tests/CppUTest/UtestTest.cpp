@@ -394,8 +394,6 @@ IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 
 #else
 
-#if !CPPUTEST_SANITIZE_ADDRESS
-
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
     fixture.setTestFunction(UtestShell::crash);
@@ -403,8 +401,6 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal");
 }
-
-#endif
 
 #endif
 
