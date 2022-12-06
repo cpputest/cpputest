@@ -418,7 +418,7 @@ MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationN
 
 void MemoryAccountant::destroyAccountantAllocationNode(MemoryAccountantAllocationNode* node) const
 {
-    allocator_->free_memory((char*) node, sizeof(node), __FILE__, __LINE__); // NOLINT(bugprone-sizeof-expression)
+    allocator_->free_memory((char*) node, sizeof(*node), __FILE__, __LINE__);
 }
 
 MemoryAccountant::MemoryAccountant()
