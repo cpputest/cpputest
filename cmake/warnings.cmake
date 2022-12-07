@@ -57,7 +57,7 @@ foreach(flag IN LISTS WARNING_COMMON_FLAGS WARNING_C_FLAGS)
 endforeach()
 
 include(CheckCXXCompilerFlag)
-foreach(flag IN LISTS WARNING_C_FLAGS WARNING_CXX_ONLY_FLAGS)
+foreach(flag IN LISTS WARNING_COMMON_FLAGS WARNING_CXX_ONLY_FLAGS)
     string(REPLACE "++" "xx" WARNING_CXX_FLAG_VAR "WARNING_CXX_FLAG_${flag}")
     check_cxx_compiler_flag("${flag}" ${WARNING_CXX_FLAG_VAR})
     if(${WARNING_CXX_FLAG_VAR})
