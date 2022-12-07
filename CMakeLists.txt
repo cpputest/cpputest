@@ -45,6 +45,8 @@ cmake_dependent_option(CPPUTEST_USE_LONG_LONG "Support long long"
 
 cmake_dependent_option(CPPUTEST_BUILD_TESTING "Compile and make tests for CppUTest"
   ${PROJECT_IS_TOP_LEVEL} "BUILD_TESTING" OFF)
+cmake_dependent_option(CPPUTEST_SPLIT_TESTS "Split tests into small executables"
+  OFF "CPPUTEST_BUILD_TESTING" OFF)
 cmake_dependent_option(CPPUTEST_TEST_DISCOVERY "Build time test discover"
   ON "CPPUTEST_BUILD_TESTING;CMAKE_CROSSCOMPILING_EMULATOR OR NOT CMAKE_CROSSCOMPILING" OFF)
 cmake_dependent_option(CPPUTEST_TEST_GTEST "Test GoogleTest integration"

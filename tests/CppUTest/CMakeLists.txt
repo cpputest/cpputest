@@ -13,21 +13,32 @@ target_link_libraries(CppUTestTests_main
     PUBLIC CppUTest
 )
 
+include(CppUTest)
 
-add_executable(CppUTestTests)
+if(NOT CPPUTEST_SPLIT_TESTS)
+    add_executable(CppUTestTests)
 
-add_mapfile(CppUTestTests)
+    add_mapfile(CppUTestTests)
 
-if(CPPUTEST_TEST_DISCOVERY)
-    include(CppUTest)
-    cpputest_discover_tests(CppUTestTests)
+    if(CPPUTEST_TEST_DISCOVERY)
+        cpputest_discover_tests(CppUTestTests)
+    endif()
 endif()
 
-function(add_cpputest_test name)
-    target_sources(CppUTestTests
+function(add_cpputest_test number)
+    set(name CppUTestTests)
+    
+    if(CPPUTEST_SPLIT_TESTS)
+        string(APPEND name ${number})
+        add_executable(${name})
+        add_mapfile(${name})
+        cpputest_discover_tests(${name})
+    endif()
+
+    target_sources(${name}
         PRIVATE ${ARGN}
     )
-    target_link_libraries(CppUTestTests
+    target_link_libraries(${name}
         PRIVATE CppUTestTests_main
     )
 endfunction()
