@@ -44,21 +44,24 @@ jobs:
     strategy:
       matrix:
         include:
-          # Mac OSX
-          - os: macos-latest
+          - name: Mac GNU
+            os: macos-latest
             cc: gcc
             cxx: g++
-          - os: macos-latest
+          - name: Mac Clang
+            os: macos-latest
             cc: clang
             cxx: clang++
-          # Linux
-          - os: ubuntu-latest
+          - name: Linux GNU
+            os: ubuntu-latest
             cc: gcc
             cxx: g++
-          - os: ubuntu-latest
+          - name: Linux Clang
+            os: ubuntu-latest
             cc: clang
             cxx: clang++
     runs-on: ${{ matrix.os }}
+    name: Automake ${{ matrix.name }}
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -199,7 +202,7 @@ jobs:
           - name: Cygwin
             os: windows-latest
             preset: GNU
-    name: ${{ matrix.name }}
+    name: CMake ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
       ### SETUP
@@ -313,6 +316,7 @@ jobs:
           ./configure
       - name: Build and test
         run: make check_gtest${{ matrix.version }}
+
   make_dos:
     runs-on: ubuntu-latest
     steps:
