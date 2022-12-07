@@ -9,6 +9,7 @@ name: Basic builds
 
 jobs:
   clang-format:
+    name: Clang Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -311,6 +312,7 @@ jobs:
         if: ${{ matrix.name == 'Coverage' }}
 
   test_report:
+    name: JUnit Test Report
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
@@ -324,6 +326,7 @@ jobs:
           path: "cpputest_build/**/cpputest_*.xml"
 
   make_dos:
+    name: Make OpenWatcom DOS
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -348,6 +351,7 @@ jobs:
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
 
   cmake_msys:
+    name: CMake MSYS
     runs-on: windows-latest
     defaults:
       run:
@@ -374,6 +378,7 @@ jobs:
         run: ctest --test-dir cpputest_build --output-on-failure
 
   autotools_msys:
+    name: Automake MSYS
     runs-on: windows-latest
     defaults:
       run:
