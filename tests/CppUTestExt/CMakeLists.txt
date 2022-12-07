@@ -60,14 +60,6 @@ if(CPPUTEST_TEST_GTEST)
     target_compile_definitions(CppUTestExtTests PRIVATE CPPUTEST_INCLUDE_GTEST_TESTS)
 endif()
 
-if(MINGW)
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads)
-    if(CMAKE_USE_PTHREADS_INIT)
-        target_link_libraries(CppUTestExtTests PRIVATE Threads::Threads)
-    endif()
-endif()
-
 target_link_libraries(CppUTestExtTests
     PRIVATE
         ${CppUTestLibName}
