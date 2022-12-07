@@ -78,9 +78,14 @@ target_compile_definitions(${CppUTestLibName}
         $<$<BOOL:${HAVE_STRUCT_TIMESPEC}>:_TIMESPEC_DEFINED>
 )
 
-if (WIN32)
-    target_link_libraries(${CppUTestLibName} winmm)
-endif (WIN32)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads)
+
+target_link_libraries(${CppUTestLibName}
+    PRIVATE
+        $<$<BOOL:${WIN32}>:winmm>
+        $<$<BOOL:${CMAKE_USE_PTHREADS_INIT}>:${CMAKE_THREAD_LIBS_INIT}>
+)
 
 add_library(CppUTest::CppUTest ALIAS ${CppUTestLibName})
 

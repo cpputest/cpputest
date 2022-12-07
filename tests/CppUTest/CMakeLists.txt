@@ -43,14 +43,6 @@ if(CPPUTEST_STD_C_LIB_DISABLED)
     )
 endif()
 
-if(MINGW OR (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD"))
-    set(THREADS_PREFER_PTHREAD_FLAG ON)
-    find_package(Threads)
-    if(CMAKE_USE_PTHREADS_INIT)
-        target_link_libraries(CppUTestTests PRIVATE Threads::Threads)
-    endif()
-endif()
-
 target_link_libraries(CppUTestTests PRIVATE ${CppUTestLibName})
 
 if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.13")
