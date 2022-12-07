@@ -131,7 +131,7 @@ static PlatformSpecificMutex fakeMutexCreate(void)
 }
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = fakeMutexCreate;
 
-static void fakeMutexFunc(PlatformSpecificMutex mtx) {}
+static void fakeMutexFunc(PlatformSpecificMutex) {}
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = fakeMutexFunc;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex mtx) = fakeMutexFunc;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex mtx) = fakeMutexFunc;
