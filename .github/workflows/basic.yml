@@ -48,21 +48,42 @@ jobs:
             os: macos-latest
             cc: gcc
             cxx: g++
+            target: tdd
           - name: Mac Clang
             os: macos-latest
             cc: clang
             cxx: clang++
+            target: tdd
           - name: Linux GNU
             os: ubuntu-latest
             cc: gcc
             cxx: g++
+            target: tdd
           - name: Linux Clang
             os: ubuntu-latest
             cc: clang
             cxx: clang++
+            target: tdd
+          - name: GTest 1.5
+            os: ubuntu-20.04
+            target: check_gtest15
+          - name: GTest 1.6
+            os: ubuntu-20.04
+            target: check_gtest16
+          - name: GTest 1.7
+            os: ubuntu-20.04
+            target: check_gtest17
+          - name: GTest 1.8
+            os: ubuntu-20.04
+            target: check_gtest18
     runs-on: ${{ matrix.os }}
     name: Automake ${{ matrix.name }}
     steps:
+      - name: Install Python 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: "2.7"
+        if: ${{ startswith(matrix.name, 'GTest') }}
       - name: Checkout
         uses: actions/checkout@main
       - run: brew install automake
@@ -76,7 +97,7 @@ jobs:
           autoreconf -i .
           ./configure
       - name: Build and test
-        run: make tdd
+        run: make ${{ matrix.target }}
 
   cmake:
     strategy:
@@ -297,25 +318,6 @@ jobs:
         with:
           name: test-results
           path: "cpputest_build/**/cpputest_*.xml"
-
-  gtest:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        version: [15, 16, 17, 18]
-    steps:
-      - name: Install Python 2
-        uses: actions/setup-python@v4
-        with:
-          python-version: "2.7"
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: |
-          autoreconf -i .
-          ./configure
-      - name: Build and test
-        run: make check_gtest${{ matrix.version }}
 
   make_dos:
     runs-on: ubuntu-latest
