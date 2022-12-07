@@ -9,6 +9,7 @@ name: Basic builds
 
 jobs:
   clang-format:
+    name: Clang Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -44,22 +45,50 @@ jobs:
     strategy:
       matrix:
         include:
-          # Mac OSX
-          - os: macos-latest
+          - name: Mac GNU
+            os: macos-latest
             cc: gcc
             cxx: g++
-          - os: macos-latest
+            target: tdd
+          - name: Mac Clang
+            os: macos-latest
             cc: clang
             cxx: clang++
-          # Linux
-          - os: ubuntu-latest
+            target: tdd
+          - name: Linux GNU
+            os: ubuntu-latest
             cc: gcc
             cxx: g++
-          - os: ubuntu-latest
+            target: tdd
+          - name: Linux Clang
+            os: ubuntu-latest
             cc: clang
             cxx: clang++
+            target: tdd
+          - name: GTest 1.5
+            os: ubuntu-20.04
+            target: check_gtest15
+          - name: GTest 1.6
+            os: ubuntu-20.04
+            target: check_gtest16
+          - name: GTest 1.7
+            os: ubuntu-20.04
+            target: check_gtest17
+          - name: GTest 1.8
+            os: ubuntu-20.04
+            target: check_gtest18
+          - name: Disable long long
+            os: ubuntu-latest
+            configure_args: --disable-longlong
+            target: tdd
     runs-on: ${{ matrix.os }}
+    name: Automake ${{ matrix.name }}
     steps:
+      - name: Install Python 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: "2.7"
+        if: ${{ startswith(matrix.name, 'GTest') }}
       - name: Checkout
         uses: actions/checkout@main
       - run: brew install automake
@@ -71,9 +100,9 @@ jobs:
       - name: Configure
         run: |
           autoreconf -i .
-          ./configure
+          ./configure ${{ matrix.configure_args }}
       - name: Build and test
-        run: make tdd
+        run: make ${{ matrix.target }}
 
   cmake:
     strategy:
@@ -199,7 +228,7 @@ jobs:
           - name: Cygwin
             os: windows-latest
             preset: GNU
-    name: ${{ matrix.name }}
+    name: CMake ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     steps:
       ### SETUP
@@ -283,6 +312,7 @@ jobs:
         if: ${{ matrix.name == 'Coverage' }}
 
   test_report:
+    name: JUnit Test Report
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
@@ -295,25 +325,8 @@ jobs:
           name: test-results
           path: "cpputest_build/**/cpputest_*.xml"
 
-  gtest:
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        version: [15, 16, 17, 18]
-    steps:
-      - name: Install Python 2
-        uses: actions/setup-python@v4
-        with:
-          python-version: "2.7"
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: |
-          autoreconf -i .
-          ./configure
-      - name: Build and test
-        run: make check_gtest${{ matrix.version }}
   make_dos:
+    name: Make OpenWatcom DOS
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -337,19 +350,8 @@ jobs:
           TERM: linux
         run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
 
-  automake-no-long-long:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@main
-      - name: Configure
-        run: |
-          autoreconf -i .
-          ./configure --disable-longlong
-      - name: Build and test
-        run: make tdd
-
   cmake_msys:
+    name: CMake MSYS
     runs-on: windows-latest
     defaults:
       run:
@@ -376,6 +378,7 @@ jobs:
         run: ctest --test-dir cpputest_build --output-on-failure
 
   autotools_msys:
+    name: Automake MSYS
     runs-on: windows-latest
     defaults:
       run:

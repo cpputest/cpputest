@@ -2,7 +2,7 @@
 name: 'Test Report'
 "on":
   workflow_run:
-    workflows: ['Extended builds']
+    workflows: ['Basic builds']
     types:
       - completed
 jobs:
