@@ -44,7 +44,7 @@ class MockPrinter : public Printer
 {
 public:
     explicit MockPrinter() {}
-    virtual ~MockPrinter() {}
+    virtual ~MockPrinter() _destructor_override {}
 
     virtual void Print(const char* s) _override
     {
