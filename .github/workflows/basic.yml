@@ -335,6 +335,7 @@ jobs:
       matrix:
         include:
           - name: Defaults
+            test_cmd: ./CppUTest_tests -r
           - name: STDC++ disabled
             make_args: >
               CPPUTEST_USE_STD_CPP_LIB=Y
@@ -371,23 +372,41 @@ jobs:
               CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
           - name: Examples
             make_args: examples
+          - name: JUnit Output
+            test_cmd: ./CppUTest_tests -ojunit
           - name: gcov
             make_args: >
               CPPUTEST_USE_GCOV=Y
               everythingInstall
+            test_cmd: >
+              make -f Makefile_using_MakefileWorker gcov &&
+              make -f Makefile_CppUTestExt gcov &&
+              make -C examples gcov
           - name: VPATH usage
             make_args: >
               CPPUTEST_USE_GCOV=Y
               CPPUTEST_USE_VPATH=Y
               everythingInstall
+            test_cmd: >
+              make CPPUTEST_USE_VPATH=Y -f Makefile_CppUTestExt gcov &&
+              make CPPUTEST_USE_VPATH=Y -C examples gcov
+          - name: VPATH Install
+            make_args: CPPUTEST_USE_VPATH=Y everythingInstall
+            test_cmd:
+              make -f Makefile_using_MakefileWorker flags &&
+              make -f Makefile_using_MakefileWorker debug
     name: Make ${{ matrix.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - run: >
+      - name: Build
+        run: >
           make
           -f Makefile_using_MakefileWorker
           ${{ matrix.make_args }}
+      - name: Test
+        run: ${{ matrix.test_cmd }}
+        if: ${{ matrix.test_cmd }}
 
   make_dos:
     name: Make OpenWatcom DOS
