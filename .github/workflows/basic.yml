@@ -330,6 +330,65 @@ jobs:
           name: test-results
           path: "cpputest_build/**/cpputest_*.xml"
 
+  make:
+    strategy:
+      matrix:
+        include:
+          - name: Defaults
+          - name: STDC++ disabled
+            make_args: >
+              CPPUTEST_USE_STD_CPP_LIB=Y
+              extensions
+          - name: Memory Leak Detection disabled
+            make_args: >
+              CPPUTEST_USE_MEM_LEAK_DETECTION=N
+              extensions
+          - name: Memory Leak Detection disabled and STD C++ disabled
+            make_args: >
+              CPPUTEST_USE_MEM_LEAK_DETECTION=N
+              CPPUTEST_USE_STD_CPP_LIB=Y
+              extensions
+          - name: debug disabled
+            make_args: >
+              CPPUTEST_ENABLE_DEBUG=N
+              extensions
+          - name: overridden CXXFLAGS and CFLAGS and CPPFLAGS
+            make_args: >
+              CLFAGS=""
+              CXXFLAGS=""
+              CPPFLAGS="-Iinclude"
+          - name: without Standard C library includes
+            make_args: >
+              CPPUTEST_USE_STD_C_LIB=N
+              CPPUTEST_ADDITIONAL_CPPFLAGS=-DCPPUTEST_CHAR_BIT=8
+              all_no_tests
+          - name: different TARGET_PLATFORM
+            make_args: TARGET_PLATFORM=real_platform
+          - name: overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
+            make_args: >
+              CLFAGS=""
+              CXXFLAGS=""
+              CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
+          - name: Examples
+            make_args: examples
+          - name: gcov
+            make_args: >
+              CPPUTEST_USE_GCOV=Y
+              everythingInstall
+          - name: VPATH usage
+            make_args: >
+              CPPUTEST_USE_GCOV=Y
+              CPPUTEST_USE_VPATH=Y
+              everythingInstall
+    name: Make ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - run: >
+          make
+          -f Makefile_using_MakefileWorker
+          ${{ matrix.make_args }}
+
   make_dos:
     name: Make OpenWatcom DOS
     runs-on: ubuntu-latest
