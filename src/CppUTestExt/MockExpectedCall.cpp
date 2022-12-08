@@ -125,7 +125,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnsignedLongIntParameter(const Si
     return *this;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockExpectedCall& MockCheckedExpectedCall::withLongLongIntParameter(const SimpleString& name, cpputest_longlong value)
 {
@@ -248,7 +248,7 @@ MockExpectedCall& MockCheckedExpectedCall::withUnmodifiedOutputParameter(const S
 SimpleString MockCheckedExpectedCall::getInputParameterType(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
-    return (p) ? p->getType() : "";
+    return (p) ? p->getType() : StringFrom("");
 }
 
 bool MockCheckedExpectedCall::hasInputParameterWithName(const SimpleString& name)
@@ -368,7 +368,7 @@ void MockCheckedExpectedCall::outputParameterWasPassed(const SimpleString& name)
 SimpleString MockCheckedExpectedCall::getInputParameterValueString(const SimpleString& name)
 {
     MockNamedValue * p = inputParameters_->getValueByName(name);
-    return (p) ? StringFrom(*p) : "failed";
+    return (p) ? StringFrom(*p) : StringFrom("failed");
 }
 
 bool MockCheckedExpectedCall::hasInputParameter(const MockNamedValue& parameter)
@@ -514,7 +514,7 @@ MockExpectedCall& MockCheckedExpectedCall::andReturnValue(unsigned long int valu
     return *this;
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 MockExpectedCall& MockCheckedExpectedCall::andReturnValue(cpputest_longlong value)
 {

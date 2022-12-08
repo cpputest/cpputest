@@ -14,7 +14,7 @@ Like this:
 	
 You might have to add the execute privilege to the shell scripts.
 Like this:
-	chmod *.sh
+	chmod +x *.sh
 
 Using NewClass for example:
 	cd to the directory where you want the files located

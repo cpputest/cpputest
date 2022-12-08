@@ -32,11 +32,15 @@
 class ObserverMock : public EventObserver
 {
 public:
-    virtual void notify(const Event& event, int timeOutInSeconds)
+    virtual void notify(const Event& event, int timeOutInSeconds) _override
     {
-        mock().actualCall("notify").onObject(this).withParameterOfType("Event", "event", (void*) &event).withParameter("timeOutInSeconds", timeOutInSeconds);
+        mock()
+            .actualCall("notify")
+            .onObject(this)
+            .withParameterOfType("Event", "event", (void*)&event)
+            .withParameter("timeOutInSeconds", timeOutInSeconds);
     }
-    virtual void notifyRegistration(EventObserver* newObserver)
+    virtual void notifyRegistration(EventObserver* newObserver) _override
     {
         mock().actualCall("notifyRegistration").onObject(this).withParameter("newObserver", newObserver);
     }
@@ -45,16 +49,15 @@ public:
 class EventComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2)
+    virtual bool isEqual(const void* object1, const void* object2) _override
     {
         return ((const Event*)object1)->type == ((const Event*)object2)->type;
     }
-    virtual SimpleString valueToString(const void* object)
+    virtual SimpleString valueToString(const void* object) _override
     {
         return StringFrom(((const Event*)object)->type);
     }
 };
-
 
 TEST_GROUP(EventDispatcher)
 {
@@ -64,18 +67,17 @@ TEST_GROUP(EventDispatcher)
     ObserverMock observer2;
     EventComparator eventComparator;
 
-    void setup()
+    void setup() _override
     {
         dispatcher = new EventDispatcher;
         mock().installComparator("Event", eventComparator);
     }
-    void teardown()
+    void teardown() _override
     {
         delete dispatcher;
         mock().removeAllComparatorsAndCopiers();
     }
 };
-
 
 TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 {
@@ -84,7 +86,11 @@ TEST(EventDispatcher, EventWithoutRegistrationsResultsIntoNoCalls)
 
 TEST(EventDispatcher, EventWithRegistrationForEventResultsIntoCallback)
 {
-    mock().expectOneCall("notify").onObject(&observer).withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+    mock()
+        .expectOneCall("notify")
+        .onObject(&observer)
+        .withParameterOfType("Event", "event", &event)
+        .withParameter("timeOutInSeconds", 10);
     event.type = IMPORTANT_EVENT;
 
     dispatcher->registerObserver(IMPORTANT_EVENT, &observer);
@@ -100,8 +106,16 @@ TEST(EventDispatcher, DifferentEventWithRegistrationDoesNotResultIntoCallback)
 
 TEST(EventDispatcher, RegisterTwoObserversResultIntoTwoCallsAndARegistrationNotification)
 {
-    mock().expectOneCall("notify").onObject(&observer).withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
-    mock().expectOneCall("notify").onObject(&observer2).withParameterOfType("Event", "event", &event).withParameter("timeOutInSeconds", 10);
+    mock()
+        .expectOneCall("notify")
+        .onObject(&observer)
+        .withParameterOfType("Event", "event", &event)
+        .withParameter("timeOutInSeconds", 10);
+    mock()
+        .expectOneCall("notify")
+        .onObject(&observer2)
+        .withParameterOfType("Event", "event", &event)
+        .withParameter("timeOutInSeconds", 10);
     mock().expectOneCall("notifyRegistration").onObject(&observer).withParameter("newObserver", &observer2);
 
     event.type = IMPORTANT_EVENT;

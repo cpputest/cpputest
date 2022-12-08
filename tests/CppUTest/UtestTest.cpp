@@ -30,62 +30,74 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#if CPPUTEST_USE_STD_C_LIB
+#include <math.h>
+#endif
+
 TEST_GROUP(UtestShell)
 {
     TestTestingFixture fixture;
 };
 
-static void _failMethod()
+static void failMethod_()
 {
     FAIL("This test fails");
 }
 
-static void _passingTestMethod()
+static void passingTestMethod_()
 {
     CHECK(true);
 }
 
-static void _passingCheckEqualTestMethod()
+static void passingCheckEqualTestMethod_()
 {
     CHECK_EQUAL(1, 1);
 }
 
-static void _exitTestMethod()
+static void exitTestMethod_()
 {
     TEST_EXIT;
     FAIL("Should not get here");
 }
 
-static volatile double zero = 0.0;
-
 TEST(UtestShell, compareDoubles)
 {
-    double not_a_number = zero / zero;
-    double infinity = 1 / zero;
     CHECK(doubles_equal(1.0, 1.001, 0.01));
-    CHECK(!doubles_equal(not_a_number, 1.001, 0.01));
-    CHECK(!doubles_equal(1.0, not_a_number, 0.01));
-    CHECK(!doubles_equal(1.0, 1.001, not_a_number));
     CHECK(!doubles_equal(1.0, 1.1, 0.05));
-    CHECK(!doubles_equal(infinity, 1.0, 0.01));
-    CHECK(!doubles_equal(1.0, infinity, 0.01));
-    CHECK(doubles_equal(1.0, -1.0, infinity));
-    CHECK(doubles_equal(infinity, infinity, 0.01));
-    CHECK(doubles_equal(infinity, infinity, infinity));
     double a = 1.2345678;
     CHECK(doubles_equal(a, a, 0.000000001));
 }
 
+#ifdef NAN
+TEST(UtestShell, compareDoublesNaN)
+{
+    CHECK(!doubles_equal((double)NAN, 1.001, 0.01));
+    CHECK(!doubles_equal(1.0, (double)NAN, 0.01));
+    CHECK(!doubles_equal(1.0, 1.001, (double)NAN));
+}
+#endif
+
+#ifdef INFINITY
+TEST(UtestShell, compareDoublesInf)
+{
+    CHECK(!doubles_equal((double)INFINITY, 1.0, 0.01));
+    CHECK(!doubles_equal(1.0, (double)INFINITY, 0.01));
+    CHECK(doubles_equal(1.0, -1.0, (double)INFINITY));
+    CHECK(doubles_equal((double)INFINITY, (double)INFINITY, 0.01));
+    CHECK(doubles_equal((double)INFINITY, (double)INFINITY, (double)INFINITY));
+}
+#endif
+
 TEST(UtestShell, FailWillIncreaseTheAmountOfChecks)
 {
-    fixture.setTestFunction(_failMethod);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
 
 TEST(UtestShell, PassedCheckEqualWillIncreaseTheAmountOfChecks)
 {
-    fixture.setTestFunction(_passingCheckEqualTestMethod);
+    fixture.setTestFunction(passingCheckEqualTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getCheckCount());
 }
@@ -98,8 +110,8 @@ IGNORE_TEST(UtestShell, IgnoreTestAccessingFixture)
 TEST(UtestShell, MacrosUsedInSetup)
 {
     IGNORE_ALL_LEAKS_IN_TEST();
-    fixture.setSetup(_failMethod);
-    fixture.setTestFunction(_passingTestMethod);
+    fixture.setSetup(failMethod_);
+    fixture.setTestFunction(passingTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
@@ -107,15 +119,15 @@ TEST(UtestShell, MacrosUsedInSetup)
 TEST(UtestShell, MacrosUsedInTearDown)
 {
     IGNORE_ALL_LEAKS_IN_TEST();
-    fixture.setTeardown(_failMethod);
-    fixture.setTestFunction(_passingTestMethod);
+    fixture.setTeardown(failMethod_);
+    fixture.setTestFunction(passingTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
 }
 
 TEST(UtestShell, ExitLeavesQuietly)
 {
-    fixture.setTestFunction(_exitTestMethod);
+    fixture.setTestFunction(exitTestMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(0, fixture.getFailureCount());
 }
@@ -132,7 +144,7 @@ TEST(UtestShell, FailWillNotCrashIfNotEnabled)
     cpputestHasCrashed = false;
     UtestShell::setCrashMethod(crashMethod);
 
-    fixture.setTestFunction(_failMethod);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
 
     CHECK_FALSE(cpputestHasCrashed);
@@ -147,7 +159,7 @@ TEST(UtestShell, FailWillCrashIfEnabled)
     UtestShell::setCrashOnFail();
     UtestShell::setCrashMethod(crashMethod);
 
-    fixture.setTestFunction(_failMethod);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
 
     CHECK(cpputestHasCrashed);
@@ -160,7 +172,7 @@ TEST(UtestShell, FailWillCrashIfEnabled)
 
 static int teardownCalled = 0;
 
-static void _teardownMethod()
+static void teardownMethod_()
 {
     teardownCalled++;
 }
@@ -169,15 +181,15 @@ TEST(UtestShell, TeardownCalledAfterTestFailure)
 {
     teardownCalled = 0;
     IGNORE_ALL_LEAKS_IN_TEST();
-    fixture.setTeardown(_teardownMethod);
-    fixture.setTestFunction(_failMethod);
+    fixture.setTeardown(teardownMethod_);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
     LONGS_EQUAL(1, teardownCalled);
 }
 
 static int stopAfterFailure = 0;
-static void _stopAfterFailureMethod()
+static void stopAfterFailureMethod_()
 {
     FAIL("fail");
     stopAfterFailure++;
@@ -187,7 +199,7 @@ TEST(UtestShell, TestStopsAfterTestFailure)
 {
     IGNORE_ALL_LEAKS_IN_TEST();
     stopAfterFailure = 0;
-    fixture.setTestFunction(_stopAfterFailureMethod);
+    fixture.setTestFunction(stopAfterFailureMethod_);
     fixture.runAllTests();
     CHECK(fixture.hasTestFailed());
     LONGS_EQUAL(1, fixture.getFailureCount());
@@ -197,13 +209,145 @@ TEST(UtestShell, TestStopsAfterTestFailure)
 TEST(UtestShell, TestStopsAfterSetupFailure)
 {
     stopAfterFailure = 0;
-    fixture.setSetup(_stopAfterFailureMethod);
-    fixture.setTeardown(_stopAfterFailureMethod);
-    fixture.setTestFunction(_failMethod);
+    fixture.setSetup(stopAfterFailureMethod_);
+    fixture.setTeardown(stopAfterFailureMethod_);
+    fixture.setTestFunction(failMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(2, fixture.getFailureCount());
     LONGS_EQUAL(0, stopAfterFailure);
 }
+
+#if CPPUTEST_HAVE_EXCEPTIONS
+
+// Prevents -Wunreachable-code; should always be 'true'
+static bool shouldThrowException = true;
+
+static void thrownUnknownExceptionMethod_()
+{
+    if (shouldThrowException)
+    {
+        throw 33;
+    }
+    stopAfterFailure++;
+}
+
+TEST(UtestShell, TestStopsAfterUnknownExceptionIsThrown)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    UtestShell::setRethrowExceptions(false);
+    stopAfterFailure = 0;
+    shouldThrowException = true;
+    fixture.setTestFunction(thrownUnknownExceptionMethod_);
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+
+TEST(UtestShell, NoExceptionIsRethrownIfEnabledButNotThrown)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    bool exceptionRethrown = false;
+    stopAfterFailure = 0;
+    UtestShell::setRethrowExceptions(true);
+    shouldThrowException = false;
+    fixture.setTestFunction(thrownUnknownExceptionMethod_);
+    try
+    {
+        fixture.runAllTests();
+    }
+    catch(...)
+    {
+        exceptionRethrown = true;
+    }
+    CHECK_FALSE(exceptionRethrown);
+    LONGS_EQUAL(0, fixture.getFailureCount());
+    LONGS_EQUAL(1, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+
+TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    bool exceptionRethrown = false;
+    stopAfterFailure = 0;
+    UtestShell::setRethrowExceptions(true);
+    shouldThrowException = true;
+    fixture.setTestFunction(thrownUnknownExceptionMethod_);
+    try
+    {
+        fixture.runAllTests();
+        stopAfterFailure++;
+    }
+    catch(...)
+    {
+        exceptionRethrown = true;
+    }
+    CHECK_TRUE(exceptionRethrown);
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+
+#if CPPUTEST_USE_STD_CPP_LIB
+static void thrownStandardExceptionMethod_()
+{
+    if (shouldThrowException)
+    {
+        throw std::runtime_error("exception text");
+    }
+    stopAfterFailure++;
+}
+
+TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    UtestShell::setRethrowExceptions(false);
+    stopAfterFailure = 0;
+    shouldThrowException = true;
+    fixture.setTestFunction(thrownStandardExceptionMethod_);
+    fixture.runAllTests();
+    LONGS_EQUAL(1, fixture.getFailureCount());
+#if CPPUTEST_HAVE_RTTI
+    fixture.assertPrintContains("Unexpected exception of type '");
+    fixture.assertPrintContains("runtime_error");
+    fixture.assertPrintContains("' was thrown: exception text");
+#else
+    fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
+#endif
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+
+TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
+{
+    bool initialRethrowExceptions = UtestShell::isRethrowingExceptions();
+    bool exceptionRethrown = false;
+    stopAfterFailure = 0;
+    UtestShell::setRethrowExceptions(true);
+    shouldThrowException = true;
+    fixture.setTestFunction(thrownStandardExceptionMethod_);
+    try
+    {
+        fixture.runAllTests();
+        stopAfterFailure++;
+    }
+    catch(const std::exception &)
+    {
+        exceptionRethrown = true;
+    }
+    CHECK_TRUE(exceptionRethrown);
+    LONGS_EQUAL(1, fixture.getFailureCount());
+    fixture.assertPrintContains("Unexpected exception of type '");
+    fixture.assertPrintContains("runtime_error");
+    fixture.assertPrintContains("' was thrown: exception text");
+    LONGS_EQUAL(0, stopAfterFailure);
+    UtestShell::setRethrowExceptions(initialRethrowExceptions);
+}
+#endif // CPPUTEST_USE_STD_CPP_LIB
+#endif // CPPUTEST_HAVE_EXCEPTIONS
 
 TEST(UtestShell, veryVebose)
 {
@@ -243,13 +387,12 @@ TEST(UtestShell, RunInSeparateProcessTest)
     fixture.assertPrintContains("Failed in separate process");
 }
 
-#ifndef CPPUTEST_HAVE_FORK
+// There is a possibility that a compiler provides fork but not waitpid.
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 IGNORE_TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest) {}
 
 #else
-
-#if !CPPUTEST_SANITIZE_ADDRESS
 
 TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
 {
@@ -257,20 +400,15 @@ TEST(UtestShell, TestDefaultCrashMethodInSeparateProcessTest)
     fixture.setRunTestsInSeperateProcess();
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal");
-
-    /* Signal 11 usually happens, but with clang3.7 on Linux, it produced signal 4 */
-    CHECK(fixture.getOutput().contains("signal 11") || fixture.getOutput().contains("signal 4"));
 }
 
 #endif
 
-#endif
-
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 static bool destructorWasCalledOnFailedTest = false;
 
-static void _destructorCalledForLocalObjects()
+static void destructorCalledForLocalObjects_()
 {
     SetBooleanOnDestructorCall pleaseCallTheDestructor(destructorWasCalledOnFailedTest);
     destructorWasCalledOnFailedTest = false;
@@ -279,7 +417,7 @@ static void _destructorCalledForLocalObjects()
 
 TEST(UtestShell, DestructorIsCalledForLocalObjectsWhenTheTestFails)
 {
-    fixture.setTestFunction(_destructorCalledForLocalObjects);
+    fixture.setTestFunction(destructorCalledForLocalObjects_);
     fixture.runAllTests();
     CHECK(destructorWasCalledOnFailedTest);
 }
@@ -371,12 +509,12 @@ TEST_BASE(MyOwnTest)
     }
     bool inTest;
 
-    void setup()
+    void setup() _override
     {
         CHECK(!inTest);
         inTest = true;
     }
-    void teardown()
+    void teardown() _override
     {
         CHECK(inTest);
         inTest = false;
@@ -451,7 +589,7 @@ TEST_GROUP(UtestShellPointerArrayTest)
     UtestShell* test1;
     UtestShell* test2;
 
-    void setup()
+    void setup() _override
     {
         test0 = new IgnoredUtestShell();
         test1 = new IgnoredUtestShell();
@@ -461,7 +599,7 @@ TEST_GROUP(UtestShellPointerArrayTest)
         test1->addTest(test2);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete test0;
         delete test1;

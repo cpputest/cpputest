@@ -199,20 +199,21 @@ MockUnexpectedOutputParameterFailure::MockUnexpectedOutputParameterFailure(Utest
     message_ += parameter.getName();
 }
 
-MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, const MockExpectedCallsList& expectations) : MockFailure(test)
+MockExpectedParameterDidntHappenFailure::MockExpectedParameterDidntHappenFailure(UtestShell* test, const SimpleString& functionName, 
+                                                                                 const MockExpectedCallsList& allExpectations,
+                                                                                 const MockExpectedCallsList& matchingExpectations) : MockFailure(test)
 {
-    MockExpectedCallsList expectationsForFunction;
-    expectationsForFunction.addExpectationsRelatedTo(functionName, expectations);
-
     message_ = "Mock Failure: Expected parameter for function \"";
     message_ += functionName;
     message_ += "\" did not happen.\n";
 
-    addExpectationsAndCallHistoryRelatedTo(functionName, expectations);
+    message_ += "\tEXPECTED calls with MISSING parameters related to function: ";
+    message_ += functionName;
+    message_ += "\n";
+    message_ += matchingExpectations.callsWithMissingParametersToString("\t\t", "\tMISSING parameters: ");
+    message_ += "\n";
 
-    message_ += "\n\tMISSING parameters that didn't happen:\n";
-    message_ += "\t\t";
-    message_ += expectationsForFunction.missingParametersToString();
+    addExpectationsAndCallHistoryRelatedTo(functionName, allExpectations);
 }
 
 MockNoWayToCompareCustomTypeFailure::MockNoWayToCompareCustomTypeFailure(UtestShell* test, const SimpleString& typeName) : MockFailure(test)

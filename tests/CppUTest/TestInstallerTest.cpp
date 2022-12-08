@@ -42,13 +42,13 @@ TEST_GROUP(TestInstaller)
     TestInstaller* testInstaller;
     TestRegistry* myRegistry;
     TestInstallerTestUtestShell shell;
-    void setup()
+    void setup() _override
     {
         myRegistry = new TestRegistry();
         myRegistry->setCurrentRegistry(myRegistry);
         testInstaller = new TestInstaller(shell, "TestInstaller", "test", __FILE__, __LINE__);
     }
-    void teardown()
+    void teardown() _override
     {
         myRegistry->setCurrentRegistry(NULLPTR);
         testInstaller->unDo();
@@ -60,4 +60,3 @@ TEST_GROUP(TestInstaller)
 TEST(TestInstaller, Create)
 {
 }
-

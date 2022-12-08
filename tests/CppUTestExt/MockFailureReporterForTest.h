@@ -38,7 +38,7 @@ class MockFailureReporterForTest : public MockFailureReporter
 public:
     SimpleString mockFailureString;
 
-    virtual void failTest(const MockFailure& failure);
+    virtual void failTest(const MockFailure& failure) _override;
     static MockFailureReporterForTest* getReporter();
     static void clearReporter();
 private:
@@ -68,4 +68,3 @@ class MockExpectedCallsListForTest : public MockExpectedCallsList
 };
 
 #endif
-

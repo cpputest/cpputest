@@ -38,6 +38,10 @@
 
 #include "SimpleString.h"
 
+#if CPPUTEST_USE_STD_CPP_LIB
+#include <stdexcept>
+#endif
+
 class UtestShell;
 class TestOutput;
 
@@ -63,13 +67,8 @@ public:
 
 
 protected:
-    enum DifferenceFormat
-    {
-        DIFFERENCE_STRING, DIFFERENCE_BINARY
-    };
-
     SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
-    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t position, DifferenceFormat format = DIFFERENCE_STRING);
+    SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t offset, size_t reportedPosition);
     SimpleString createUserText(const SimpleString& text);
 
     SimpleString testName_;
@@ -186,5 +185,16 @@ class FeatureUnsupportedFailure : public TestFailure
 public:
     FeatureUnsupportedFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& featureName, const SimpleString& text);
 };
+
+#if CPPUTEST_HAVE_EXCEPTIONS
+class UnexpectedExceptionFailure : public TestFailure
+{
+public:
+    UnexpectedExceptionFailure(UtestShell* test);
+#if CPPUTEST_USE_STD_CPP_LIB
+    UnexpectedExceptionFailure(UtestShell* test, const std::exception &e);
+#endif
+};
+#endif
 
 #endif

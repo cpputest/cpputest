@@ -92,8 +92,9 @@ public:
     virtual void * returnPointerValue() _override;
     virtual void * returnPointerValueOrDefault(void *) _override;
 
-    virtual void (*returnFunctionPointerValue())() _override;
-    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
+    typedef void (*FunctionPointerReturnValue)();
+    virtual FunctionPointerReturnValue returnFunctionPointerValue() _override;
+    virtual FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*)()) _override;
 
     virtual MockActualCall& onObject(const void* objectPtr) _override;
 
@@ -149,7 +150,7 @@ private:
     MockOutputParametersListNode* outputParameterExpectations_;
 
     virtual void addOutputParameter(const SimpleString& name, const SimpleString& type, void* ptr);
-    virtual void cleanUpOutputParameterList();
+    void cleanUpOutputParameterList();
 };
 
 class MockActualCallTrace : public MockActualCall
@@ -213,8 +214,8 @@ public:
     virtual const void * returnConstPointerValue() _override;
     virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
 
-    virtual void (*returnFunctionPointerValue())() _override;
-    virtual void (*returnFunctionPointerValueOrDefault(void (*)()))() _override;
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValue() _override;
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*)()) _override;
 
     virtual MockActualCall& onObject(const void* objectPtr) _override;
 
@@ -268,10 +269,28 @@ public:
     virtual long int returnLongIntValue() _override { return 0; }
     virtual long int returnLongIntValueOrDefault(long int value) _override { return value; }
 
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override { return 0; }
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override
+    {
+#if CPPUTEST_USE_LONG_LONG
+        return 0;
+#else
+        cpputest_ulonglong ret = {};
+        return ret;
+#endif
+    }
+
     virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong value) _override { return value; }
 
-    virtual cpputest_longlong returnLongLongIntValue() _override { return 0; }
+    virtual cpputest_longlong returnLongLongIntValue() _override
+    {
+#if CPPUTEST_USE_LONG_LONG
+        return 0;
+#else
+        cpputest_longlong ret = {};
+        return ret;
+#endif
+    }
+
     virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong value) _override { return value; }
 
     virtual unsigned int returnUnsignedIntValue() _override { return 0; }
@@ -289,8 +308,8 @@ public:
     virtual const void * returnConstPointerValue() _override { return NULLPTR; }
     virtual const void * returnConstPointerValueOrDefault(const void * value) _override { return value; }
 
-    virtual void (*returnFunctionPointerValue())() _override { return NULLPTR; }
-    virtual void (*returnFunctionPointerValueOrDefault(void (*value)()))() _override { return value; }
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValue() _override { return NULLPTR; }
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*value)()) _override { return value; }
 
     virtual MockActualCall& onObject(const void* ) _override { return *this; }
 

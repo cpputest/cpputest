@@ -44,9 +44,18 @@ MockSupport& mock(const SimpleString& mockName, MockFailureReporter* failureRepo
 }
 
 MockSupport::MockSupport(const SimpleString& mockName)
-    : actualCallOrder_(0), expectedCallOrder_(0), strictOrdering_(false), standardReporter_(&defaultReporter_), ignoreOtherCalls_(false), enabled_(true), lastActualFunctionCall_(NULLPTR), mockName_(mockName), tracing_(false)
+    :
+        actualCallOrder_(0),
+        expectedCallOrder_(0),
+        strictOrdering_(false),
+        activeReporter_(NULLPTR),
+        standardReporter_(&defaultReporter_),
+        ignoreOtherCalls_(false),
+        enabled_(true),
+        lastActualFunctionCall_(NULLPTR),
+        mockName_(mockName),
+        tracing_(false)
 {
-    setActiveReporter(NULLPTR);
 }
 
 MockSupport::~MockSupport()
@@ -546,7 +555,7 @@ unsigned long int MockSupport::unsignedLongIntReturnValue()
     return returnValue().getUnsignedLongIntValue();
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 cpputest_longlong MockSupport::longLongIntReturnValue()
 {
@@ -579,13 +588,15 @@ cpputest_ulonglong MockSupport::returnUnsignedLongLongIntValueOrDefault(cpputest
 cpputest_longlong MockSupport::longLongIntReturnValue()
 {
     FAIL("Long Long type is not supported");
-    return cpputest_longlong(0);
+    cpputest_longlong ret = {};
+    return ret;
 }
 
 cpputest_ulonglong MockSupport::unsignedLongLongIntReturnValue()
 {
     FAIL("Unsigned Long Long type is not supported");
-    return cpputest_ulonglong(0);
+    cpputest_ulonglong ret = {};
+    return ret;
 }
 
 cpputest_longlong MockSupport::returnLongLongIntValueOrDefault(cpputest_longlong defaultValue)

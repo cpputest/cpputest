@@ -1,0 +1,184 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "defaults",
+      "binaryDir": "cpputest_build",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "CMAKE_CXX_EXTENSIONS": false
+      }
+    },
+    {
+      "name": "GNU",
+      "inherits": ["defaults"],
+      "environment": {
+        "CFLAGS": "-Werror",
+        "CXXFLAGS": "-Werror"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "gcc",
+        "CMAKE_CXX_COMPILER": "g++"
+      }
+    },
+    {
+      "name": "Clang",
+      "inherits": ["GNU"],
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "clang",
+        "CMAKE_CXX_COMPILER": "clang++"
+      }
+    },
+    {
+      "name": "clang-tidy",
+      "inherits": ["Clang"],
+      "cacheVariables": {
+        "CMAKE_CXX_CLANG_TIDY": "clang-tidy",
+        "CMAKE_C_CLANG_TIDY": "clang-tidy"
+      }
+    },
+    {
+      "name": "MSVC",
+      "inherits": ["defaults"],
+      "environment": {
+        "CFLAGS": "/WX",
+        "CXXFLAGS": "/WX"
+      }
+    },
+    {
+      "name": "ClangCL",
+      "inherits": ["MSVC"],
+      "generator": "Visual Studio 17 2022",
+      "toolset": "ClangCL"
+    },
+    {
+      "name": "MinGW",
+      "inherits": ["GNU"],
+      "environment": {
+        "LDFLAGS": "-static"
+      },
+      "cacheVariables": {
+        "CMAKE_C_COMPILER": "x86_64-w64-mingw32-gcc",
+        "CMAKE_CXX_COMPILER": "x86_64-w64-mingw32-g++",
+        "CMAKE_SYSTEM_NAME": "Windows",
+        "CMAKE_CROSSCOMPILING_EMULATOR": "wine"
+      }
+    },
+    {
+      "name": "arm-embedded",
+      "inherits": ["defaults"],
+      "toolchainFile": "${sourceDir}/cmake/Toolchains/arm-none-eabi-gcc.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_CROSSCOMPILING_EMULATOR": "qemu-arm-static;-cpu;cortex-m4"
+      }
+    },
+    {
+      "name": "coverage",
+      "inherits": ["GNU"],
+      "environment": {
+        "CFLAGS": "--coverage",
+        "CXXFLAGS": "--coverage"
+      },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_STANDARD": "11",
+        "CPPUTEST_EXAMPLES": false
+      }
+    },
+    {
+      "name": "no-std-cpp",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror  -nostdinc++"
+      },
+      "cacheVariables": {
+        "CPPUTEST_STD_CPP_LIB_DISABLED": true
+      }
+    },
+    {
+      "name": "no-rtti",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -fno-rtti"
+      }
+    },
+    {
+      "name": "no-exceptions",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-Werror -fno-exceptions"
+      }
+    },
+    {
+      "name": "no-std-c",
+      "inherits": ["GNU"],
+      "environment": {
+        "CXXFLAGS": "-DCPPUTEST_CHAR_BIT=8 -Werror -nostdinc",
+        "CFLAGS": "-DCPPUTEST_CHAR_BIT=8 -Werror -nostdinc"
+      },
+      "cacheVariables": {
+        "CPPUTEST_STD_C_LIB_DISABLED": true
+      }
+    },
+    {
+      "name": "no-long-long",
+      "inherits": ["GNU"],
+      "cacheVariables": {
+        "CPPUTEST_USE_LONG_LONG": false
+      }
+    },
+    {
+      "name": "asan",
+      "inherits": ["Clang"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true
+      },
+      "environment": {
+        "CFLAGS": "-fsanitize=address -fno-omit-frame-pointer",
+        "CXXFLAGS": "-fsanitize=address -fno-omit-frame-pointer",
+        "LDFLAGS": "-fsanitize=address"
+      }
+    },
+    {
+      "name": "detailed",
+      "inherits": ["defaults"],
+      "cacheVariables": {
+        "CPPUTEST_TESTS_DETAILED": true
+      }
+    },
+    {
+      "name": "gtest",
+      "inherits": ["defaults"],
+      "generator": "Ninja Multi-Config",
+      "cacheVariables": {
+        "CPPUTEST_TEST_GTEST": true,
+        "gtest_build_tests": true
+      }
+    },
+    {
+      "name": "IAR",
+      "inherits": ["defaults"],
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Generic",
+        "CMAKE_C_COMPILER": "iccarm",
+        "CMAKE_C_FLAGS_INIT": "--cpu Cortex-M4F --dlib_config normal",
+        "CMAKE_CXX_COMPILER": "iccarm",
+        "CMAKE_CXX_FLAGS_INIT": "--cpu Cortex-M4F --dlib_config normal",
+        "CMAKE_EXE_LINKER_FLAGS": "--semihosting --config ${sourceDir}/platforms/iar/CppUTestTest.icf"
+      }
+    },
+    {
+      "name": "DOS",
+      "inherits": ["defaults"],
+      "generator": "Watcom WMake",
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "DOS",
+        "CMAKE_BUILD_TYPE": "MinRelSize",
+        "CMAKE_CXX_STANDARD": "98",
+        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true,
+        "CPPUTEST_STD_CPP_LIB_DISABLED": true
+      }
+    }
+  ]
+}

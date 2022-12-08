@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockHierarchyTest)
 {
-    void teardown()
+    void teardown() _override
     {
         mock().clear();
     }
@@ -132,7 +132,7 @@ TEST(MockHierarchyTest, checkExpectationsWorksHierarchicallyForLastCallNotFinish
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("first::foobar")->withParameter("boo", 1);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "first::foobar", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "first::foobar", expectations, expectations);
 
     mock("first").expectOneCall("foobar").withParameter("boo", 1);
     mock("first").actualCall("foobar");
@@ -151,4 +151,3 @@ TEST(MockHierarchyTest, reporterIsInheritedInHierarchicalMocks)
     MockUnexpectedCallHappenedFailure expectedFailure(mockFailureTest(), "differentScope::foobar", expectations);
     CHECK_EXPECTED_MOCK_FAILURE(expectedFailure);
 }
-

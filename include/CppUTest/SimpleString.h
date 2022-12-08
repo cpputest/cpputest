@@ -83,6 +83,8 @@ public:
     SimpleString subStringFromTill(char startChar, char lastExcludedChar) const;
     void copyToBuffer(char* buffer, size_t bufferSize) const;
 
+    SimpleString printable() const;
+
     const char *asCharString() const;
     size_t size() const;
     bool isEmpty() const;
@@ -125,6 +127,10 @@ private:
     static bool isDigit(char ch);
     static bool isSpace(char ch);
     static bool isUpper(char ch);
+    static bool isControl(char ch);
+    static bool isControlWithShortEscapeSequence(char ch);
+    
+    size_t getPrintableSize() const;
 };
 
 class SimpleStringCollection
@@ -203,7 +209,7 @@ SimpleString HexStringFrom(const void* value);
 SimpleString HexStringFrom(void (*value)());
 SimpleString StringFrom(double value, int precision = 6);
 SimpleString StringFrom(const SimpleString& other);
-SimpleString StringFromFormat(const char* format, ...) _check_format_(printf, 1, 2);
+SimpleString StringFromFormat(const char* format, ...) _check_format_(CPPUTEST_CHECK_FORMAT_TYPE, 1, 2);
 SimpleString VStringFromFormat(const char* format, va_list args);
 SimpleString StringFromBinary(const unsigned char* value, size_t size);
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size);
@@ -219,6 +225,7 @@ SimpleString BracketsFormattedHexStringFrom(cpputest_longlong value);
 SimpleString BracketsFormattedHexStringFrom(cpputest_ulonglong value);
 SimpleString BracketsFormattedHexStringFrom(signed char value);
 SimpleString BracketsFormattedHexString(SimpleString hexString);
+SimpleString PrintableStringFromOrNull(const char * expected);
 
 /*
  * ARM compiler has only partial support for C++11.

@@ -47,13 +47,13 @@ public:
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2)
+    virtual bool isEqual(const void* object1, const void* object2) _override
     {
         const TypeForTestingExpectedFunctionCall* obj1 = (const TypeForTestingExpectedFunctionCall*) object1;
         const TypeForTestingExpectedFunctionCall* obj2 = (const TypeForTestingExpectedFunctionCall*) object2;
         return *(obj1->value) == *(obj2->value);
     }
-    virtual SimpleString valueToString(const void* object)
+    virtual SimpleString valueToString(const void* object) _override
     {
         const TypeForTestingExpectedFunctionCall* obj = (const TypeForTestingExpectedFunctionCall*) object;
         return StringFrom(*(obj->value));
@@ -63,7 +63,7 @@ public:
 class TypeForTestingExpectedFunctionCallCopier : public MockNamedValueCopier
 {
 public:
-    virtual void copy(void* dst_, const void* src_)
+    virtual void copy(void* dst_, const void* src_) _override
     {
         TypeForTestingExpectedFunctionCall* dst = (TypeForTestingExpectedFunctionCall*) dst_;
         const TypeForTestingExpectedFunctionCall* src = (const TypeForTestingExpectedFunctionCall*) src_;
@@ -73,7 +73,7 @@ public:
 
 TEST_GROUP(MockNamedValueHandlerRepository)
 {
-    void teardown()
+    void teardown() _override
     {
         CHECK_NO_MOCK_FAILURE();
         MockFailureReporterForTest::clearReporter();
@@ -155,13 +155,13 @@ TEST_GROUP(MockExpectedCall)
 {
     MockCheckedExpectedCall* call;
     MockNamedValueComparatorsAndCopiersRepository* originalComparatorRepository;
-    void setup()
+    void setup() _override
     {
         originalComparatorRepository = MockNamedValue::getDefaultComparatorsAndCopiersRepository();
         call = new MockCheckedExpectedCall(1);
         call->withName("funcName");
     }
-    void teardown()
+    void teardown() _override
     {
         MockNamedValue::setDefaultComparatorsAndCopiersRepository(originalComparatorRepository);
         delete call;
@@ -232,7 +232,7 @@ TEST(MockExpectedCall, callWithLongIntegerParameter)
     STRCMP_CONTAINS("funcName -> long int paramName: <777 (0x309)>", call->callToString().asCharString());
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(MockExpectedCall, callWithUnsignedLongLongIntegerParameter)
 {
@@ -326,7 +326,7 @@ TEST(MockExpectedCall, callWithMemoryBuffer)
     const unsigned char value[] = { 0x12, 0xFE, 0xA1 };
     call->withParameter(paramName, value, sizeof(value));
     STRCMP_EQUAL("const unsigned char*", call->getInputParameterType(paramName).asCharString());
-    POINTERS_EQUAL( (void*) value, (void*) call->getInputParameter(paramName).getMemoryBuffer() );
+    POINTERS_EQUAL(value, call->getInputParameter(paramName).getMemoryBuffer());
     LONGS_EQUAL(sizeof(value),  call->getInputParameter(paramName).getSize());
     STRCMP_CONTAINS("funcName -> const unsigned char* paramName: <Size = 3 | HexContents = 12 FE A1>", call->callToString().asCharString());
 }
@@ -780,7 +780,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.withUnsignedIntParameter("foo", (unsigned int) 1);
     ignored.withLongIntParameter("hey", (long int) 1);
     ignored.withUnsignedLongIntParameter("bah", (unsigned long int) 1);
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     ignored.withLongLongIntParameter("yo", (long long int) 1);
     ignored.withUnsignedLongLongIntParameter("grr", (unsigned long long int) 1);
 #endif
@@ -802,7 +802,7 @@ TEST(MockIgnoredExpectedCall, worksAsItShould)
     ignored.andReturnValue((int) 1);
     ignored.andReturnValue((unsigned long int) 1);
     ignored.andReturnValue((long int) 1);
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     ignored.andReturnValue((unsigned long long int) 1);
     ignored.andReturnValue((long long int) 1);
 #endif

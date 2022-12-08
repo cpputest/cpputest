@@ -29,7 +29,7 @@ TEST_GROUP(SetPointerPluginTest)
     StringBufferTestOutput* output_;
     TestResult* result_;
 
-    void setup()
+    void setup() _override
     {
         myRegistry_ = new TestRegistry();
         plugin_ = new SetPointerPlugin("TestSetPlugin");
@@ -39,7 +39,7 @@ TEST_GROUP(SetPointerPluginTest)
         result_ = new TestResult(*output_);
     }
 
-    void teardown()
+    void teardown() _override
     {
         myRegistry_->setCurrentRegistry(NULLPTR);
         delete myRegistry_;
@@ -68,7 +68,7 @@ public:
 class FunctionPointerUtestShell: public UtestShell
 {
 public:
-   virtual Utest* createTest()
+   virtual Utest* createTest() _override
    {
       return new FunctionPointerUtest();
    }
@@ -98,7 +98,7 @@ public:
    {
    }
 
-   void setup()
+   void setup() _override
    {
       for (int i = 0; i < numOfFpSets; ++i)
       {
@@ -116,7 +116,7 @@ public:
     {
     }
 
-    virtual Utest* createTest()
+    virtual Utest* createTest() _override
     {
        return new MaxFunctionPointerUtest(numOfFpSets);
     }
@@ -140,11 +140,11 @@ static double stub_double = 4.0;
 class SetDoublePointerUtest : public Utest
 {
 public:
-   void setup()
+   void setup() _override
    {
       UT_PTR_SET(orig_double_ptr, &stub_double);
    }
-   void testBody()
+   void testBody() _override
    {
       CHECK(orig_double_ptr == &stub_double);
    }
@@ -153,7 +153,7 @@ public:
 class SetDoublePointerUtestShell: public UtestShell
 {
 public:
-   Utest * createTest()
+   Utest * createTest() _override
    {
       return new SetDoublePointerUtest();
    }

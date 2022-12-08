@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockComparatorCopierTest)
 {
-    void teardown()
+    void teardown() _override
     {
         mock().checkExpectations();
         mock().clear();
@@ -55,13 +55,13 @@ public:
 class MyTypeForTestingComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2)
+    virtual bool isEqual(const void* object1, const void* object2) _override
     {
         const MyTypeForTesting* obj1 = (const MyTypeForTesting*) object1;
         const MyTypeForTesting* obj2 = (const MyTypeForTesting*) object2;
         return *(obj1->value) == *(obj2->value);
     }
-    virtual SimpleString valueToString(const void* object)
+    virtual SimpleString valueToString(const void* object) _override
     {
         const MyTypeForTesting* obj = (const MyTypeForTesting*) object;
         return StringFrom(*(obj->value));
@@ -71,7 +71,7 @@ public:
 class MyTypeForTestingCopier : public MockNamedValueCopier
 {
 public:
-    virtual void copy(void* dst_, const void* src_)
+    virtual void copy(void* dst_, const void* src_) _override
     {
         MyTypeForTesting* dst = (MyTypeForTesting*) dst_;
         const MyTypeForTesting* src = (const MyTypeForTesting*) src_;
@@ -229,7 +229,7 @@ TEST(MockComparatorCopierTest, customTypeOutputParameterMissing)
 
     MockExpectedCallsListForTest expectations;
     expectations.addFunction("foo")->withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
-    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations);
+    MockExpectedParameterDidntHappenFailure expectedFailure(mockFailureTest(), "foo", expectations, expectations);
 
     mock().expectOneCall("foo").withOutputParameterOfTypeReturning("MyTypeForTesting", "output", &expectedObject);
     mock().actualCall("foo");
@@ -567,11 +567,11 @@ TEST(MockComparatorCopierTest, installCopiersWorksHierarchically)
 class StubComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void*, const void*)
+    virtual bool isEqual(const void*, const void*) _override
     {
         return true;
     }
-    virtual SimpleString valueToString(const void*)
+    virtual SimpleString valueToString(const void*) _override
     {
         return "";
     }
@@ -598,4 +598,3 @@ TEST(MockComparatorCopierTest, shouldSupportConstParameters)
 
     mock().checkExpectations();
 }
-

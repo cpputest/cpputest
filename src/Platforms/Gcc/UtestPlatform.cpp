@@ -37,7 +37,7 @@
 #ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
 #endif
-#ifdef CPPUTEST_HAVE_FORK
+#if defined(CPPUTEST_HAVE_FORK) && defined(CPPUTEST_HAVE_WAITPID)
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
@@ -61,7 +61,8 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-#ifndef CPPUTEST_HAVE_FORK
+// There is a possibility that a compiler provides fork but not waitpid.
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
@@ -175,8 +176,10 @@ static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), v
  * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about _no_return_.
  * The later clang compilers complain when it isn't there. So only way is to check the clang compiler here :(
  */
-#if !((__clang_major__ == 3) && (__clang_minor__ == 0))
-_no_return_
+#ifdef __clang__
+ #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
+ _no_return_
+ #endif
 #endif
 static void PlatformSpecificLongJmpImplementation()
 {
@@ -201,7 +204,7 @@ static long TimeInMillisImplementation()
     struct timeval tv;
     struct timezone tz;
     gettimeofday(&tv, &tz);
-    return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+    return (long)((tv.tv_sec * 1000) + (time_t)((double)tv.tv_usec * 0.001));
 #else
     return 0;
 #endif
@@ -211,7 +214,7 @@ static const char* TimeStringImplementation()
 {
     time_t theTime = time(NULLPTR);
     static char dateTime[80];
-#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
+#ifdef STDC_WANT_SECURE_LIB
     static struct tm lastlocaltime;
     localtime_s(&lastlocaltime, &theTime);
     struct tm *tmp = &lastlocaltime;
@@ -237,7 +240,7 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-#if defined(_WIN32) && defined(MINGW_HAS_SECURE_API)
+#ifdef STDC_WANT_SECURE_LIB
   FILE* file;
    fopen_s(&file, filename, flag);
    return file;
@@ -261,11 +264,12 @@ static void PlatformSpecificFlushImplementation()
   fflush(stdout);
 }
 
+PlatformSpecificFile PlatformSpecificStdOut = stdout;
+
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
 void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
 void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-int (*PlatformSpecificPutchar)(int) = putchar;
 void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
 
 void* (*PlatformSpecificMalloc)(size_t size) = malloc;
@@ -350,5 +354,6 @@ PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = PThreadMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = PThreadMutexDestroy;
+void (*PlatformSpecificAbort)(void) = abort;
 
 }

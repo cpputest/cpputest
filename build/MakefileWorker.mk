@@ -24,6 +24,8 @@
 #				These do not go in a library. They are explicitly included in the test runner
 #	MOCKS_SRC_DIRS - Directories containing mock source files to build into the test runner
 #				These do not go in a library. They are explicitly included in the test runner
+#	MOCKS_SRC_FILES - Specific mock source files to build into the unit test runner
+#				These do not go in a library. They are explicitly included in the test runner
 #----------
 # You can adjust these variables to influence how to build the test target
 # and where to put and name outputs
@@ -46,6 +48,7 @@
 #		of the test harness
 #   CPPUTEST_USE_GCOV - Turn on coverage analysis
 #		Clean then build with this flag set to Y, then 'make gcov'
+#   CPPUTEST_USE_GCOV_NO_GCNO_FILES - Disable gcov's .gcno files from being generated
 #   CPPUTEST_MAPFILE - generate a map file
 #   CPPUTEST_WARNINGFLAGS - overly picky by default
 #   OTHER_MAKEFILE_TO_INCLUDE - a hook to use this makefile to make
@@ -62,6 +65,8 @@
 #	CPPUTEST_CPPFLAGS - flags for the C++ AND C preprocessor
 #	CPPUTEST_CFLAGS - flags for the C complier
 #	CPPUTEST_LDFLAGS - Linker flags
+#	CPPUTEST_CXX_PREFIX - prefix for the C++ compiler
+#	CPPUTEST_CC_PREFIX - prefix for the C compiler
 #----------
 
 # Some behavior is weird on some platforms. Need to discover the platform.
@@ -73,14 +78,14 @@ MINGW_STR = MINGW
 CYGWIN_STR = CYGWIN
 LINUX_STR = Linux
 SUNOS_STR = SunOS
-UNKNWOWN_OS_STR = Unknown
+UNKNOWN_OS_STR = Unknown
 
 # Compilers
 CC_VERSION_OUTPUT ="$(shell $(CXX) -v 2>&1)"
 CLANG_STR = clang
 SUNSTUDIO_CXX_STR = SunStudio
 
-UNAME_OS = $(UNKNWOWN_OS_STR)
+UNAME_OS = $(UNKNOWN_OS_STR)
 
 ifeq ($(findstring $(MINGW_STR),$(UNAME_OUTPUT)),$(MINGW_STR))
 	UNAME_OS = $(MINGW_STR)
@@ -170,6 +175,11 @@ ifndef CPPUTEST_USE_GCOV
 	CPPUTEST_USE_GCOV = N
 endif
 
+# Skip generating gcov's .gcno files, off by default
+ifndef CPPUTEST_USE_GCOV_NO_GCNO_FILES
+	CPPUTEST_USE_GCOV_NO_GCNO_FILES = N
+endif
+
 ifndef CPPUTEST_PEDANTIC_ERRORS
 	CPPUTEST_PEDANTIC_ERRORS = Y
 endif
@@ -192,25 +202,42 @@ ifeq ($(COMPILER_NAME),$(CLANG_STR))
 # -Wno-disabled-macro-expansion -> Have to disable the macro expansion warning as the operator new overload warns on that.
 # -Wno-padded -> I sort-of like this warning but if there is a bool at the end of the class, it seems impossible to remove it! (except by making padding explicit)
 # -Wno-global-constructors Wno-exit-time-destructors -> Great warnings, but in CppUTest it is impossible to avoid as the automatic test registration depends on the global ctor and dtor
-# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. Thats ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
+# -Wno-weak-vtables -> The TEST_GROUP macro declares a class and will automatically inline its methods. That's ok as they are only in one translation unit. Unfortunately, the warning can't detect that, so it must be disabled.
 # -Wno-old-style-casts -> We only use old style casts by decision
 # -Wno-c++11-long-long -> When it detects long long, then we can use it and no need for a warning about that
 # -Wno-c++98-compat-pedantic -> Incompatibilities with C++98, these are happening through #define.
 # -Wno-reserved-id-macro -> Macro uses __ in MINGW... can't change that.
 # -Wno-keyword-macro -> new overload
-	CPPUTEST_CXX_WARNINGFLAGS += -Weverything -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
-	CPPUTEST_C_WARNINGFLAGS += -Weverything -Wno-padded
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-disabled-macro-expansion -Wno-padded -Wno-global-constructors -Wno-exit-time-destructors -Wno-weak-vtables -Wno-old-style-cast -Wno-c++11-long-long -Wno-c++98-compat-pedantic -Wno-reserved-id-macro -Wno-keyword-macro
+	CPPUTEST_C_WARNINGFLAGS += -Wno-padded
 
-# Clang "7" or newer (Xcode 7 or newer command-line tools) introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
-CLANG_VERSION := $(shell echo $(CC_VERSION_OUTPUT) | grep -o 'clang-[0-9][0-9][0-9]*.')
-CLANG_VERSION_NUM := $(subst .,,$(subst clang-,,$(CLANG_VERSION)))
-CLANG_VERSION_NUM_GT_700 := $(shell [[ $(CLANG_VERSION_NUM) -ge 700 ]] && echo Y)
+# Clang 7 and 12 introduced new warnings by default that don't exist on previous versions of clang and cause errors when present.
+CLANG_VERSION := $(shell echo $(CC_VERSION_OUTPUT) | sed -n 's/.* \([0-9]*\.[0-9]*\.[0-9]*\).*/\1/p')
+CLANG_VERSION_NUM := $(subst .,,$(CLANG_VERSION))
+CLANG_VERSION_NUM_GT_700 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 700 ] && echo Y || echo N)
+CLANG_VERSION_NUM_GT_1200 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 1200 ] && echo Y || echo N)
+CLANG_VERSION_NUM_GT_1205 := $(shell [ "$(CLANG_VERSION_NUM)" -ge 1205 ] && echo Y || echo N)
 
 ifeq ($(CLANG_VERSION_NUM_GT_700), Y)
 # -Wno-reserved-id-macro -> Many CppUTest macros start with __, which is a reserved namespace
 # -Wno-keyword-macro -> CppUTest redefines the 'new' keyword for memory leak tracking
 	CPPUTEST_CXX_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
 	CPPUTEST_C_WARNINGFLAGS += -Wno-reserved-id-macro -Wno-keyword-macro
+endif
+
+ifeq ($(UNAME_OS),$(MACOSX_STR))
+#apple clang has some special behavior
+ifeq ($(CLANG_VERSION_NUM_GT_1200), Y)
+# -Wno-poison-system-directories -> Apparently apple clang thinks everything is a cross compile, making this useless
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-poison-system-directories
+	CPPUTEST_C_WARNINGFLAGS += -Wno-poison-system-directories
+endif # clang 1200
+
+ifeq ($(CLANG_VERSION_NUM_GT_1205), Y)
+# Not sure why apple clang throws these warnings on cpputest code when clang doesn't
+	CPPUTEST_CXX_WARNINGFLAGS += -Wno-suggest-override -Wno-suggest-destructor-override
+	CPPUTEST_C_WARNINGFLAGS += -Wno-suggest-override -Wno-suggest-destructor-override
+endif
 endif
 endif
 
@@ -229,7 +256,7 @@ else
 endif
 endif
 
-# Default dir for the outout library
+# Default dir for the output library
 ifndef CPPUTEST_LIB_DIR
 ifndef TARGET_PLATFORM
     CPPUTEST_LIB_DIR = lib
@@ -243,7 +270,7 @@ ifndef CPPUTEST_MAP_FILE
 	CPPUTEST_MAP_FILE = N
 endif
 
-# No extentions is default
+# No extensions is default
 ifndef CPPUTEST_USE_EXTENSIONS
 	CPPUTEST_USE_EXTENSIONS = N
 endif
@@ -317,8 +344,12 @@ endif
 
 
 ifeq ($(CPPUTEST_USE_GCOV), Y)
-	CPPUTEST_CXXFLAGS += -fprofile-arcs -ftest-coverage
-	CPPUTEST_CFLAGS += -fprofile-arcs -ftest-coverage
+	CPPUTEST_CXXFLAGS += -fprofile-arcs
+	CPPUTEST_CFLAGS += -fprofile-arcs
+	ifneq ($(CPPUTEST_USE_GCOV_NO_GCNO_FILES), Y)
+		CPPUTEST_CXXFLAGS += -ftest-coverage
+		CPPUTEST_CFLAGS += -ftest-coverage
+	endif
 endif
 
 CPPUTEST_CXXFLAGS += $(CPPUTEST_WARNINGFLAGS) $(CPPUTEST_CXX_WARNINGFLAGS)
@@ -381,7 +412,7 @@ TEST_OBJS = $(call src_to_o,$(TEST_SRC))
 STUFF_TO_CLEAN += $(TEST_OBJS)
 
 
-MOCKS_SRC += $(call get_src_from_dir_list, $(MOCKS_SRC_DIRS))
+MOCKS_SRC += $(call get_src_from_dir_list, $(MOCKS_SRC_DIRS)) $(MOCKS_SRC_FILES)
 MOCKS_OBJS = $(call src_to_o,$(MOCKS_SRC))
 STUFF_TO_CLEAN += $(MOCKS_OBJS)
 
@@ -485,35 +516,53 @@ TEST_DEPS = $(TEST_OBJS) $(MOCKS_OBJS) $(PRODUCTION_CODE_START) $(TARGET_LIB) $(
 test-deps: $(TEST_DEPS)
 
 $(TEST_TARGET): $(TEST_DEPS)
+ifndef MORE_SILENCE
 	@echo Linking $@
+endif
 	$(SILENCE)$(CXX) -o $@ $^ $(LD_LIBRARIES) $(LDFLAGS)
 
 $(TARGET_LIB): $(OBJ)
+ifndef MORE_SILENCE
 	@echo Building archive $@
+endif
 	$(SILENCE)mkdir -p $(dir $@)
+ifndef MORE_SILENCE
 	$(SILENCE)$(AR) $(ARFLAGS) $@ $^
+else
+	$(SILENCE)$(AR) $(ARFLAGS) $@ $^ >/dev/null
+endif
 	$(SILENCE)$(RANLIB) $@
 
 test: $(TEST_TARGET)
-	$(RUN_TEST_TARGET) | tee $(TEST_OUTPUT)
+	@$(eval TEST_RUN_RETURN_CODE_FILE=$(shell mktemp /tmp/cpputestResult.XXX))
+	@($(RUN_TEST_TARGET); echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
+	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 vtest: $(TEST_TARGET)
-	$(RUN_TEST_TARGET) -v  | tee $(TEST_OUTPUT)
+	@$(eval TEST_RUN_RETURN_CODE_FILE=$(shell mktemp /tmp/cpputestResult.XXX))
+	@($(RUN_TEST_TARGET) -v; echo $$? > $(TEST_RUN_RETURN_CODE_FILE)) | tee $(TEST_OUTPUT)
+	@ret=$$(cat $(TEST_RUN_RETURN_CODE_FILE)); rm $(TEST_RUN_RETURN_CODE_FILE); if [ "$$ret" -ne 0 ]; then echo "$$(tput setaf 1)$(TEST_TARGET) returned $${ret}$$(tput sgr0)"; fi; exit $$ret
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cc
+ifndef MORE_SILENCE
 	@echo compiling $(notdir $<)
+endif
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(CPPUTEST_CXX_PREFIX)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.cpp
+ifndef MORE_SILENCE
 	@echo compiling $(notdir $<)
+endif
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(CPPUTEST_CXX_PREFIX)$(COMPILE.cpp) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 $(CPPUTEST_OBJS_DIR)/%.o: %.c
+ifndef MORE_SILENCE
 	@echo compiling $(notdir $<)
+endif
 	$(SILENCE)mkdir -p $(dir $@)
-	$(SILENCE)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
+	$(SILENCE)$(CPPUTEST_CC_PREFIX)$(COMPILE.c) $(DEP_FLAGS) $(OUTPUT_OPTION) $<
 
 ifneq "$(MAKECMDGOALS)" "clean"
 -include $(DEP_FILES)
@@ -521,7 +570,9 @@ endif
 
 .PHONY: clean
 clean:
+ifndef MORE_SILENCE
 	@echo Making clean
+endif
 	$(SILENCE)$(RM) $(STUFF_TO_CLEAN)
 	$(SILENCE)rm -rf gcov $(CPPUTEST_OBJS_DIR) $(CPPUTEST_LIB_DIR)
 	$(SILENCE)find . -name "*.gcno" | xargs rm -f

@@ -1,0 +1,17 @@
+---
+name: 'Test Report'
+"on":
+  workflow_run:
+    workflows: ['Basic builds']
+    types:
+      - completed
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dorny/test-reporter@v1
+        with:
+          artifact: test-results
+          name: JUnit Tests
+          path: "**/cpputest_*.xml"
+          reporter: java-junit

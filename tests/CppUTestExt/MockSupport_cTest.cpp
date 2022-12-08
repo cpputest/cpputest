@@ -43,7 +43,7 @@ extern "C" {
 
 TEST_GROUP(MockSupport_c)
 {
-    void teardown()
+    void teardown() _override
     {
         mock_c()->clear();
     }
@@ -164,7 +164,7 @@ TEST(MockSupport_c, doubleParameterWithTolerance)
     mock_c( )->actualCall("foo")->withDoubleParameters("p", 1.9);
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(MockSupport_c, longLongIntParameter)
 {
@@ -369,7 +369,7 @@ TEST(MockSupport_c, whenNoReturnValueIsGivenReturnUnsignedLongIntValueOrDefaultS
     LONGS_EQUAL(defaultValue, mock_c()->returnUnsignedLongIntValueOrDefault(defaultValue));
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(MockSupport_c, returnLongLongIntValue)
 {

@@ -40,22 +40,18 @@
 #include <stdlib.h>
 #include <string>
 
-class MockPrinter: public Printer
+class MockPrinter : public Printer
 {
 public:
-    explicit MockPrinter()
-    {
-    }
-    virtual ~MockPrinter()
-    {
-    }
+    explicit MockPrinter() {}
+    virtual ~MockPrinter() _destructor_override {}
 
-    virtual void Print(const char* s)
+    virtual void Print(const char* s) _override
     {
         savedOutput.append(s);
     }
 
-    virtual void Print(long int value)
+    virtual void Print(long int value) _override
     {
         SimpleString buffer;
         buffer = StringFromFormat("%ld", value);
@@ -68,12 +64,10 @@ public:
     }
 
 private:
-
     std::string savedOutput;
 
     MockPrinter(const MockPrinter&);
     MockPrinter& operator=(const MockPrinter&);
-
 };
 
-#endif  // D_MockPrinter_H
+#endif // D_MockPrinter_H

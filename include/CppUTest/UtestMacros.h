@@ -50,10 +50,10 @@
   TEST_GROUP_BASE(testGroup, Utest)
 
 #define TEST_SETUP() \
-  virtual void setup()
+  virtual void setup() _override
 
 #define TEST_TEARDOWN() \
-  virtual void teardown()
+  virtual void teardown() _override
 
 #define TEST(testGroup, testName) \
   /* External declarations for strict compilers */ \
@@ -153,11 +153,15 @@
   CHECK_COMPARE_LOCATION(first, relop, second, text, __FILE__, __LINE__)
 
 #define CHECK_COMPARE_LOCATION(first, relop, second, text, file, line)\
- do { SimpleString conditionString;\
-      conditionString += StringFrom(first); conditionString += " ";\
-      conditionString += #relop; conditionString += " ";\
-      conditionString += StringFrom(second);\
-      UtestShell::getCurrent()->assertCompare((first) relop (second), "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
+ do {\
+      bool success = (first) relop (second);\
+      if (!success) {\
+          SimpleString conditionString;\
+          conditionString += StringFrom(first); conditionString += " ";\
+          conditionString += #relop; conditionString += " ";\
+          conditionString += StringFrom(second);\
+          UtestShell::getCurrent()->assertCompare(false, "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
+      }\
  } while(0)
 
 //This check checks for char* string equality using strcmp.
@@ -226,6 +230,7 @@
 #define UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
   do { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); } while(0)
 
+#if CPPUTEST_USE_LONG_LONG
 #define LONGLONGS_EQUAL(expected, actual)\
   LONGLONGS_EQUAL_LOCATION(expected, actual, NULLPTR, __FILE__, __LINE__)
 
@@ -239,10 +244,11 @@
   UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
 
 #define LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        do { UtestShell::getCurrent()->assertLongLongsEqual((long long)expected, (long long)actual, text, file, line); } while(0)
+        do { UtestShell::getCurrent()->assertLongLongsEqual((cpputest_longlong)expected, (cpputest_longlong)actual, text, file, line); } while(0)
 
 #define UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        do { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((unsigned long long)expected, (unsigned long long)actual, text, file, line); } while(0)
+        do { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((cpputest_ulonglong)expected, (cpputest_ulonglong)actual, text, file, line); } while(0)
+#endif // CPPUTEST_USE_LONG_LONG
 
 #define BYTES_EQUAL(expected, actual)\
     LONGS_EQUAL((expected) & 0xff,(actual) & 0xff)
@@ -306,7 +312,7 @@
   BITS_LOCATION(expected, actual, mask, text, __FILE__, __LINE__)
 
 #define BITS_LOCATION(expected, actual, mask, text, file, line)\
-  do { UtestShell::getCurrent()->assertBitsEqual(expected, actual, mask, sizeof(actual), text, file, line); } while(0)
+  do { UtestShell::getCurrent()->assertBitsEqual(expected, actual, mask, sizeof(actual), text, file, line); } while(0) // NOLINT(bugprone-sizeof-expression)
 
 #define ENUMS_EQUAL_INT(expected, actual)\
   ENUMS_EQUAL_TYPE(int, expected, actual)
@@ -357,7 +363,7 @@
 #define UT_PRINT(text) \
    UT_PRINT_LOCATION(text, __FILE__, __LINE__)
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 #define CHECK_THROWS(expected, expression) \
     do { \
     SimpleString failure_msg("expected to throw "#expected "\nbut threw nothing"); \
@@ -376,7 +382,7 @@
         UtestShell::getCurrent()->countCheck(); \
     } \
     } while(0)
-#endif /* CPPUTEST_USE_STD_CPP_LIB */
+#endif /* CPPUTEST_HAVE_EXCEPTIONS */
 
 #define UT_CRASH() do { UtestShell::crash(); } while(0)
 #define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)

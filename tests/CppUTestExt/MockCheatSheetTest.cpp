@@ -39,7 +39,7 @@ static void productionCodeBarCalls()
 /* Actual test */
 TEST_GROUP(MockCheatSheet)
 {
-    void teardown()
+    void teardown() _override
     {
         /* Check expectations. Alternatively use MockSupportPlugin */
         mock().checkExpectations();
@@ -73,4 +73,3 @@ TEST(MockCheatSheet, bar)
     /* And the production code call */
     productionCodeBarCalls();
 }
-

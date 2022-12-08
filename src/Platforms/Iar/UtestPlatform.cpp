@@ -151,11 +151,11 @@ static void PlatformSpecificFlushImplementation()
 {
 }
 
+PlatformSpecificFile PlatformSpecificStdOut = stdout;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
 void (*PlatformSpecificFPuts)(const char*, PlatformSpecificFile) = PlatformSpecificFPutsImplementation;
 void (*PlatformSpecificFClose)(PlatformSpecificFile) = PlatformSpecificFCloseImplementation;
 
-int (*PlatformSpecificPutchar)(int) = putchar;
 void (*PlatformSpecificFlush)() = PlatformSpecificFlushImplementation;
 
 void* (*PlatformSpecificMalloc)(size_t size) = malloc;
@@ -202,4 +202,5 @@ void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 void (*PlatformSpecificSrand)(unsigned int) = srand;
 int (*PlatformSpecificRand)(void) = rand;
+void (*PlatformSpecificAbort)(void) = abort;
 }

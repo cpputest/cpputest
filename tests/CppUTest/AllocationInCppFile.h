@@ -7,12 +7,12 @@ char* newArrayAllocation();
 char* newAllocationWithoutMacro();
 char* newArrayAllocationWithoutMacro();
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 class ClassThatThrowsAnExceptionInTheConstructor
 {
 public:
-  ClassThatThrowsAnExceptionInTheConstructor() _no_return_;
+    _no_return_ ClassThatThrowsAnExceptionInTheConstructor();
 };
 
 #endif

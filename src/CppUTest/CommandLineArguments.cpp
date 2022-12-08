@@ -30,7 +30,10 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 CommandLineArguments::CommandLineArguments(int ac, const char *const *av) :
-    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false), listTestGroupNames_(false), listTestGroupAndCaseNames_(false), runIgnored_(false), reversing_(false), crashOnFail_(false), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0), groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
+    ac_(ac), av_(av), needHelp_(false), verbose_(false), veryVerbose_(false), color_(false), runTestsAsSeperateProcess_(false),
+    listTestGroupNames_(false), listTestGroupAndCaseNames_(false), listTestLocations_(false), runIgnored_(false), reversing_(false),
+    crashOnFail_(false), rethrowExceptions_(true), shuffling_(false), shufflingPreSeeded_(false), repeat_(1), shuffleSeed_(0),
+    groupFilters_(NULLPTR), nameFilters_(NULLPTR), outputType_(OUTPUT_ECLIPSE)
 {
 }
 
@@ -65,11 +68,16 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
         else if (argument == "-b") reversing_ = true;
         else if (argument == "-lg") listTestGroupNames_ = true;
         else if (argument == "-ln") listTestGroupAndCaseNames_ = true;
+        else if (argument == "-ll") listTestLocations_ = true;
         else if (argument == "-ri") runIgnored_ = true;
         else if (argument == "-f") crashOnFail_ = true;
+        else if ((argument == "-e") || (argument == "-ci")) rethrowExceptions_ = false;
         else if (argument.startsWith("-r")) setRepeatCount(ac_, av_, i);
         else if (argument.startsWith("-g")) addGroupFilter(ac_, av_, i);
-        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i);
+        else if (argument.startsWith("-t")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-t", false, false);
+        else if (argument.startsWith("-st")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-st", true, false);
+        else if (argument.startsWith("-xt")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-xt", false, true);
+        else if (argument.startsWith("-xst")) correctParameters = addGroupDotNameFilter(ac_, av_, i, "-xst", true, true);
         else if (argument.startsWith("-sg")) addStrictGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xg")) addExcludeGroupFilter(ac_, av_, i);
         else if (argument.startsWith("-xsg")) addExcludeStrictGroupFilter(ac_, av_, i);
@@ -95,10 +103,10 @@ bool CommandLineArguments::parse(TestPlugin* plugin)
 const char* CommandLineArguments::usage() const
 {
     return "use -h for more extensive help\n"
-           "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f]\n"
-           "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
-           "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
-           "      [-o{normal, junit, teamcity}] [-k packageName]\n";
+           "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ll] [-ri] [-r[<#>]] [-f] [-e] [-ci]\n"
+           "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t|st|xt|xst <groupName>.<testName>]...\n"
+           "      [-b] [-s [<seed>]] [\"[IGNORE_]TEST(<groupName>, <testName>)\"]...\n"
+           "      [-o{normal|eclipse|junit|teamcity}] [-k <packageName>]\n";
 }
 
 const char* CommandLineArguments::help() const
@@ -107,9 +115,10 @@ const char* CommandLineArguments::help() const
       "Thanks for using CppUTest.\n"
       "\n"
       "Options that do not run tests but query:\n"
-      "  -h                 - this wonderful help screen. Joy!\n"
-      "  -lg                - print a list of group names, separated by spaces\n"
-      "  -ln                - print a list of test names in the form of group.name, separated by spaces\n"
+      "  -h                - this wonderful help screen. Joy!\n"
+      "  -lg               - print a list of group names, separated by spaces\n"
+      "  -ln               - print a list of test names in the form of group.name, separated by spaces\n"
+      "  -ll               - print a list of test names in the form of group.name.test_file_path.line\n"
       "\n"
       "Options that change the output format:\n"
       "  -c                - colorize output, print green if OK, or red if failed\n"
@@ -117,28 +126,38 @@ const char* CommandLineArguments::help() const
       "  -vv               - very verbose, print internal information during test run\n"
       "\n"
       "Options that change the output location:\n"
-      "  -oteamcity       - output to xml files (as the name suggests, for TeamCity)\n"
-      "  -ojunit          - output to JUnit ant plugin style xml files (for CI systems)\n"
-      "  -k package name  - Add a package name in JUnit output (for classification in CI systems)\n"
+      "  -onormal          - no output to files\n"
+      "  -oeclipse         - equivalent to -onormal\n"
+      "  -oteamcity        - output to xml files (as the name suggests, for TeamCity)\n"
+      "  -ojunit           - output to JUnit ant plugin style xml files (for CI systems)\n"
+      "  -k <packageName>  - add a package name in JUnit output (for classification in CI systems)\n"
       "\n"
       "\n"
       "Options that control which tests are run:\n"
-      "  -g group         - only run test whose group contains the substring group\n"
-      "  -n name          - only run test whose name contains the substring name\n"
-      "  -t group.name    - only run test whose name contains the substring group and name\n"
-      "  -sg group        - only run test whose group exactly matches the string group\n"
-      "  -sn name         - only run test whose name exactly matches the string name\n"
-      "  -xg group        - exclude tests whose group contains the substring group (v3.8)\n"
-      "  -xn name         - exclude tests whose name contains the substring name (v3.8)\n"
-      "  TEST(group,name) - only run test whose group and name matches the strings group and name.\n"
-      "                     This can be used to copy-paste output from the -v option on the command line.\n"
+      "  -g <group>        - only run tests whose group contains <group>\n"
+      "  -n <name>         - only run tests whose name contains <name>\n"
+      "  -t <group>.<name> - only run tests whose group and name contain <group> and <name>\n"
+      "  -sg <group>       - only run tests whose group exactly matches <group>\n"
+      "  -sn <name>        - only run tests whose name exactly matches <name>\n"
+      "  -st <grp>.<name>  - only run tests whose group and name exactly match <grp> and <name>\n"
+      "  -xg <group>       - exclude tests whose group contains <group>\n"
+      "  -xn <name>        - exclude tests whose name contains <name>\n"
+      "  -xt <grp>.<name>  - exclude tests whose group and name contain <grp> and <name>\n"
+      "  -xsg <group>      - exclude tests whose group exactly matches <group>\n"
+      "  -xsn <name>       - exclude tests whose name exactly matches <name>\n"
+      "  -xst <grp>.<name> - exclude tests whose group and name exactly match <grp> and <name>\n"
+      "  \"[IGNORE_]TEST(<group>, <name>)\"\n"
+      "                    - only run tests whose group and name exactly match <group> and <name>\n"
+      "                      (this can be used to copy-paste output from the -v option on the command line)\n"
       "\n"
       "Options that control how the tests are run:\n"
-      "  -p               - run tests in a separate process.\n"
-      "  -b               - run the tests backwards, reversing the normal way\n"
-      "  -s [seed]        - shuffle tests randomly. Seed is optional\n"
-      "  -r#              - repeat the tests some number (#) of times, or twice if # is not specified.\n"
-      "  -f               - Cause the tests to crash on failure (to allow the test to be debugged if necessary)\n";
+      "  -p                - run tests in a separate process\n"
+      "  -b                - run the tests backwards, reversing the normal way\n"
+      "  -s [<seed>]       - shuffle tests randomly (randomization seed is optional, must be greater than 0)\n"
+      "  -r[<#>]           - repeat the tests <#> times (or twice if <#> is not specified)\n"
+      "  -f                - Cause the tests to crash on failure (to allow the test to be debugged if necessary)\n"
+      "  -e                - do not rethrow unexpected exceptions on failure\n"
+      "  -ci               - continuous integration mode (equivalent to -e)\n";
 }
 
 bool CommandLineArguments::needHelp() const
@@ -171,6 +190,11 @@ bool CommandLineArguments::isListingTestGroupAndCaseNames() const
     return listTestGroupAndCaseNames_;
 }
 
+bool CommandLineArguments::isListingTestLocations() const
+{
+    return listTestLocations_;
+}
+
 bool CommandLineArguments::isRunIgnored() const
 {
     return runIgnored_;
@@ -195,6 +219,11 @@ bool CommandLineArguments::isReversing() const
 bool CommandLineArguments::isCrashingOnFail() const
 {
     return crashOnFail_;
+}
+
+bool CommandLineArguments::isRethrowingExceptions() const
+{
+    return rethrowExceptions_;
 }
 
 bool CommandLineArguments::isShuffling() const
@@ -269,16 +298,29 @@ void CommandLineArguments::addGroupFilter(int ac, const char *const *av, int& i)
     groupFilters_ = groupFilter->add(groupFilters_);
 }
 
-bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i)
+bool CommandLineArguments::addGroupDotNameFilter(int ac, const char *const *av, int& i, const SimpleString& parameterName, 
+                                                 bool strict, bool exclude)
 {
-    SimpleString groupDotName = getParameterField(ac, av, i, "-t");
+    SimpleString groupDotName = getParameterField(ac, av, i, parameterName);
     SimpleStringCollection collection;
     groupDotName.split(".", collection);
 
     if (collection.size() != 2) return false;
 
-    groupFilters_ = (new TestFilter(collection[0].subString(0, collection[0].size()-1)))->add(groupFilters_);
-    nameFilters_ = (new TestFilter(collection[1]))->add(nameFilters_);
+    TestFilter* groupFilter = new TestFilter(collection[0].subString(0, collection[0].size()-1));
+    TestFilter* nameFilter = new TestFilter(collection[1]);
+    if (strict)
+    {
+        groupFilter->strictMatching();
+        nameFilter->strictMatching();
+    }
+    if (exclude)
+    {
+        groupFilter->invertMatching();
+        nameFilter->invertMatching();
+    }
+    groupFilters_ = groupFilter->add(groupFilters_);
+    nameFilters_ = nameFilter->add(nameFilters_);
     return true;
 }
 

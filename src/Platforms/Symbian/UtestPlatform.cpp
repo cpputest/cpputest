@@ -96,10 +96,6 @@ void PlatformSpecificFlush() {
     fflush(stdout);
 }
 
-int PlatformSpecificPutchar(int c) {
-    return putchar(c);
-}
-
 double PlatformSpecificFabs(double d) {
     return fabs(d);
 }
@@ -124,6 +120,8 @@ void* PlatformSpecificMemset(void* mem, int c, size_t size)
 {
     return memset(mem, c, size);
 }
+
+PlatformSpecificFile PlatformSpecificStdOut = stdout;
 
 PlatformSpecificFile PlatformSpecificFOpen(const char* filename, const char* flag) {
     return fopen(filename, flag);
@@ -179,4 +177,5 @@ PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+void (*PlatformSpecificAbort)(void) = abort;
 

@@ -67,14 +67,14 @@ TEST_GROUP(GlobalSimpleStringMemoryAccountant)
     TestTestingFixture fixture;
     GlobalSimpleStringMemoryAccountant accountant;
 
-    void setup()
+    void setup() _override
     {
         stash.save();
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
     }
 
-    void teardown()
+    void teardown() _override
     {
         stash.restore();
     }
@@ -105,19 +105,19 @@ TEST(GlobalSimpleStringMemoryAccountant, stop)
     POINTERS_EQUAL(originalAllocator, SimpleString::getStringAllocator());
 }
 
-static void _stopAccountant(GlobalSimpleStringMemoryAccountant* accountant)
+static void stopAccountant_(GlobalSimpleStringMemoryAccountant* accountant)
 {
     accountant->stop();
 }
 
 TEST(GlobalSimpleStringMemoryAccountant, stopWithoutStartWillFail)
 {
-    testFunction.testFunction_ = _stopAccountant;
+    testFunction.testFunction_ = stopAccountant_;
     fixture.runAllTests();
     fixture.assertPrintContains("Global SimpleString allocator stopped without starting");
 }
 
-static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccountant* accountant)
+static void changeAllocatorBetweenStartAndStop_(GlobalSimpleStringMemoryAccountant* accountant)
 {
     TestMemoryAllocator* originalAllocator = SimpleString::getStringAllocator();
     accountant->start();
@@ -127,7 +127,7 @@ static void _changeAllocatorBetweenStartAndStop(GlobalSimpleStringMemoryAccounta
 
 TEST(GlobalSimpleStringMemoryAccountant, stopFailsWhenAllocatorWasChangedInBetween)
 {
-    testFunction.testFunction_ = _changeAllocatorBetweenStartAndStop;
+    testFunction.testFunction_ = changeAllocatorBetweenStartAndStop_;
     fixture.runAllTests();
     fixture.assertPrintContains("GlobalStrimpleStringMemoryAccountant: allocator has changed between start and stop!");
 }
@@ -157,12 +157,12 @@ TEST_GROUP(SimpleString)
 {
   JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
   GlobalSimpleStringAllocatorStash stash;
-  void setup()
+  void setup() _override
   {
       stash.save();
       SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
   }
-  void teardown()
+  void teardown() _override
   {
       stash.restore();
   }
@@ -292,6 +292,14 @@ TEST(SimpleString, lowerCase)
     SimpleString s2(s1.lowerCase());
     STRCMP_EQUAL("abcdefg1234", s2.asCharString());
     STRCMP_EQUAL("AbCdEfG1234", s1.asCharString());
+}
+
+TEST(SimpleString, printable)
+{
+    SimpleString s1("ABC\01\06\a\n\r\b\t\v\f\x0E\x1F\x7F""abc");
+    SimpleString s2(s1.printable());
+    STRCMP_EQUAL("ABC\\x01\\x06\\a\\n\\r\\b\\t\\v\\f\\x0E\\x1F\\x7Fabc", s2.asCharString());
+    STRCMP_EQUAL("ABC\01\06\a\n\r\b\t\v\f\x0E\x1F\x7F""abc", s1.asCharString());
 }
 
 TEST(SimpleString, Addition)
@@ -578,6 +586,11 @@ TEST(SimpleString, NULLReportsNullString)
     STRCMP_EQUAL("(null)", StringFromOrNull((char*) NULLPTR).asCharString());
 }
 
+TEST(SimpleString, NULLReportsNullStringPrintable)
+{
+    STRCMP_EQUAL("(null)", PrintableStringFromOrNull((char*) NULLPTR).asCharString());
+}
+
 TEST(SimpleString, Booleans)
 {
     SimpleString s1(StringFrom(true));
@@ -627,7 +640,7 @@ TEST(SimpleString, UnsignedLongInts)
     CHECK(s == s2);
 }
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(SimpleString, LongLongInts)
 {
@@ -684,7 +697,7 @@ TEST(SimpleString, Sizes)
 
 TEST(SimpleString, nullptr_type)
 {
-    SimpleString s(StringFrom(nullptr));
+    SimpleString s(StringFrom(NULLPTR));
     STRCMP_EQUAL("(null)", s.asCharString());
 }
 
@@ -697,7 +710,7 @@ TEST(SimpleString, HexStrings)
     SimpleString h1 = HexStringFrom(0xffffL);
     STRCMP_EQUAL("ffff", h1.asCharString());
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     SimpleString h15 = HexStringFrom(0xffffLL);
     STRCMP_EQUAL("ffff", h15.asCharString());
 #endif
@@ -834,7 +847,7 @@ TEST(SimpleString, CollectionWritingToEmptyString)
 
 #ifdef CPPUTEST_64BIT
 
-TEST(SimpleString, _64BitAddressPrintsCorrectly)
+TEST(SimpleString, 64BitAddressPrintsCorrectly)
 {
     char* p = (char*) 0x0012345678901234;
     SimpleString expected("0x12345678901234");
@@ -865,7 +878,7 @@ TEST(SimpleString, BracketsFormattedHexStringFromForLongOnDifferentPlatform)
 /*
  * This test case cannot pass on 32 bit systems.
  */
-IGNORE_TEST(SimpleString, _64BitAddressPrintsCorrectly)
+IGNORE_TEST(SimpleString, 64BitAddressPrintsCorrectly)
 {
 }
 
@@ -1127,7 +1140,7 @@ TEST(SimpleString, MaskedBitsChar)
     STRCMP_EQUAL("xxxxxxxx xxxxxxx1", StringFromMaskedBits(0x01, 0x01, 1).asCharString());
     STRCMP_EQUAL("xxxxxxxx 11xx11xx", StringFromMaskedBits(0xFF, 0xCC, 1).asCharString());
 }
-#else
+#elif (CPPUTEST_CHAR_BIT == 8)
 TEST(SimpleString, MaskedBitsChar)
 {
     STRCMP_EQUAL("xxxxxxxx", StringFromMaskedBits(0x00, 0x00, 1).asCharString());
@@ -1233,7 +1246,7 @@ TEST(SimpleString, BracketsFormattedHexStringFromForLong)
 
 	STRCMP_EQUAL("(0x1)", BracketsFormattedHexStringFrom(value).asCharString());
 }
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
 {
@@ -1250,16 +1263,15 @@ TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 #else
 TEST(SimpleString, BracketsFormattedHexStringFromForLongLong)
 {
-	cpputest_longlong value = 1;
+	cpputest_longlong value;
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }
 TEST(SimpleString, BracketsFormattedHexStringFromForULongLong)
 {
-	cpputest_ulonglong value = 1;
+	cpputest_ulonglong value;
 
 	STRCMP_EQUAL("", BracketsFormattedHexStringFrom(value).asCharString());
 }
 
 #endif
-

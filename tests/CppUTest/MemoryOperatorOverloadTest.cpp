@@ -10,6 +10,16 @@
 #include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
 
+#if defined(__GNUC__)
+# if __GNUC__ >= 11
+#  define NEEDS_DISABLE_FREE_NON_HEEP_WARNING
+# endif /* GCC >= 11 */
+# if __GNUC__ >= 12
+#  define NEEDS_DISABLE_USE_AFTER_FREE
+# endif /* GCC >= 12 */
+#endif /* GCC */
+
+
 TEST_GROUP(BasicBehavior)
 {
 };
@@ -22,6 +32,11 @@ TEST(BasicBehavior, CanDeleteNullPointers)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
+#ifdef NEEDS_DISABLE_USE_AFTER_FREE
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wuse-after-free"
+#endif /* NEEDS_DISABLE_USE_AFTER_FREE */
+
 CPPUTEST_DO_NOT_SANITIZE_ADDRESS
 static void deleteArrayInvalidatesMemory()
 {
@@ -31,11 +46,6 @@ static void deleteArrayInvalidatesMemory()
     CHECK(memory[5] != 0xCB);
 }
 
-TEST(BasicBehavior, deleteArrayInvalidatesMemory)
-{
-    deleteArrayInvalidatesMemory();
-}
-
 CPPUTEST_DO_NOT_SANITIZE_ADDRESS
 static void deleteInvalidatesMemory()
 {
@@ -43,6 +53,15 @@ static void deleteInvalidatesMemory()
     *memory = 0xAD;
     delete memory;
     CHECK(*memory != 0xAD);
+}
+
+#ifdef NEEDS_DISABLE_USE_AFTER_FREE
+# pragma GCC diagnostic pop
+#endif /* NEEDS_DISABLE_USE_AFTER_FREE */
+
+TEST(BasicBehavior, deleteArrayInvalidatesMemory)
+{
+    deleteArrayInvalidatesMemory();
 }
 
 TEST(BasicBehavior, deleteInvalidatesMemory)
@@ -60,11 +79,21 @@ TEST(BasicBehavior, DeleteWithSizeParameterWorks)
 }
 #endif
 
+#ifdef NEEDS_DISABLE_FREE_NON_HEEP_WARNING
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wfree-nonheap-object"
+#endif /* NEEDS_DISABLE_FREE_NON_HEEP_WARNING */
+
 static void deleteUnallocatedMemory()
 {
     delete (char*) 0x1234678;
     FAIL("Should never come here"); // LCOV_EXCL_LINE
 } // LCOV_EXCL_LINE
+
+#ifdef NEEDS_DISABLE_FREE_NON_HEEP_WARNING
+# pragma GCC diagnostic pop
+#endif /* NEEDS_DISABLE_FREE_NON_HEEP_WARNING */
+
 
 TEST(BasicBehavior, deleteWillNotThrowAnExceptionWhenDeletingUnallocatedMemoryButCanStillCauseTestFailures)
 {
@@ -121,14 +150,14 @@ TEST(BasicBehavior, freeInvalidatesMemory)
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 {
     MemoryLeakDetector* memLeakDetector;
-    void setup()
+    void setup() _override
     {
         memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     }
 
 };
 
-#if ! defined CPPUTEST_MEM_LEAK_DETECTION_DISABLED || ! CPPUTEST_MEM_LEAK_DETECTION_DISABLED
+#if CPPUTEST_USE_MEM_LEAK_DETECTION
 
 #ifdef CPPUTEST_USE_NEW_MACROS
     #undef new
@@ -373,7 +402,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 {
     TestMemoryAllocator* no_memory_allocator;
     GlobalMemoryAllocatorStash memoryAllocatorStash;
-    void setup()
+    void setup() _override
     {
         memoryAllocatorStash.save();
         no_memory_allocator = new NullUnknownAllocator;
@@ -381,7 +410,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
         setCurrentNewArrayAllocator(no_memory_allocator);
     }
 
-    void teardown()
+    void teardown() _override
     {
         memoryAllocatorStash.restore();
         delete no_memory_allocator;
@@ -390,16 +419,16 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-    CHECK_THROWS(std::bad_alloc, new char);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
-    CHECK_THROWS(std::bad_alloc, new char[10]);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, new char[10]);
 }
 
 TEST_GROUP(TestForExceptionsInConstructor)
@@ -432,7 +461,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
 
 #undef new
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 
 /*
@@ -471,14 +500,15 @@ char* some_memory;
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-    CHECK_THROWS(std::bad_alloc, some_memory = new char);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, some_memory = new char);
 }
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhenUsingStdCppNewWithoutOverride)
 {
-    CHECK_THROWS(std::bad_alloc, some_memory = new char[10]);
+    CHECK_THROWS(CPPUTEST_BAD_ALLOC, some_memory = new char[10]);
 }
 
+#if CPPUTEST_USE_STD_CPP_LIB
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
     POINTERS_EQUAL(NULLPTR, new (std::nothrow) char);
@@ -488,6 +518,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOv
 {
     POINTERS_EQUAL(NULLPTR, new (std::nothrow) char[10]);
 }
+#endif
 
 #else
 

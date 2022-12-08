@@ -44,7 +44,7 @@ TEST_GROUP(TestOrderedTest)
     ExecFunctionTestShell normalTest3;
 
     OrderedTestShell* orderedTestCache;
-    void setup()
+    void setup() _override
     {
         orderedTestCache = OrderedTestShell::getOrderedTestHead();
         OrderedTestShell::setOrderedTestHead(NULLPTR);
@@ -53,7 +53,7 @@ TEST_GROUP(TestOrderedTest)
         fixture->getRegistry()->unDoLastAddTest();
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete fixture;
         OrderedTestShell::setOrderedTestHead(orderedTestCache);
@@ -82,7 +82,7 @@ TEST_GROUP(TestOrderedTest)
 
 TEST(TestOrderedTest, TestInstallerSetsFields)
 {
-    OrderedTestInstaller(orderedTest, "testgroup", "testname", "this.cpp", 10, 5);
+    OrderedTestInstaller installer(orderedTest, "testgroup", "testname", "this.cpp", 10, 5);
     STRCMP_EQUAL("testgroup", orderedTest.getGroup().asCharString());
     STRCMP_EQUAL("testname", orderedTest.getName().asCharString());
     STRCMP_EQUAL("this.cpp", orderedTest.getFile().asCharString());
@@ -169,7 +169,7 @@ int OrderedTestTestingFixture::count_ = 0;
 
 TEST_GROUP(TestOrderedTestMacros)
 {
-    void setup()
+    void setup() _override
     {
         OrderedTestTestingFixture::checkRun(TestRegistry::getCurrentRegistry()->getCurrentRepetition());
     }

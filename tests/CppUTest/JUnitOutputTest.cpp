@@ -336,7 +336,7 @@ TEST_GROUP(JUnitOutputTest)
     JUnitTestOutputTestRunner *testCaseRunner;
     FileForJUnitOutputTests* outputFile;
 
-    void setup()
+    void setup() _override
     {
         UT_PTR_SET(PlatformSpecificFOpen, mockFOpen);
         UT_PTR_SET(PlatformSpecificFPuts, mockFPuts);
@@ -346,7 +346,7 @@ TEST_GROUP(JUnitOutputTest)
         testCaseRunner = new JUnitTestOutputTestRunner(*result);
     }
 
-    void teardown()
+    void teardown() _override
     {
         delete testCaseRunner;
         delete result;

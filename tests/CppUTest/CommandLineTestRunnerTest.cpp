@@ -32,7 +32,6 @@
 #include "CppUTest/TestPlugin.h"
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
-#include "CppUTestExt/MockSupport.h"
 
 
 class DummyPluginWhichCountsThePlugins : public TestPlugin
@@ -47,7 +46,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int, const char *const *, int)
+    virtual bool parseArguments(int, const char *const *, int) _override
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
@@ -69,19 +68,19 @@ public:
     fakeConsoleOutputWhichIsReallyABuffer(NULLPTR), fakeTCOutputWhichIsReallyABuffer(NULLPTR)
   {}
 
-  TestOutput* createConsoleOutput()
+  TestOutput* createConsoleOutput() _override
   {
     fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeConsoleOutputWhichIsReallyABuffer;
   }
 
-  TestOutput* createJUnitOutput(const SimpleString&)
+  TestOutput* createJUnitOutput(const SimpleString&) _override
   {
     fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
     return fakeJUnitOutputWhichIsReallyABuffer_;
   }
 
-  TestOutput* createTeamCityOutput()
+  TestOutput* createTeamCityOutput() _override
   {
     fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeTCOutputWhichIsReallyABuffer;
@@ -95,14 +94,14 @@ TEST_GROUP(CommandLineTestRunner)
     UtestShell *test2;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup()
+    void setup() _override
     {
       test1 = new UtestShell("group1", "test1", "file1", 1);
       test2 = new UtestShell("group2", "test2", "file2", 2);
       registry.addTest(test1);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown()
+    void teardown() _override
     {
       delete pluginCountingPlugin;
       delete test2;
@@ -269,6 +268,16 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
     STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
+TEST(CommandLineTestRunner, listTestLocationsShouldWorkProperly)
+{
+    const char* argv[] = { "tests.exe", "-ll" };
+
+    CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
+    commandLineTestRunner.runAllTestsMain();
+
+    STRCMP_CONTAINS("group1.test1", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
+}
+
 TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
 {
     // more than 1 item in test list ensures that shuffle algorithm calls rand_()
@@ -293,13 +302,12 @@ extern "C" {
     typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
     typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
     typedef void (*FCloseFunc)(PlatformSpecificFile);
-    typedef int (*PutcharFunc)(int);
 }
 
 struct FakeOutput
 {
     FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
-        SaveFClose(PlatformSpecificFClose), SavePutchar(PlatformSpecificPutchar)
+        SaveFClose(PlatformSpecificFClose)
     {
         installFakes();
         currentFake = this;
@@ -316,12 +324,10 @@ struct FakeOutput
         PlatformSpecificFOpen = (FOpenFunc)fopen_fake;
         PlatformSpecificFPuts = (FPutsFunc)fputs_fake;
         PlatformSpecificFClose = (FCloseFunc)fclose_fake;
-        PlatformSpecificPutchar = (PutcharFunc)putchar_fake;
     }
 
     void restoreOriginals()
     {
-        PlatformSpecificPutchar = SavePutchar;
         PlatformSpecificFOpen = SaveFOpen;
         PlatformSpecificFPuts = SaveFPuts;
         PlatformSpecificFClose = SaveFClose;
@@ -332,19 +338,18 @@ struct FakeOutput
         return (PlatformSpecificFile) NULLPTR;
     }
 
-    static void fputs_fake(const char* str, PlatformSpecificFile)
+    static void fputs_fake(const char* str, PlatformSpecificFile f)
     {
-        currentFake->file += str;
+        if (f == PlatformSpecificStdOut) {
+            currentFake->console += str;
+        }
+        else {
+            currentFake->file += str;
+        }
     }
 
     static void fclose_fake(PlatformSpecificFile)
     {
-    }
-
-    static int putchar_fake(int c)
-    {
-        currentFake->console += StringFrom((char)c);
-        return c;
     }
 
     SimpleString file;
@@ -355,7 +360,6 @@ private:
     FOpenFunc SaveFOpen;
     FPutsFunc SaveFPuts;
     FCloseFunc SaveFClose;
-    PutcharFunc SavePutchar;
 };
 
 FakeOutput* FakeOutput::currentFake = NULLPTR;
@@ -398,7 +402,7 @@ class RunIgnoredUtest : public Utest
 {
 public:
     static bool Checker;
-    void testBody()
+    void testBody() _override
     {
         Checker = true;
     }
@@ -420,13 +424,13 @@ TEST_GROUP(RunIgnoredTest)
     RunIgnoredUtestShell *runIgnoredTest;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup()
+    void setup() _override
     {
       runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
       registry.addTest(runIgnoredTest);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown()
+    void teardown() _override
     {
       delete pluginCountingPlugin;
       delete runIgnoredTest;
@@ -453,4 +457,3 @@ TEST(RunIgnoredTest, IgnoreTestWillGetRunIfOptionSpecified)
 
     CHECK_TRUE( RunIgnoredUtest::Checker );
 }
-

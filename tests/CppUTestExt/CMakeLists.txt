@@ -1,4 +1,4 @@
-set(CppUTestExtTests_src
+add_executable(CppUTestExtTests
     AllTests.cpp
     CodeMemoryReporterTest.cpp
     GMockTest.cpp
@@ -29,15 +29,48 @@ set(CppUTestExtTests_src
     OrderedTestTest.cpp
 )
 
-if (MINGW)
-    find_package (Threads REQUIRED)
-    set(THREAD_LIB "pthread")
-endif (MINGW)
+if(CPPUTEST_STD_C_LIB_DISABLED)
+    target_sources(CppUTestExtTests
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/../DummyUTestPlatform/DummyUTestPlatform.cpp
+    )
+endif()
 
-add_executable(CppUTestExtTests ${CppUTestExtTests_src})
-cpputest_normalize_test_output_location(CppUTestExtTests)
-target_link_libraries(CppUTestExtTests CppUTest CppUTestExt ${THREAD_LIB} ${CPPUNIT_EXTERNAL_LIBRARIES})
+if(CPPUTEST_TEST_GTEST)
+    find_package(GTest)
+    if(NOT GTest_FOUND)
+        if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.11")
+            include(FetchContent)
+            FetchContent_Declare(googletest
+                URL https://github.com/google/googletest/archive/release-1.8.0.zip
+            )
+            if(NOT googletest_POPULATED)
+                FetchContent_Populate(googletest)
+                add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+            endif()
+            set(GTEST_LIBRARIES gmock gtest)
+        else()
+            # FetchContent is not supported.
+            message(FATAL_ERROR
+                "GTest not found"
+            )
+        endif()
+    endif()
+    target_link_libraries(CppUTestExtTests PRIVATE ${GTEST_LIBRARIES})
+    target_compile_definitions(CppUTestExtTests PRIVATE CPPUTEST_INCLUDE_GTEST_TESTS)
+endif()
 
-if (TESTS_BUILD_DISCOVER)
-    cpputest_buildtime_discover_tests(CppUTestExtTests)
+target_link_libraries(CppUTestExtTests
+    PRIVATE
+        ${CppUTestLibName}
+        ${CppUTestExtLibName}
+)
+
+add_mapfile(CppUTestExtTests)
+
+if(CPPUTEST_TEST_DISCOVERY)
+    include(CppUTest)
+    cpputest_discover_tests(CppUTestExtTests
+        DETAILED FALSE
+    )
 endif()

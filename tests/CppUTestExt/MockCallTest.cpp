@@ -31,7 +31,7 @@
 
 TEST_GROUP(MockCallTest)
 {
-    void teardown()
+    void teardown() _override
     {
         mock().checkExpectations();
         mock().clear();
@@ -500,4 +500,3 @@ TEST(MockCallTest, mockExpectationShouldIncreaseNumberOfChecks)
     fixture.runAllTests();
     LONGS_EQUAL(3, fixture.getCheckCount());
 }
-

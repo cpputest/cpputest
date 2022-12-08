@@ -36,8 +36,8 @@
 #undef realloc
 #undef strdup
 #undef strndup
-
 #define  far  // eliminate "meaningless type qualifier" warning
+extern "C" {
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -45,8 +45,8 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
+}
 #undef far
-
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 static jmp_buf test_exit_jmp_buf[10];
@@ -137,7 +137,17 @@ PlatformSpecificFile C2000FOpen(const char* filename, const char* flag)
 
 static void C2000FPuts(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+#if USE_BUFFER_OUTPUT
+    if (file == PlatformSpecificStdOut) {
+        while (*str && (idx < BUFFER_SIZE)) {
+            buf[idx++] = *str++;
+        }
+    }
+    else
+#endif
+    { 
+        fputs(str, (FILE*)file);
+    }
 }
 
 static void C2000FClose(PlatformSpecificFile file)
@@ -145,53 +155,36 @@ static void C2000FClose(PlatformSpecificFile file)
    fclose((FILE*)file);
 }
 
+PlatformSpecificFile PlatformSpecificStdOut = stdout;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char* filename, const char* flag) = C2000FOpen;
 void (*PlatformSpecificFPuts)(const char* str, PlatformSpecificFile file) = C2000FPuts;
 void (*PlatformSpecificFClose)(PlatformSpecificFile file) = C2000FClose;
-
-static int CL2000Putchar(int c)
-{
-#if USE_BUFFER_OUTPUT
-    if(idx < BUFFER_SIZE) {
-        buffer[idx] = (char) c;
-        idx++;
-        /* "buffer[idx]" instead of "c" eliminates "never used" warning */
- 		return (buffer[idx]);
-    }
-    else {
-        return EOF;
-    }
-#else
-    return putchar(c);
-#endif
-}
 
 static void CL2000Flush()
 {
   fflush(stdout);
 }
 
-extern int (*PlatformSpecificPutchar)(int c) = CL2000Putchar;
 extern void (*PlatformSpecificFlush)(void) = CL2000Flush;
 
 static void* C2000Malloc(size_t size)
 {
-   return (void*)far_malloc((unsigned long)size);
+   return (void*)malloc((unsigned long)size);
 }
 
 static void* C2000Realloc (void* memory, size_t size)
 {
-    return (void*)far_realloc((long)memory, (unsigned long)size);
+    return (void*)realloc(memory, (unsigned long)size);
 }
 
 static void C2000Free(void* memory)
 {
-    far_free((long)memory);
+    free(memory);
 }
 
 static void* C2000MemCpy(void* s1, const void* s2, size_t size)
 {
-    return (void*)far_memlcpy((long)s1, (long)s2, size);
+    return (void*)memcpy(s1, s2, size);
 }
 
 static void* C2000Memset(void* mem, int c, size_t size)
@@ -247,8 +240,11 @@ static void DummyMutexDestroy(PlatformSpecificMutex mtx)
 }
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
+void (*PlatformSpecificSrand)(unsigned int) = srand;
+int (*PlatformSpecificRand)(void) = rand;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
+void (*PlatformSpecificAbort)(void) = abort;
 
 }

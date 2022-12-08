@@ -50,12 +50,12 @@ TEST_GROUP(CommandLineArguments)
     CommandLineArguments* args;
     OptionsPlugin* plugin;
 
-    void setup()
+    void setup() _override
     {
         plugin = new OptionsPlugin("options");
         args = NULLPTR;
     }
-    void teardown()
+    void teardown() _override
     {
         delete args;
         delete plugin;
@@ -206,6 +206,7 @@ TEST(CommandLineArguments, setCompleteGroupDotNameFilterInvalidArgument)
     const char* argv[] = { "tests.exe", "-t", "groupname" };
     CHECK_FALSE(newArgumentParser(argc, argv));
 }
+
 TEST(CommandLineArguments, setCompleteGroupDotNameFilter)
 {
     int argc = 3;
@@ -215,6 +216,67 @@ TEST(CommandLineArguments, setCompleteGroupDotNameFilter)
     CHECK_EQUAL(TestFilter("name"), *args->getNameFilters());
 }
 
+TEST(CommandLineArguments, setCompleteStrictGroupDotNameFilterInvalidArgument)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-st", "groupname" };
+    CHECK_FALSE(newArgumentParser(argc, argv));
+}
+
+TEST(CommandLineArguments, setCompleteStrictGroupDotNameFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-st", "group.name" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.strictMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+    TestFilter nameFilter("name");
+    nameFilter.strictMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
+
+TEST(CommandLineArguments, setCompleteExcludeGroupDotNameFilterInvalidArgument)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xt", "groupname" };
+    CHECK_FALSE(newArgumentParser(argc, argv));
+}
+
+TEST(CommandLineArguments, setCompleteExcludeGroupDotNameFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xt", "group.name" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.invertMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+    TestFilter nameFilter("name");
+    nameFilter.invertMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
+
+TEST(CommandLineArguments, setCompleteExcludeStrictGroupDotNameFilterInvalidArgument)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xst", "groupname" };
+    CHECK_FALSE(newArgumentParser(argc, argv));
+}
+
+TEST(CommandLineArguments, setCompleteExcludeStrictGroupDotNameFilter)
+{
+    int argc = 3;
+    const char* argv[] = { "tests.exe", "-xst", "group.name" };
+    CHECK(newArgumentParser(argc, argv));
+    TestFilter groupFilter("group");
+    groupFilter.strictMatching();
+    groupFilter.invertMatching();
+    CHECK_EQUAL(groupFilter, *args->getGroupFilters());
+    TestFilter nameFilter("name");
+    nameFilter.strictMatching();
+    nameFilter.invertMatching();
+    CHECK_EQUAL(nameFilter, *args->getNameFilters());
+}
 
 TEST(CommandLineArguments, setGroupFilterSameParameter)
 {
@@ -466,10 +528,10 @@ TEST(CommandLineArguments, printUsage)
 {
     STRCMP_EQUAL(
             "use -h for more extensive help\n"
-            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ri] [-r#] [-f]\n"
-            "      [-g|sg|xg|xsg groupName]... [-n|sn|xn|xsn testName]... [-t groupName.testName]...\n"
-            "      [-b] [-s [randomizerSeed>0]] [\"TEST(groupName, testName)\"]...\n"
-            "      [-o{normal, junit, teamcity}] [-k packageName]\n",
+            "usage [-h] [-v] [-vv] [-c] [-p] [-lg] [-ln] [-ll] [-ri] [-r[<#>]] [-f] [-e] [-ci]\n"
+            "      [-g|sg|xg|xsg <groupName>]... [-n|sn|xn|xsn <testName>]... [-t|st|xt|xst <groupName>.<testName>]...\n"
+            "      [-b] [-s [<seed>]] [\"[IGNORE_]TEST(<groupName>, <testName>)\"]...\n"
+            "      [-o{normal|eclipse|junit|teamcity}] [-k <packageName>]\n",
             args->usage());
 }
 
@@ -504,6 +566,22 @@ TEST(CommandLineArguments, checkDefaultArguments)
     CHECK(args->isEclipseOutput());
     CHECK(SimpleString("") == args->getPackageName());
     CHECK(!args->isCrashingOnFail());
+    CHECK(args->isRethrowingExceptions());
+}
+
+TEST(CommandLineArguments, checkContinuousIntegrationMode)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-ci" };
+    CHECK(newArgumentParser(argc, argv));
+    CHECK(!args->isVerbose());
+    LONGS_EQUAL(1, args->getRepeatCount());
+    CHECK(NULLPTR == args->getGroupFilters());
+    CHECK(NULLPTR == args->getNameFilters());
+    CHECK(args->isEclipseOutput());
+    CHECK(SimpleString("") == args->getPackageName());
+    CHECK(!args->isCrashingOnFail());
+    CHECK_FALSE(args->isRethrowingExceptions());
 }
 
 TEST(CommandLineArguments, setPackageName)
@@ -551,3 +629,10 @@ TEST(CommandLineArguments, setOptCrashOnFail)
     CHECK(args->isCrashingOnFail());
 }
 
+TEST(CommandLineArguments, setOptRethrowExceptions)
+{
+    int argc = 2;
+    const char* argv[] = { "tests.exe", "-e"};
+    CHECK(newArgumentParser(argc, argv));
+    CHECK_FALSE(args->isRethrowingExceptions());
+}

@@ -52,7 +52,7 @@ TEST_GROUP(SimpleStringInternalCache)
     TestFunctionWithCache testFunction;
     TestTestingFixture fixture;
 
-    void setup()
+    void setup() _override
     {
         fixture.setTestFunction(&testFunction);
         testFunction.parameter = &cache;
@@ -62,7 +62,7 @@ TEST_GROUP(SimpleStringInternalCache)
         cache.setAllocator(defaultAllocator);
     }
 
-    void teardown()
+    void teardown() _override
     {
         cache.clearAllIncludingCurrentlyUsedMemory();
         accountant.clear();
@@ -188,7 +188,7 @@ TEST(SimpleStringInternalCache, clearCacheWillRemoveAllCachedMemoryButNotAllUsed
     char* mem = cache.alloc(10);
     cache.dealloc(mem, 10);
 
-    mem = cache.alloc(60);
+    cache.alloc(60);
 
     cache.clearCache();
 
@@ -251,7 +251,7 @@ TEST(SimpleStringInternalCache, clearAllIncludingCurrentlyUsedMemoryAlsoReleases
     LONGS_EQUAL(3, accountant.totalDeallocationsOfSize(1234));
 }
 
-static void _deallocatingStringMemoryThatWasntAllocatedWithCache(SimpleStringInternalCache* cache, size_t allocationSize)
+static void deallocatingStringMemoryThatWasntAllocatedWithCache_(SimpleStringInternalCache* cache, size_t allocationSize)
 {
     char* mem = defaultMallocAllocator()->alloc_memory(allocationSize, __FILE__, __LINE__);
     mem[0] = 'B';
@@ -264,7 +264,7 @@ static void _deallocatingStringMemoryThatWasntAllocatedWithCache(SimpleStringInt
 
 TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarning)
 {
-    testFunction.testFunction = _deallocatingStringMemoryThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 123;
 
     cache.setAllocator(allocator);
@@ -277,7 +277,7 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 
 }
 
-static void _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache(SimpleStringInternalCache* cache, size_t allocationSize)
+static void deallocatingStringMemoryTwiceThatWasntAllocatedWithCache_(SimpleStringInternalCache* cache, size_t allocationSize)
 {
     char* mem = defaultMallocAllocator()->alloc_memory(allocationSize, __FILE__, __LINE__);
     mem[0] = '\0';
@@ -288,7 +288,7 @@ static void _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache(SimpleStri
 
 TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarningButOnlyOnce)
 {
-    testFunction.testFunction = _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryTwiceThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 123;
 
     cache.setAllocator(allocator);
@@ -299,7 +299,7 @@ TEST(SimpleStringInternalCache, deallocatingMemoryThatWasntAllocatedWhileCacheWa
 
 TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarning)
 {
-    testFunction.testFunction = _deallocatingStringMemoryThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 12345;
 
     cache.setAllocator(allocator);
@@ -314,7 +314,7 @@ TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCa
 
 TEST(SimpleStringInternalCache, deallocatingLargeMemoryThatWasntAllocatedWhileCacheWasInPlaceProducesWarningButOnlyOnce)
 {
-    testFunction.testFunction = _deallocatingStringMemoryTwiceThatWasntAllocatedWithCache;
+    testFunction.testFunction = deallocatingStringMemoryTwiceThatWasntAllocatedWithCache_;
     testFunction.allocationSize = 12345;
 
     cache.setAllocator(allocator);
@@ -330,13 +330,13 @@ TEST_GROUP(SimpleStringCacheAllocator)
     MemoryAccountant accountant;
     AccountingTestMemoryAllocator* accountingAllocator;
 
-    void setup()
+    void setup() _override
     {
         accountingAllocator = new AccountingTestMemoryAllocator(accountant, defaultMallocAllocator());
         allocator = new SimpleStringCacheAllocator(cache, accountingAllocator);
     }
 
-    void teardown()
+    void teardown() _override
     {
         cache.clearCache();
         delete allocator;
@@ -387,4 +387,3 @@ TEST(GlobalSimpleStringCache, installsAndRemovedCache)
     }
     POINTERS_EQUAL(originalStringAllocator, SimpleString::getStringAllocator());
 }
-

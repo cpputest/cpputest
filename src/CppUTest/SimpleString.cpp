@@ -62,7 +62,7 @@ GlobalSimpleStringMemoryAccountant::~GlobalSimpleStringMemoryAccountant()
 
 void GlobalSimpleStringMemoryAccountant::restoreAllocator()
 {
-    if (SimpleString::getStringAllocator() == allocator_)
+    if (allocator_ && (SimpleString::getStringAllocator() == allocator_))
         SimpleString::setStringAllocator(allocator_->originalAllocator());
 }
 
@@ -196,8 +196,10 @@ char* SimpleString::StrNCpy(char* s1, const char* s2, size_t n)
 
     if((NULLPTR == s1) || (0 == n)) return result;
 
-    while ((*s1++ = *s2++) && --n != 0)
-        ;
+    *s1 = *s2;
+    while ((--n != 0) && *s1){
+        *++s1 = *++s2;
+    }
     return result;
 }
 
@@ -356,9 +358,15 @@ size_t SimpleString::count(const SimpleString& substr) const
 {
     size_t num = 0;
     const char* str = getBuffer();
-    while (*str && (str = StrStr(str, substr.getBuffer()))) {
+    const char* strpart = NULLPTR;
+    if (*str){
+        strpart = StrStr(str, substr.getBuffer());
+    }
+    while (*str && strpart) {
+        str = strpart;
         str++;
         num++;
+        strpart = StrStr(str, substr.getBuffer());
     }
     return num;
 }
@@ -420,6 +428,70 @@ void SimpleString::replace(const char* to, const char* with)
     }
     else
         setInternalBufferAsEmptyString();
+}
+
+SimpleString SimpleString::printable() const
+{
+    static const char* shortEscapeCodes[] =
+    {
+        "\\a",
+        "\\b",
+        "\\t",
+        "\\n",
+        "\\v",
+        "\\f",
+        "\\r"
+    };
+
+    SimpleString result;
+    result.setInternalBufferToNewBuffer(getPrintableSize() + 1);
+
+    size_t str_size = size();
+    size_t j = 0;
+    for (size_t i = 0; i < str_size; i++)
+    {
+        char c = buffer_[i];
+        if (isControlWithShortEscapeSequence(c))
+        {
+            StrNCpy(&result.buffer_[j], shortEscapeCodes[(unsigned char)(c - '\a')], 2);
+            j += 2;
+        }
+        else if (isControl(c))
+        {
+            SimpleString hexEscapeCode = StringFromFormat("\\x%02X ", c);
+            StrNCpy(&result.buffer_[j], hexEscapeCode.asCharString(), 4);
+            j += 4;
+        }
+        else
+        {
+            result.buffer_[j] = c;
+            j++;
+        }
+    }
+    result.buffer_[j] = 0;
+
+    return result;
+}
+
+size_t SimpleString::getPrintableSize() const
+{
+    size_t str_size = size();
+    size_t printable_str_size = str_size;
+
+    for (size_t i = 0; i < str_size; i++)
+    {
+        char c = buffer_[i];
+        if (isControlWithShortEscapeSequence(c))
+        {
+            printable_str_size += 1;
+        }
+        else if (isControl(c))
+        {
+            printable_str_size += 3;
+        }
+    }
+
+    return printable_str_size;
 }
 
 SimpleString SimpleString::lowerCase() const
@@ -586,6 +658,16 @@ bool SimpleString::isUpper(char ch)
     return 'A' <= ch && 'Z' >= ch;
 }
 
+bool SimpleString::isControl(char ch)
+{
+    return ch < ' ' || ch == char(0x7F);
+}
+
+bool SimpleString::isControlWithShortEscapeSequence(char ch)
+{
+    return '\a' <= ch && '\r' >= ch;
+}
+
 SimpleString StringFrom(bool value)
 {
     return SimpleString(StringFromFormat("%s", value ? "true" : "false"));
@@ -598,7 +680,12 @@ SimpleString StringFrom(const char *value)
 
 SimpleString StringFromOrNull(const char * expected)
 {
-    return (expected) ? StringFrom(expected) : "(null)";
+    return (expected) ? StringFrom(expected) : StringFrom("(null)");
+}
+
+SimpleString PrintableStringFromOrNull(const char * expected)
+{
+    return (expected) ? StringFrom(expected).printable() : StringFrom("(null)");
 }
 
 SimpleString StringFrom(int value)
@@ -694,7 +781,7 @@ SimpleString StringFrom(const std::nullptr_t value)
 }
 #endif
 
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
 
 SimpleString StringFrom(cpputest_longlong value)
 {
@@ -897,7 +984,7 @@ SimpleString StringFromBinary(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryOrNull(const unsigned char* value, size_t size)
 {
-    return (value) ? StringFromBinary(value, size) : "(null)";
+    return (value) ? StringFromBinary(value, size) : StringFrom("(null)");
 }
 
 SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
@@ -914,7 +1001,7 @@ SimpleString StringFromBinaryWithSize(const unsigned char* value, size_t size)
 
 SimpleString StringFromBinaryWithSizeOrNull(const unsigned char* value, size_t size)
 {
-    return (value) ? StringFromBinaryWithSize(value, size) : "(null)";
+    return (value) ? StringFromBinaryWithSize(value, size) : StringFrom("(null)");
 }
 
 SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_t byteCount)
@@ -944,19 +1031,17 @@ SimpleString StringFromMaskedBits(unsigned long value, unsigned long mask, size_
 
 SimpleString StringFromOrdinalNumber(unsigned int number)
 {
-    unsigned int onesDigit = number % 10;
+    const char* suffix = "th";
 
-    const char* suffix;
-    if (number >= 11 && number <= 13) {
-        suffix = "th";
-    } else if (3 == onesDigit) {
-        suffix = "rd";
-    } else if (2 == onesDigit) {
-        suffix = "nd";
-    } else if (1 == onesDigit) {
-        suffix = "st";
-    } else {
-        suffix = "th";
+    if ((number < 11) || (number > 13)) {
+        unsigned int const onesDigit = number % 10;
+        if (3 == onesDigit) {
+            suffix = "rd";
+        } else if (2 == onesDigit) {
+            suffix = "nd";
+        } else if (1 == onesDigit) {
+            suffix = "st";
+        }
     }
 
     return StringFromFormat("%u%s", number, suffix);

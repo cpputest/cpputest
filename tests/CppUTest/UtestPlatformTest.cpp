@@ -44,7 +44,8 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-#ifndef CPPUTEST_HAVE_FORK
+// There is a possibility that a compiler provides fork but not waitpid.
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
@@ -55,13 +56,13 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWit
 
 #else
 
-static void _failFunction()
+static void failFunction_()
 {
     FAIL("This test fails");
 }
 
-static void _exitNonZeroFunction() _no_return_;
-static void _exitNonZeroFunction()
+_no_return_ static void exitNonZeroFunction_();
+static void exitNonZeroFunction_()
 {
     /* destructor of static objects will be called. If StringCache was there then the allocator will report invalid deallocations of static SimpleString */
     SimpleString::setStringAllocator(SimpleString::getStringAllocator()->actualAllocator());
@@ -100,7 +101,7 @@ extern "C" {
 #include <unistd.h>
 #include <signal.h>
 
-static void _stoppedTestFunction()
+static void stoppedTestFunction_()
 {
     kill(getpid(), SIGSTOP);
 }
@@ -115,7 +116,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, TestInSeparat
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSeparateProcessWorks)
 {
     fixture.setRunTestsInSeperateProcess();
-    fixture.setTestFunction(_failFunction);
+    fixture.setTestFunction(failFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process");
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
@@ -123,15 +124,15 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSepa
 
 #if (! CPPUTEST_SANITIZE_ADDRESS)
 
-static int _accessViolationTestFunction()
+static int accessViolationTestFunction_()
 {
-    return *(volatile int*) NULLPTR;
+    return *(volatile int*) NULLPTR; // NOLINT(clang-analyzer-core.NullDereference)
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolationInSeparateProcessWorks)
 {
     fixture.setRunTestsInSeperateProcess();
-    fixture.setTestFunction((void(*)())_accessViolationTestFunction);
+    fixture.setTestFunction((void(*)())accessViolationTestFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran");
@@ -142,7 +143,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolati
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSeparateProcessWorks)
 {
     fixture.setRunTestsInSeperateProcess();
-    fixture.setTestFunction(_stoppedTestFunction);
+    fixture.setTestFunction(stoppedTestFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("Stopped in separate process - continuing");
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran");
@@ -197,9 +198,9 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTests
 {
     fixture.setRunTestsInSeperateProcess();
     fixture.runTestWithMethod(NULLPTR);
-    fixture.runTestWithMethod(_stoppedTestFunction);
+    fixture.runTestWithMethod(stoppedTestFunction_);
     fixture.runTestWithMethod(NULLPTR);
-    fixture.runTestWithMethod(_exitNonZeroFunction);
+    fixture.runTestWithMethod(exitNonZeroFunction_);
     fixture.runTestWithMethod(NULLPTR);
     fixture.assertPrintContains("Failed in separate process");
     fixture.assertPrintContains("Stopped in separate process");
@@ -208,4 +209,3 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTests
 
 #endif
 #endif
-

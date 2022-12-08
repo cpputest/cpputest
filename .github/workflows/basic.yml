@@ -1,0 +1,409 @@
+---
+name: Basic builds
+
+"on":
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 5 * * 3'
+
+jobs:
+  clang-format:
+    name: Clang Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - uses: DoozyX/clang-format-lint-action@v0.14
+        with:
+          clangFormatVersion: 14
+          source: examples
+
+  codeql:
+    runs-on: ubuntu-20.04
+    env:
+      CC: gcc-10
+      CXX: g++-10
+    name: "CodeQL"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: CodeQL Initialization
+        uses: github/codeql-action/init@v2
+        with:
+          languages: cpp
+          queries: +security-and-quality
+      - name: Build
+        run: |
+          mkdir _build && cd _build
+          cmake -DCMAKE_CXX_STANDARD=17 ..
+          make -j2
+      - name: CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  automake:
+    strategy:
+      matrix:
+        include:
+          - name: Mac GNU
+            os: macos-latest
+            cc: gcc
+            cxx: g++
+            target: tdd
+          - name: Mac Clang
+            os: macos-latest
+            cc: clang
+            cxx: clang++
+            target: tdd
+          - name: Linux GNU
+            os: ubuntu-latest
+            cc: gcc
+            cxx: g++
+            target: tdd
+          - name: Linux Clang
+            os: ubuntu-latest
+            cc: clang
+            cxx: clang++
+            target: tdd
+          - name: GTest 1.5
+            os: ubuntu-20.04
+            target: check_gtest15
+          - name: GTest 1.6
+            os: ubuntu-20.04
+            target: check_gtest16
+          - name: GTest 1.7
+            os: ubuntu-20.04
+            target: check_gtest17
+          - name: GTest 1.8
+            os: ubuntu-20.04
+            target: check_gtest18
+          - name: Disable long long
+            os: ubuntu-latest
+            configure_args: --disable-longlong
+            target: tdd
+    runs-on: ${{ matrix.os }}
+    name: Automake ${{ matrix.name }}
+    steps:
+      - name: Install Python 2
+        uses: actions/setup-python@v4
+        with:
+          python-version: "2.7"
+        if: ${{ startswith(matrix.name, 'GTest') }}
+      - name: Checkout
+        uses: actions/checkout@main
+      - run: brew install automake
+        if: ${{ startswith(matrix.os, 'macos') }}
+      - if: ${{ matrix.cxx }}
+        run: echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+      - if: ${{ matrix.cc }}
+        run: echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure ${{ matrix.configure_args }}
+      - name: Build and test
+        run: make ${{ matrix.target }}
+
+  cmake:
+    strategy:
+      matrix:
+        include:
+          - name: MSVC install
+            os: windows-latest
+            preset: MSVC
+            install: true
+            ctest_args: -C Debug
+          - name: MSVC 20
+            os: windows-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=20
+            preset: MSVC
+            ctest_args: -C Debug
+          - name: ClangCL
+            os: windows-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=17
+            preset: ClangCL
+            ctest_args: -C Debug
+          - name: Clang-Tidy
+            os: ubuntu-latest
+            preset: clang-tidy
+          - name: Linux Clang 98
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=98
+            preset: Clang
+          - name: Linux Clang 11
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=11
+            preset: Clang
+          - name: Linux Clang 14
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=14
+            preset: Clang
+          - name: Linux Clang 17
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=17
+            preset: Clang
+          - name: Linux Clang 20
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=20
+            preset: Clang
+          - name: Linux GNU 98
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=98
+            preset: GNU
+          - name: No long long
+            os: ubuntu-latest
+            preset: no-long-long
+          - name: Detailed
+            os: ubuntu-latest
+            preset: detailed
+          - name: Linux GNU Install
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=11
+            preset: GNU
+            install: true
+          - name: Linux GNU 14
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=14
+            preset: GNU
+          - name: Linux GNU 17
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=17
+            preset: GNU
+          - name: Linux GNU 20
+            os: ubuntu-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=20
+            preset: GNU
+          - name: MinGW
+            os: ubuntu-latest
+            preset: MinGW
+            apt_packages: mingw-w64 wine64
+          - name: No C++ Standard Library
+            os: ubuntu-latest
+            preset: no-std-cpp
+          - name: No RTTI
+            os: ubuntu-latest
+            preset: no-rtti
+          - name: No Exceptions
+            os: ubuntu-latest
+            preset: no-exceptions
+          - name: No C Standard Library
+            os: ubuntu-latest
+            preset: no-std-c
+          - name: Coverage
+            os: ubuntu-latest
+            preset: coverage
+            apt_packages: lcov
+          - name: Google Test
+            os: ubuntu-20.04
+            cmake_args: -DCMAKE_CXX_STANDARD=98
+            preset: gtest
+            ctest_args: -C Debug
+            apt_packages: python2 ninja-build
+          - name: Address Sanitizer
+            os: ubuntu-latest
+            preset: asan
+          - name: GCC ARM embedded
+            os: ubuntu-latest
+            preset: arm-embedded
+          - name: Mac install
+            os: macos-latest
+            preset: defaults
+            install: true
+          - name: Apple Clang 17
+            os: macos-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=17
+            preset: Clang
+          - name: Apple Clang 20
+            os: macos-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=20
+            preset: Clang
+          - name: Mac GNU 14
+            os: macos-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=14
+            preset: GNU
+          - name: OpenWatcom DOS
+            os: ubuntu-latest
+            preset: DOS
+            apt_packages: dosbox
+          - name: Cygwin
+            os: windows-latest
+            preset: GNU
+    name: CMake ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      ### SETUP
+
+      - name: Install packages
+        run: sudo apt install -y ${{ matrix.apt_packages }}
+        if: ${{ matrix.apt_packages }}
+
+      - uses: carlosperate/arm-none-eabi-gcc-action@v1
+        if: ${{ matrix.name == 'GCC ARM embedded' }}
+      - name: Install QEMU
+        # The version in the ubuntu repositories (6.2) is broken.
+        run: |
+          wget -nv http://ftp.de.debian.org/debian/pool/main/q/qemu/qemu-user-static_7.1+dfsg-2+b3_amd64.deb -O qemu.deb
+          sudo dpkg --install qemu.deb
+          rm -f qemu.deb
+        if: ${{ matrix.name == 'GCC ARM embedded' }}
+
+      - name: Install OpenWatcom
+        uses: open-watcom/setup-watcom@v0
+        with:
+          version: "2.0"
+        if: ${{ matrix.name == 'OpenWatcom DOS' }}
+
+      - run: git config --global core.autocrlf input
+        if: ${{ matrix.name == 'Cygwin' }}
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Install Cygwin
+        uses: cygwin/cygwin-install-action@master
+        with:
+          platform: x86
+          packages: >
+            cmake
+            gcc-core
+            gcc-g++
+            make
+        if: ${{ matrix.name == 'Cygwin' }}
+
+      ## BUILD AND TEST
+
+      - name: Configure
+        run: cmake --preset ${{ matrix.preset }} ${{ matrix.cmake_args }}
+      - name: Build
+        run: cmake --build cpputest_build --verbose -j
+      - name: Save map files
+        uses: actions/upload-artifact@v3
+        with:
+          name: "${{ matrix.name }} map files"
+          path: cpputest_build/**/*.map
+      - name: Test
+        run: >
+          ctest
+          --test-dir cpputest_build
+          ${{ matrix.ctest_args }}
+          --output-on-failure
+
+      # POST PROCESSING
+
+      - name: Install (*nix)
+        run: |
+          sudo cmake --install cpputest_build/
+          pkg-config --print-provides cpputest
+        if: ${{ matrix.install && !startswith(matrix.os, 'windows')}}
+      - name: Install (Windows)
+        run: cmake --install cpputest_build/ --config=Debug
+        if: ${{ matrix.install && startswith(matrix.os, 'windows')}}
+      - name: Use install
+        run: |
+          cmake -B build -S examples
+          cmake --build build -j
+          ctest --test-dir build
+        if: ${{ matrix.install }}
+
+      - name: Coverage
+        run: |
+          lcov --capture --directory . --no-external --output-file lcov.info
+          lcov --remove lcov.info --output-file lcov.info '*/tests/*'
+        if: ${{ matrix.name == 'Coverage' }}
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          path-to-lcov: lcov.info
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+        if: ${{ matrix.name == 'Coverage' }}
+
+  test_report:
+    name: JUnit Test Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - run: cmake --preset=defaults -DCPPUTEST_JUNIT_REPORT=TRUE
+      - run: cmake --build cpputest_build -j
+      - run: ctest --test-dir cpputest_build
+      - uses: actions/upload-artifact@v3
+        if: success() || failure()
+        with:
+          name: test-results
+          path: "cpputest_build/**/cpputest_*.xml"
+
+  make_dos:
+    name: Make OpenWatcom DOS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Install tools
+        run: |
+          sudo apt-get install -y dosbox
+          git clone https://github.com/cpputest/watcom-compiler.git watcom
+          echo "WATCOM=$GITHUB_WORKSPACE/watcom" >> $GITHUB_ENV
+          echo "CC=wcl" >> $GITHUB_ENV
+          echo "CXX=wcl" >> $GITHUB_ENV
+          echo "$GITHUB_WORKSPACE/watcom/binl" >> $GITHUB_PATH
+          echo "CPPUTEST_HOME=$GITHUB_WORKSPACE" >> $GITHUB_ENV
+      - name: Build
+        run: |
+          $CC --version
+          make -f $CPPUTEST_HOME/platforms/Dos/Makefile clean
+          make -f $CPPUTEST_HOME/platforms/Dos/Makefile
+      - name: Test
+        env:
+          TERM: linux
+        run: $CPPUTEST_HOME/platforms/Dos/alltests.sh
+
+  cmake_msys:
+    name: CMake MSYS
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    env:
+      LDFLAGS: -static
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >
+            git
+            mingw-w64-x86_64-cc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
+      - name: Configure
+        run: cmake --preset=GNU
+      - name: Build
+        run: cmake --build cpputest_build -j
+      - name: Test
+        run: ctest --test-dir cpputest_build --output-on-failure
+
+  autotools_msys:
+    name: Automake MSYS
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    env:
+      LDFLAGS: -static
+    steps:
+      - uses: actions/checkout@v3
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >
+            git
+            mingw-w64-x86_64-autotools
+            mingw-w64-x86_64-cc
+            mingw-w64-x86_64-make
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure
+      - name: Build and test
+        run: make tdd

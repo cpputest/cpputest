@@ -37,85 +37,85 @@
 #include "CppUTestConfig.h"
 
 #define CHECK_EQUAL_C_BOOL(expected,actual) \
-  CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_BOOL_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_BOOL_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_INT(expected,actual) \
-  CHECK_EQUAL_C_INT_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_INT_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_INT_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_INT_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UINT(expected,actual) \
-  CHECK_EQUAL_C_UINT_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_UINT_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UINT_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_UINT_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONG(expected,actual) \
-  CHECK_EQUAL_C_LONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_LONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_LONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONG(expected,actual) \
-  CHECK_EQUAL_C_ULONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_ULONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_ULONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONGLONG(expected,actual) \
-  CHECK_EQUAL_C_LONGLONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_LONGLONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_LONGLONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_LONGLONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONGLONG(expected,actual) \
-  CHECK_EQUAL_C_ULONGLONG_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_ULONGLONG_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_ULONGLONG_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_ULONGLONG_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_REAL(expected,actual,threshold) \
-  CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_REAL_TEXT(expected,actual,threshold,text) \
   CHECK_EQUAL_C_REAL_LOCATION(expected,actual,threshold,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_CHAR(expected,actual) \
-  CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_CHAR_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_CHAR_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UBYTE(expected,actual) \
-  CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_UBYTE_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_UBYTE_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_SBYTE(expected,actual) \
-  CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_SBYTE_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_SBYTE_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_STRING(expected,actual) \
-  CHECK_EQUAL_C_STRING_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_STRING_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_STRING_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_STRING_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_POINTER(expected,actual) \
-  CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,NULLPTR,__FILE__,__LINE__)
+  CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,NULL,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_POINTER_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
 #define CHECK_EQUAL_C_BITS(expected, actual, mask) \
-  CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), NULLPTR, __FILE__, __LINE__)
+  CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), NULL, __FILE__, __LINE__)
 
 #define CHECK_EQUAL_C_BITS_TEXT(expected, actual, mask, text) \
   CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), text, __FILE__, __LINE__)
@@ -127,7 +127,7 @@
   FAIL_C_LOCATION(__FILE__,__LINE__)
 
 #define CHECK_C(condition) \
-  CHECK_C_LOCATION(condition, #condition, NULLPTR, __FILE__,__LINE__)
+  CHECK_C_LOCATION(condition, #condition, NULL, __FILE__,__LINE__)
 
 #define CHECK_C_TEXT(condition, text) \
   CHECK_C_LOCATION(condition, #condition, text, __FILE__, __LINE__)
@@ -141,19 +141,19 @@
 /* For use in C file */
 #define TEST_GROUP_C_SETUP(group_name) \
     extern void group_##group_name##_setup_wrapper_c(void); \
-    void group_##group_name##_setup_wrapper_c()
+    void group_##group_name##_setup_wrapper_c(void)
 
 #define TEST_GROUP_C_TEARDOWN(group_name) \
     extern void group_##group_name##_teardown_wrapper_c(void); \
-    void group_##group_name##_teardown_wrapper_c()
+    void group_##group_name##_teardown_wrapper_c(void)
 
 #define TEST_C(group_name, test_name) \
     extern void test_##group_name##_##test_name##_wrapper_c(void);\
-    void test_##group_name##_##test_name##_wrapper_c()
+    void test_##group_name##_##test_name##_wrapper_c(void)
 
 #define IGNORE_TEST_C(group_name, test_name) \
     extern void ignore_##group_name##_##test_name##_wrapper_c(void);\
-    void ignore_##group_name##_##test_name##_wrapper_c()
+    void ignore_##group_name##_##test_name##_wrapper_c(void)
 
 
 /* For use in C++ file */
@@ -164,12 +164,12 @@
     TEST_GROUP(group_name)
 
 #define TEST_GROUP_C_SETUP_WRAPPER(group_name) \
-    void setup() { \
+    void setup() _override { \
        group_##group_name##_setup_wrapper_c(); \
     }
 
 #define TEST_GROUP_C_TEARDOWN_WRAPPER(group_name) \
-    void teardown() { \
+    void teardown() _override { \
        group_##group_name##_teardown_wrapper_c(); \
     }
 

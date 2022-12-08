@@ -1,19 +1,55 @@
-# Create target to discover tests
-function (cpputest_buildtime_discover_tests EXECUTABLE)
-  # The path to the discover script depends on execution mode:
-  # - internal (building CppUTest it self).
-  # - imported (installed, imported, and executed by a client of the CppUTest lib)
-  if (PROJECT_NAME STREQUAL "CppUTest") # internal - (path is relative to source dir)
-    SET(DISCOVER_SCRIPT ${PROJECT_SOURCE_DIR}/cmake/Scripts/CppUTestBuildTimeDiscoverTests.cmake)
-  else (PROJECT_NAME STREQUAL "CppUTest") # Installed (path is relative to install directory)
-    SET(DISCOVER_SCRIPT ${CppUTest_DIR}/Scripts/CppUTestBuildTimeDiscoverTests.cmake)
-  endif (PROJECT_NAME STREQUAL "CppUTest")
+option(CPPUTEST_TESTS_DETAILED "Run discovered tests individually")
 
-  add_custom_command (TARGET ${EXECUTABLE}
-    POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -DTESTS_DETAILED:BOOL=${TESTS_DETAILED} -DEXECUTABLE=$<TARGET_FILE:${EXECUTABLE}> -P ${DISCOVER_SCRIPT}
-    VERBATIM
+set(_DISCOVER_SCRIPT "${CMAKE_CURRENT_LIST_DIR}/../Scripts/CppUTestBuildTimeDiscoverTests.cmake")
+
+# Create target to discover tests
+function (cpputest_buildtime_discover_tests tgt)
+  message(DEPRECATION
+    "Use cpputest_discover_tests from the CppUTest module instead"
+  )
+
+  set(options)
+  set(oneValueArgs DETAILED)
+  set(multiValueArgs)
+  cmake_parse_arguments(
+    ""
+    "${options}"
+    "${oneValueArgs}"
+    "${multiValueArgs}"
+    ${ARGN}
+  )
+  if(NOT DEFINED _DETAILED)
+    set(_DETAILED ${CPPUTEST_TESTS_DETAILED})
+  endif()
+
+  if(NOT TARGET ${tgt})
+    message(FATAL_ERROR
+      "Cannot discover tests for target \"${tgt}\" "
+      "which is not built by this project."
+    )
+  endif()
+
+  get_property(target_type
+    TARGET ${tgt}
+    PROPERTY TYPE
+  )
+  if(NOT target_type STREQUAL "EXECUTABLE")
+    message(FATAL_ERROR
+      "Cannot discover tests for target \"${tgt}\" "
+      "which is not an executable."
+    )
+  endif()
+
+  add_custom_command(
+    TARGET ${tgt} POST_BUILD
+    COMMAND
+      ${CMAKE_COMMAND}
+      -D "TESTS_DETAILED:BOOL=${_DETAILED}"
+      -D "EXECUTABLE=$<TARGET_FILE:${tgt}>"
+      -D "EMULATOR=$<TARGET_PROPERTY:${tgt},CROSSCOMPILING_EMULATOR>"
+      -P "${_DISCOVER_SCRIPT}"
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-    COMMENT "Discovering Tests in ${EXECUTABLE}"
-    VERBATIM)
+    COMMENT "Discovering Tests in ${tgt}"
+    VERBATIM
+  )
 endfunction ()

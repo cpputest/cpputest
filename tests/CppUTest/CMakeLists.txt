@@ -1,4 +1,4 @@
-set(CppUTestTests_src
+add_executable(CppUTestTests
     AllTests.cpp
     SetPluginTest.cpp
     CheatSheetTest.cpp
@@ -36,26 +36,18 @@ set(CppUTestTests_src
     TeamCityOutputTest.cpp
 )
 
-if (MSVC)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd4723")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4723")
-endif (MSVC)
+if(CPPUTEST_STD_C_LIB_DISABLED)
+    target_sources(CppUTestTests
+        PRIVATE
+            ${CMAKE_CURRENT_SOURCE_DIR}/../DummyUTestPlatform/DummyUTestPlatform.cpp
+    )
+endif()
 
-if (MINGW)
-    find_package (Threads REQUIRED)
-    set(THREAD_LIB "pthread")
-endif (MINGW)
+target_link_libraries(CppUTestTests PRIVATE ${CppUTestLibName})
 
-if (${CMAKE_HOST_SYSTEM_NAME} MATCHES "OpenBSD")
-   set (THREADS_HAVE_PTHREAD_ARG 1)
-   find_package (Threads REQUIRED)
-   set (THREAD_LIB "pthread")
-endif ()
+add_mapfile(CppUTestTests)
 
-add_executable(CppUTestTests ${CppUTestTests_src})
-cpputest_normalize_test_output_location(CppUTestTests)
-target_link_libraries(CppUTestTests CppUTest ${THREAD_LIB})
-
-if (TESTS_BUILD_DISCOVER)
-    cpputest_buildtime_discover_tests(CppUTestTests)
+if(CPPUTEST_TEST_DISCOVERY)
+    include(CppUTest)
+    cpputest_discover_tests(CppUTestTests)
 endif()

@@ -30,6 +30,10 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestOutput.h"
 
+#if defined(__GNUC__) && __GNUC__ >= 11
+# define NEEDS_DISABLE_NULL_WARNING
+#endif /* GCC >= 11 */
+
 bool doubles_equal(double d1, double d2, double threshold)
 {
     if (PlatformSpecificIsNan(d1) || PlatformSpecificIsNan(d2) || PlatformSpecificIsNan(threshold))
@@ -131,13 +135,15 @@ extern "C" {
 
 /******************************** */
 
-static const NormalTestTerminator normalTestTerminator;
-static const CrashingTestTerminator crashingTestTerminator;
+static const NormalTestTerminator normalTestTerminator = NormalTestTerminator();
+static const CrashingTestTerminator crashingTestTerminator = CrashingTestTerminator();
 static const TestTerminatorWithoutExceptions normalTestTerminatorWithoutExceptions;
 static const CrashingTestTerminatorWithoutExceptions crashingTestTerminatorWithoutExceptions;
 
 const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
 const TestTerminator *UtestShell::currentTestTerminatorWithoutExceptions_ = &normalTestTerminatorWithoutExceptions;
+
+bool UtestShell::rethrowExceptions_ = false;
 
 /******************************** */
 
@@ -160,14 +166,7 @@ UtestShell::~UtestShell()
 {
 }
 
-// LCOV_EXCL_START - actually covered but not in .gcno due to race condition
-static void defaultCrashMethod()
-{
-    UtestShell* ptr = (UtestShell*) NULLPTR; ptr->countTests();
-}
-// LCOV_EXCL_STOP
-
-static void (*pleaseCrashMeRightNow) () = defaultCrashMethod;
+static void (*pleaseCrashMeRightNow) () = PlatformSpecificAbort;
 
 void UtestShell::setCrashMethod(void (*crashme)())
 {
@@ -176,7 +175,7 @@ void UtestShell::setCrashMethod(void (*crashme)())
 
 void UtestShell::resetCrashMethod()
 {
-    pleaseCrashMeRightNow = defaultCrashMethod;
+    pleaseCrashMeRightNow = PlatformSpecificAbort;
 }
 
 void UtestShell::crash()
@@ -218,16 +217,30 @@ void UtestShell::runOneTestInCurrentProcess(TestPlugin* plugin, TestResult& resu
     UtestShell::setTestResult(&result);
     UtestShell::setCurrentTest(this);
 
-    result.printVeryVerbose("\n---- before createTest: ");
-    Utest* testToRun = createTest();
-    result.printVeryVerbose("\n---- after createTest: ");
+    Utest* testToRun = NULLPTR;
 
-    result.printVeryVerbose("\n------ before runTest: ");
-    testToRun->run();
-    result.printVeryVerbose("\n------ after runTest: ");
+#if CPPUTEST_HAVE_EXCEPTIONS
+    try
+    {
+#endif
+        result.printVeryVerbose("\n---- before createTest: ");
+        testToRun = createTest();
+        result.printVeryVerbose("\n---- after createTest: ");
 
-    UtestShell::setCurrentTest(savedTest);
-    UtestShell::setTestResult(savedResult);
+        result.printVeryVerbose("\n------ before runTest: ");
+        testToRun->run();
+        result.printVeryVerbose("\n------ after runTest: ");
+
+        UtestShell::setCurrentTest(savedTest);
+        UtestShell::setTestResult(savedResult);
+#if CPPUTEST_HAVE_EXCEPTIONS
+    }
+    catch(...)
+    {
+        destroyTest(testToRun);
+        throw;
+    }
+#endif
 
     result.printVeryVerbose("\n---- before destroyTest: ");
     destroyTest(testToRun);
@@ -364,10 +377,15 @@ void UtestShell::failWith(const TestFailure& failure)
 
 void UtestShell::failWith(const TestFailure& failure, const TestTerminator& terminator)
 {
-    hasFailed_ = true;
-    getTestResult()->addFailure(failure);
+    addFailure(failure);
     terminator.exitCurrentTest();
 } // LCOV_EXCL_LINE
+
+void UtestShell::addFailure(const TestFailure& failure)
+{
+    hasFailed_ = true;
+    getTestResult()->addFailure(failure);
+}
 
 void UtestShell::exitTest(const TestTerminator& terminator)
 {
@@ -454,7 +472,7 @@ void UtestShell::assertUnsignedLongsEqual(unsigned long expected, unsigned long 
 void UtestShell::assertLongLongsEqual(cpputest_longlong expected, cpputest_longlong actual, const char* text, const char* fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     if (expected != actual)
         failWith(LongLongsEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
 #else
@@ -467,7 +485,7 @@ void UtestShell::assertLongLongsEqual(cpputest_longlong expected, cpputest_longl
 void UtestShell::assertUnsignedLongLongsEqual(cpputest_ulonglong expected, cpputest_ulonglong actual, const char* text, const char* fileName, size_t lineNumber, const TestTerminator& testTerminator)
 {
     getTestResult()->countCheck();
-#ifdef CPPUTEST_USE_LONG_LONG
+#if CPPUTEST_USE_LONG_LONG
     if (expected != actual)
         failWith(UnsignedLongLongsEqualFailure(this, fileName, lineNumber, expected, actual, text), testTerminator);
 #else
@@ -607,6 +625,16 @@ void UtestShell::restoreDefaultTestTerminator()
     currentTestTerminatorWithoutExceptions_ = &normalTestTerminatorWithoutExceptions;
 }
 
+void UtestShell::setRethrowExceptions(bool rethrowExceptions)
+{
+    rethrowExceptions_ = rethrowExceptions;
+}
+
+bool UtestShell::isRethrowingExceptions()
+{
+    return rethrowExceptions_;
+}
+
 ExecFunctionTestShell::~ExecFunctionTestShell()
 {
 }
@@ -621,7 +649,7 @@ Utest::~Utest()
 {
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+#if CPPUTEST_HAVE_EXCEPTIONS
 
 void Utest::run()
 {
@@ -642,6 +670,26 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
+#if CPPUTEST_USE_STD_CPP_LIB
+    catch (const std::exception &e)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current, e));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
+#endif
+    catch (...)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
 
     try {
         current->printVeryVerbose("\n--------  before teardown: ");
@@ -652,7 +700,26 @@ void Utest::run()
     {
         PlatformSpecificRestoreJumpBuffer();
     }
-
+#if CPPUTEST_USE_STD_CPP_LIB
+    catch (const std::exception &e)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current, e));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
+#endif
+    catch (...)
+    {
+        current->addFailure(UnexpectedExceptionFailure(current));
+        PlatformSpecificRestoreJumpBuffer();
+        if (current->isRethrowingExceptions())
+        {
+            throw;
+        }
+    }
 }
 #else
 
@@ -687,7 +754,7 @@ TestTerminator::~TestTerminator()
 
 void NormalTestTerminator::exitCurrentTest() const
 {
-    #if CPPUTEST_USE_STD_CPP_LIB
+    #if CPPUTEST_HAVE_EXCEPTIONS
         throw CppUTestFailedException();
     #else
         TestTerminatorWithoutExceptions().exitCurrentTest();
