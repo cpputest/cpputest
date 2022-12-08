@@ -16,7 +16,7 @@
 #include <time.h>
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-#include <windows.h>
+#include <Windows.h>
 #include <mmsystem.h>
 
 #include <setjmp.h>
@@ -45,7 +45,7 @@ static int VisualCppSetJmp(void (*function) (void* data), void* data)
     return 0;
 }
 
-static void VisualCppLongJmp()
+_no_return_ static void VisualCppLongJmp()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
@@ -60,7 +60,7 @@ int (*PlatformSpecificSetJmp)(void (*function) (void*), void* data) = VisualCppS
 void (*PlatformSpecificLongJmp)(void) = VisualCppLongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = VisualCppRestoreJumpBuffer;
 
-static void VisualCppRunTestInASeperateProcess(UtestShell* shell, TestPlugin* plugin, TestResult* result)
+static void VisualCppRunTestInASeperateProcess(UtestShell* shell, TestPlugin* /* plugin */, TestResult* result)
 {
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
@@ -105,7 +105,7 @@ long (*GetPlatformSpecificTimeInMillis)() = VisualCppTimeInMillis;
 
 static const char* VisualCppTimeString()
 {
-    time_t the_time = time(NULL);
+    time_t the_time = time(NULLPTR);
     struct tm the_local_time;
     static char dateTime[80];
     LOCALTIME(&the_local_time, &the_time);
@@ -119,21 +119,21 @@ const char* (*GetPlatformSpecificTimeString)() = VisualCppTimeString;
 
 static int VisualCppVSNprintf(char *str, size_t size, const char* format, va_list args)
 {
-    char* buf = 0;
+    char* buf = NULLPTR;
     size_t sizeGuess = size;
 
     int result = _VSNPRINTF( str, size, _TRUNCATE, format, args);
     str[size-1] = 0;
     while (result == -1)
     {
-        if (buf != 0)
+        if (buf)
             free(buf);
         sizeGuess += 10;
         buf = (char*)malloc(sizeGuess);
         result = _VSNPRINTF( buf, sizeGuess, _TRUNCATE, format, args);
     }
 
-    if (buf != 0)
+    if (buf)
         free(buf);
     return result;
 

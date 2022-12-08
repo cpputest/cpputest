@@ -71,20 +71,20 @@ TEST(UtestShell, compareDoubles)
 #ifdef NAN
 TEST(UtestShell, compareDoublesNaN)
 {
-    CHECK(!doubles_equal(NAN, 1.001, 0.01));
-    CHECK(!doubles_equal(1.0, NAN, 0.01));
-    CHECK(!doubles_equal(1.0, 1.001, NAN));
+    CHECK(!doubles_equal((double)NAN, 1.001, 0.01));
+    CHECK(!doubles_equal(1.0, (double)NAN, 0.01));
+    CHECK(!doubles_equal(1.0, 1.001, (double)NAN));
 }
 #endif
 
 #ifdef INFINITY
 TEST(UtestShell, compareDoublesInf)
 {
-    CHECK(!doubles_equal(INFINITY, 1.0, 0.01));
-    CHECK(!doubles_equal(1.0, INFINITY, 0.01));
-    CHECK(doubles_equal(1.0, -1.0, INFINITY));
-    CHECK(doubles_equal(INFINITY, INFINITY, 0.01));
-    CHECK(doubles_equal(INFINITY, INFINITY, INFINITY));
+    CHECK(!doubles_equal((double)INFINITY, 1.0, 0.01));
+    CHECK(!doubles_equal(1.0, (double)INFINITY, 0.01));
+    CHECK(doubles_equal(1.0, -1.0, (double)INFINITY));
+    CHECK(doubles_equal((double)INFINITY, (double)INFINITY, 0.01));
+    CHECK(doubles_equal((double)INFINITY, (double)INFINITY, (double)INFINITY));
 }
 #endif
 

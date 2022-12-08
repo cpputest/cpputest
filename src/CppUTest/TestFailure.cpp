@@ -426,6 +426,7 @@ UnexpectedExceptionFailure::UnexpectedExceptionFailure(UtestShell* test, const s
 #endif
 )
 {
+    (void) e;
 }
 #endif // CPPUTEST_USE_STD_CPP_LIB
 #endif // CPPUTEST_HAVE_EXCEPTIONS
