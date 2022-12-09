@@ -338,7 +338,7 @@ jobs:
             test_cmd: ./CppUTest_tests -r
           - name: STDC++ disabled
             make_args: >
-              CPPUTEST_USE_STD_CPP_LIB=Y
+              CPPUTEST_USE_STD_CPP_LIB=N
               extensions
           - name: Memory Leak Detection disabled
             make_args: >

@@ -35,8 +35,8 @@ test_all: start
 	./$(TEST_TARGET) -r
 	$(MAKE_CMD) clean
 	@echo Building with the STDC++ new disabled.
-	$(TIME) $(MAKE_CMD) CPPUTEST_USE_STD_CPP_LIB=Y extensions
-	$(MAKE_CMD) CPPUTEST_USE_STD_CPP_LIB=Y cleanExtensions
+	$(TIME) $(MAKE_CMD) CPPUTEST_USE_STD_CPP_LIB=N extensions
+	$(MAKE_CMD) CPPUTEST_USE_STD_CPP_LIB=N cleanExtensions
 	@echo Building with Memory Leak Detection disabled
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_MEM_LEAK_DETECTION=N extensions
 	$(MAKE_CMD) CPPUTEST_USE_MEM_LEAK_DETECTION=N cleanExtensions
