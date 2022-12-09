@@ -62,8 +62,8 @@ endif()
 
 target_link_libraries(CppUTestExtTests
     PRIVATE
-        ${CppUTestLibName}
-        ${CppUTestExtLibName}
+        CppUTest
+        CppUTestExt
 )
 
 add_mapfile(CppUTestExtTests)
