@@ -141,6 +141,19 @@
       }
     },
     {
+      "name": "msan",
+      "inherits": ["Clang"],
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true
+      },
+      "environment": {
+        "CFLAGS": "-fsanitize=memory -fsanitize-memory-track-origins -fno-omit-frame-pointer",
+        "CXXFLAGS": "-fsanitize=memory -fsanitize-memory-track-origins -fno-omit-frame-pointer",
+        "LDFLAGS": "-fsanitize=memory"
+      }
+    },
+    {
       "name": "detailed",
       "inherits": ["defaults"],
       "cacheVariables": {

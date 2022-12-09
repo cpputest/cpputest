@@ -211,6 +211,9 @@ jobs:
           - name: Address Sanitizer
             os: ubuntu-latest
             preset: asan
+          - name: Memory Sanitizer
+            os: ubuntu-latest
+            preset: msan
           - name: GCC ARM embedded
             os: ubuntu-latest
             preset: arm-embedded

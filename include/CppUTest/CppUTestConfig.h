@@ -133,33 +133,42 @@
  * Address sanitizer is a good thing... and it causes some conflicts with the CppUTest tests
  * To check whether it is on or off, we create a CppUTest define here.
 */
-#if defined(__has_feature)
-#if __has_feature(address_sanitizer)
-#define CPPUTEST_SANITIZE_ADDRESS 1
-#endif
+#ifdef __has_feature
+  #if __has_feature(address_sanitizer)
+    #define CPPUTEST_SANITIZE_ADDRESS 1
+    #define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
+  #endif
+  #if __has_feature(memory_sanitizer)
+    #define CPPUTEST_SANITIZE_MEMORY 1
+    #define CPPUTEST_DO_NOT_SANITIZE_MEMORY __attribute__((no_sanitize_memory))
+  #endif
+#elif defined(__SANITIZE_ADDRESS__)
+  #define CPPUTEST_SANITIZE_ADDRESS 1
 #endif
 
-#ifdef __SANITIZE_ADDRESS__
-#define CPPUTEST_SANITIZE_ADDRESS 1
+#if CPPUTEST_USE_MEM_LEAK_DETECTION \
+    && CPPUTEST_SANITIZE_ADDRESS \
+    && (defined(__linux__) \
+    && defined(__clang))
+  #warning Compiling with Address Sanitizer with clang on linux will cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
+  #undef CPPUTEST_USE_MEM_LEAK_DETECTION
+  #define CPPUTEST_USE_MEM_LEAK_DETECTION 0
 #endif
 
 #ifndef CPPUTEST_SANITIZE_ADDRESS
-#define CPPUTEST_SANITIZE_ADDRESS 0
+  #define CPPUTEST_SANITIZE_ADDRESS 0
 #endif
 
-#if CPPUTEST_SANITIZE_ADDRESS
-#define CPPUTEST_SANITIZE_ADDRESS 1
-#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
-  #if defined(__linux__) && defined(__clang__)
-    #if CPPUTEST_USE_MEM_LEAK_DETECTION
-    #warning Compiling with Address Sanitizer with clang on linux will cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
-    #undef CPPUTEST_USE_MEM_LEAK_DETECTION
-    #define CPPUTEST_USE_MEM_LEAK_DETECTION 0
-    #endif
-  #endif
-#else
-#define CPPUTEST_SANITIZER_ADDRESS 0
-#define CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+#ifndef CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+  #define CPPUTEST_DO_NOT_SANITIZE_ADDRESS
+#endif
+
+#ifndef CPPUTEST_SANITIZE_MEMORY
+  #define CPPUTEST_SANITIZE_MEMORY 0
+#endif
+
+#ifndef CPPUTEST_DO_NOT_SANITIZE_MEMORY
+  #define CPPUTEST_DO_NOT_SANITIZE_MEMORY 0
 #endif
 
 /*
