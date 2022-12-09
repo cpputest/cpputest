@@ -34,7 +34,7 @@
              * Some platforms (OSx, i.e.) will get <string.h> or <cstring> included when using <memory> header,
              *  in order to avoid conflicts with strdup and strndup macros defined by MemoryLeakDetectorMallocMacros.h
              *  we will undefined those macros, include the C++ headers and then reinclude MemoryLeakDetectorMallocMacros.h.
-             * The check `#if CPPUTEST_USE_STRDUP_MACROS` will ensure we only include MemoryLeakDetectorMallocMacros.h if
+             * The check '#if CPPUTEST_USE_STRDUP_MACROS' will ensure we only include MemoryLeakDetectorMallocMacros.h if
              *  it has already been includeded earlier.
              */
                 #undef strdup
