@@ -64,14 +64,19 @@ if (MINGW)
     check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
 endif()
 
+configure_file(CppUTestGeneratedConfig.h.cmake generated/CppUTestGeneratedConfig.h)
+
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
 target_include_directories(CppUTest
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
 target_compile_definitions(CppUTest
+    PUBLIC
+        HAVE_CONFIG_H
     PRIVATE
         $<$<BOOL:${CPPUTEST_USE_SECURE_STDLIB}>:STDC_WANT_SECURE_LIB>
         # Apply workaround for MinGW timespec redefinition (pthread.h / time.h).
@@ -124,7 +129,7 @@ if(PROJECT_IS_TOP_LEVEL)
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
     )
     install(
-        FILES "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
+        FILES "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
         DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/generated"
     )
 
