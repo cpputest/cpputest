@@ -125,7 +125,7 @@ TEST(TestMemoryAllocatorTest, NullUnknownNames)
     STRCMP_EQUAL("unknown", allocator->free_name());
 }
 
-#if (! CPPUTEST_SANITIZE_ADDRESS)
+#if !CPPUTEST_SANITIZE_ADDRESS && !CPPUTEST_SANITIZE_MEMORY
 
 #define MAX_SIZE_FOR_ALLOC ((size_t) -1 > (unsigned short)-1) ? (size_t)(-97) : (size_t)(-1)
 

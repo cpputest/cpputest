@@ -30,6 +30,12 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+#if CPPUTEST_SANITIZE_MEMORY
+  #define LEAKY_TEST IGNORE_TEST
+#else
+  #define LEAKY_TEST TEST
+#endif
+
 class MemoryLeakFailureForTest: public MemoryLeakFailure
 {
 public:
@@ -129,7 +135,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
     }
 };
 
-TEST(MemoryLeakDetectorTest, OneLeak)
+LEAKY_TEST(MemoryLeakDetectorTest, OneLeak)
 {
     char* mem = detector->allocMemory(testAllocator, 3);
     detector->stopChecking();
@@ -144,7 +150,7 @@ TEST(MemoryLeakDetectorTest, OneLeak)
     LONGS_EQUAL(0, testAllocator->free_called);
 }
 
-TEST(MemoryLeakDetectorTest, sequenceNumbersOfMemoryLeaks)
+LEAKY_TEST(MemoryLeakDetectorTest, sequenceNumbersOfMemoryLeaks)
 {
     char* mem = detector->allocMemory(defaultNewAllocator(), 1);
     char* mem2 = detector->allocMemory(defaultNewAllocator(), 2);
@@ -174,7 +180,7 @@ TEST(MemoryLeakDetectorTest, memoryDumpOutput)
     PlatformSpecificFree(mem);
 }
 
-TEST(MemoryLeakDetectorTest, OneHundredLeaks)
+LEAKY_TEST(MemoryLeakDetectorTest, OneHundredLeaks)
 {
     const int amount_alloc = 100;
     char *mem[amount_alloc];
@@ -193,7 +199,7 @@ TEST(MemoryLeakDetectorTest, OneHundredLeaks)
         PlatformSpecificFree(mem[j]);
 }
 
-TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)
+LEAKY_TEST(MemoryLeakDetectorTest, OneLeakOutsideCheckingPeriod)
 {
     detector->stopChecking();
     char* mem = detector->allocMemory(defaultNewAllocator(), 4);
@@ -212,7 +218,7 @@ TEST(MemoryLeakDetectorTest, NoLeaksWhatsoever)
     STRCMP_CONTAINS("No memory leaks", detector->report(mem_leak_period_all));
 }
 
-TEST(MemoryLeakDetectorTest, TwoLeaksUsingOperatorNew)
+LEAKY_TEST(MemoryLeakDetectorTest, TwoLeaksUsingOperatorNew)
 {
     char* mem = detector->allocMemory(defaultNewAllocator(), 4);
     char* mem2 = detector->allocMemory(defaultNewAllocator(), 8);
@@ -235,7 +241,7 @@ TEST(MemoryLeakDetectorTest, OneAllocButNoLeak)
     LONGS_EQUAL(1, testAllocator->free_called);
 }
 
-TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
+LEAKY_TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
 {
     char* mem = detector->allocMemory(testAllocator, 4);
     char* mem2 = detector->allocMemory(testAllocator, 12);
@@ -250,7 +256,7 @@ TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeak)
     LONGS_EQUAL(1, testAllocator->free_called);
 }
 
-TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeakReverseOrder)
+LEAKY_TEST(MemoryLeakDetectorTest, TwoAllocOneFreeOneLeakReverseOrder)
 {
     char* mem = detector->allocMemory(defaultNewAllocator(), 4);
     char* mem2 = detector->allocMemory(defaultNewAllocator(), 12);
@@ -311,7 +317,7 @@ TEST(MemoryLeakDetectorTest, IgnoreMemoryAllocatedOutsideCheckingPeriodComplicat
     PlatformSpecificFree(mem3);
 }
 
-TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
+LEAKY_TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
 {
     char* mem = detector->allocMemory(defaultNewAllocator(), 4, "file.cpp", 1234);
     detector->stopChecking();
@@ -321,7 +327,7 @@ TEST(MemoryLeakDetectorTest, OneLeakUsingOperatorNewWithFileLine)
     PlatformSpecificFree(mem);
 }
 
-TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingArrayNew)
+LEAKY_TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingArrayNew)
 {
     char* mem = detector->allocMemory(defaultNewArrayAllocator(), 10, "file.cpp", 1234);
     char* mem2 = detector->allocMemory(defaultNewArrayAllocator(), 12);
@@ -334,7 +340,7 @@ TEST(MemoryLeakDetectorTest, OneAllocAndFreeUsingArrayNew)
     detector->stopChecking();
 }
 
-TEST(MemoryLeakDetectorTest, OneAllocAndFree)
+LEAKY_TEST(MemoryLeakDetectorTest, OneAllocAndFree)
 {
     char* mem = detector->allocMemory(defaultMallocAllocator(), 10, "file.cpp", 1234);
     char* mem2 = detector->allocMemory(defaultMallocAllocator(), 12);
@@ -347,7 +353,7 @@ TEST(MemoryLeakDetectorTest, OneAllocAndFree)
     detector->stopChecking();
 }
 
-TEST(MemoryLeakDetectorTest, OneRealloc)
+LEAKY_TEST(MemoryLeakDetectorTest, OneRealloc)
 {
     char* mem1 = detector->allocMemory(testAllocator, 10, "file.cpp", 1234, true);
 
@@ -396,7 +402,7 @@ TEST(MemoryLeakDetectorTest, AllocOneTypeFreeAnotherTypeWithCheckingDisabled)
     detector->enableAllocationTypeChecking();
 }
 
-TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
+LEAKY_TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
 {
     char* mem = detector->allocMemory(defaultMallocAllocator(), 100, "ALLOC.c", 10);
     detector->stopChecking();
@@ -405,7 +411,7 @@ TEST(MemoryLeakDetectorTest, mallocLeakGivesAdditionalWarning)
     PlatformSpecificFree(mem);
 }
 
-TEST(MemoryLeakDetectorTest, newLeakDoesNotGiveAdditionalWarning)
+LEAKY_TEST(MemoryLeakDetectorTest, newLeakDoesNotGiveAdditionalWarning)
 {
     char* mem = detector->allocMemory(defaultNewAllocator(), 100, "ALLOC.c", 10);
     detector->stopChecking();
