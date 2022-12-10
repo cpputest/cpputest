@@ -145,7 +145,8 @@
       "inherits": ["Clang"],
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
-        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true
+        "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true,
+        "CPPUTEST_STD_CPP_LIB_DISABLED": true
       },
       "environment": {
         "CFLAGS": "-fsanitize=memory -fsanitize-memory-track-origins -fno-omit-frame-pointer",
