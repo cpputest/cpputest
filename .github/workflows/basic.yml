@@ -397,8 +397,8 @@ jobs:
             make_target: test_examples
           - name: JUnit Output
             make_target: test_junit_output
-          - name: gcov
-            make_target: test_gcov
+          # - name: gcov
+          #   make_target: test_gcov
           - name: VPATH usage
             make_target: test_vpath
           - name: VPATH Install
