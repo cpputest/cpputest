@@ -41,7 +41,7 @@ jobs:
       - name: CodeQL Analysis
         uses: github/codeql-action/analyze@v2
 
-  automake:
+  autotools:
     strategy:
       matrix:
         include:
@@ -91,7 +91,7 @@ jobs:
             configure_args: --disable-longlong
             target: tdd
     runs-on: ${{ matrix.os }}
-    name: Automake ${{ matrix.name }}
+    name: Autotools ${{ matrix.name }}
     steps:
       - name: Install Python 2
         uses: actions/setup-python@v4
@@ -468,7 +468,7 @@ jobs:
         run: ctest --test-dir cpputest_build --output-on-failure
 
   autotools_msys:
-    name: Automake MSYS
+    name: Autotools MSYS
     runs-on: windows-latest
     defaults:
       run:
