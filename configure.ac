@@ -535,12 +535,6 @@ Did you compile it?
 -------------------------------------]);
 	fi
 
-	# In Travis, do not show warnings. The GTest warnings cause a log overflow that errors the build. Nice :)
-	if test -n "${TRAVIS_BRANCH}"; then
-		CPPUTEST_CWARNINGFLAGS=""
-		CPPUTEST_CXXWARNINGFLAGS=""
-	fi
-
 else
 	# When we don't compile with GMock, we can be a bit stricter on warnings.
 	CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} ${CPPUTEST_CWARNINGFLAGS_STRICT}"

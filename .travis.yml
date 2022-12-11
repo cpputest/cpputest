@@ -81,12 +81,6 @@ before_script:
 script:
 - "../scripts/travis_ci_build.sh"
 
-after_failure:
-- "../scripts/travis_ci_after.sh"
-
-after_success:
-- "../scripts/travis_ci_after.sh"
-
 notifications:
   slack:
     secure: oOx4AGIiJB+j1pkIxlLeQh5qp7TF89Sj+3RzJRQuo6z0HocTz9yJgXPlDh1H9rLj5SxK/UKsk+WFafVuPdWakQ40LeYO49C/+e+mCDcS0ujLka6dvIE8v0SEb1PuaAGjJWdhiviAhSqu9YOKPYZs37lD3oqepuEpxeiXwsur9QU=
