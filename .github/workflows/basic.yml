@@ -49,47 +49,50 @@ jobs:
             os: macos-latest
             cc: gcc
             cxx: g++
-            target: tdd
+            make_args: tdd
           - name: Mac Clang
             os: macos-latest
             cc: clang
             cxx: clang++
-            target: tdd
+            make_args: tdd
           - name: Linux GNU
             os: ubuntu-latest
             cc: gcc
             cxx: g++
-            target: tdd
+            make_args: tdd
           - name: Linux Clang
             os: ubuntu-latest
             cc: clang
             cxx: clang++
-            target: tdd
+            make_args: tdd
           - name: GTest 1.5
             os: ubuntu-20.04
-            target: check_gtest15
+            make_args: check_gtest15
           - name: GTest 1.6
             os: ubuntu-20.04
-            target: check_gtest16
+            make_args: check_gtest16
           - name: GTest 1.7
             os: ubuntu-20.04
-            target: check_gtest17
+            make_args: check_gtest17
           - name: GTest 1.8
             os: ubuntu-20.04
-            target: check_gtest18
+            make_args: check_gtest18
           - name: GTest 1.10
             os: ubuntu-20.04
-            target: check_gtest110
+            make_args: check_gtest110
           - name: GTest 1.11
             os: ubuntu-20.04
-            target: check_gtest111
+            make_args: check_gtest111
           - name: GTest 1.12
             os: ubuntu-20.04
-            target: check_gtest112
+            make_args: check_gtest112
           - name: Disable long long
             os: ubuntu-latest
             configure_args: --disable-longlong
-            target: tdd
+            make_args: tdd
+          - name: Install
+            os: ubuntu-latest
+            make_args: DESTDIR=install_autotools install
     runs-on: ${{ matrix.os }}
     name: Autotools ${{ matrix.name }}
     steps:
@@ -111,7 +114,7 @@ jobs:
           autoreconf -i .
           ./configure ${{ matrix.configure_args }}
       - name: Build and test
-        run: make ${{ matrix.target }}
+        run: make ${{ matrix.make_args }}
 
   cmake:
     strategy:
