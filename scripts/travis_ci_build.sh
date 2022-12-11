@@ -52,19 +52,6 @@ if [ "x$BUILD" = "xdocker_ubuntu_dos" ]; then
     docker start -i cpputest_dos
 fi
 
-if [ "x$BUILD" = "xautotools_dist" ]; then
-    autoreconf -i ..
-    ../configure
-
-    if [ "x$TRAVIS_OS_NAME" = "xosx" ]; then
-        COPYFILE_DISABLE=1 make dist VERSION=latest
-        COPYFILE_DISABLE=1 make dist-zip VERSION=latest
-    else
-        make dist VERSION=latest
-        make dist-zip VERSION=latest
-    fi
-fi
-
 if [ "x$BUILD" = "xautotools_install_and_test_examples" ]; then
     autoreconf -i ..
     ../configure

@@ -90,6 +90,9 @@ jobs:
             os: ubuntu-latest
             configure_args: --disable-longlong
             make_args: tdd
+          - name: Distribution
+            os: ubuntu-latest
+            make_args: dist dist-zip VERSION=latest
           - name: Install
             os: ubuntu-latest
             make_args: DESTDIR=install_autotools install
@@ -115,6 +118,14 @@ jobs:
           ./configure ${{ matrix.configure_args }}
       - name: Build and test
         run: make ${{ matrix.make_args }}
+      - name: Save Distributions
+        uses: actions/upload-artifact@v3
+        with:
+          name: "Distribution"
+          path: |
+            cpputest-latest.tar.gz
+            cpputest-latest.zip
+        if: ${{ matrix.name == 'Distribution' }}
 
   cmake:
     strategy:

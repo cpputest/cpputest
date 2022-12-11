@@ -35,7 +35,6 @@ jobs:
 #   Docker images. Need to be cleared at times
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_dos
-    - env: BUILD=autotools_dist
 
     - arch: ppc64le
       compiler: gcc
