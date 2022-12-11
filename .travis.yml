@@ -28,27 +28,6 @@ jobs:
 # Extended builds, different C++ version and build tools
     - stage: extended build & test
 
-#   New compilers can be added here. Need to be cleared when compiler becomes standard
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=17
-        - CC=gcc-10
-        - CXX=g++-10
-      addons:
-        apt:
-          packages: ['g++-10']
-          sources:
-            - sourceline: 'ppa:ubuntu-toolchain-r/test'
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=17
-        - CC=clang-11
-        - CXX=clang++-11
-      addons:
-        apt:
-          sources:
-            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-11 main'
-              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-          packages: ['clang-11', 'libc++-11-dev', 'libc++abi-11-dev']
-
 #   Specific other tests
     - compiler: gcc
       env: BUILD=autotools_cmake_install_test

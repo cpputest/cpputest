@@ -12,19 +12,6 @@ if [ "x$BUILD" = "xautotools" ]; then
     make tdd
 fi
 
-if [ "x$BUILD" = "xcmake" ]; then
-    BUILD_ARGS=("-DWERROR=ON")
-
-    if [ -n "$CPP_STD" ]; then
-        BUILD_ARGS+=("-DCMAKE_CXX_STANDARD=$CPP_STD")
-    fi
-
-    cmake --version
-    cmake "${BUILD_ARGS[@]}" ..
-    make
-    ctest -V
-fi
-
 if [ "x$BUILD" = "xautotools_cmake_install_test" ]; then
     autoreconf -i ..
     ../configure

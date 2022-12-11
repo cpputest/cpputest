@@ -182,6 +182,20 @@ jobs:
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: GNU
+          - name: GCC-10
+            os: ubuntu-20.04
+            cmake_args: >
+              -DCMAKE_C_COMPILER=gcc-10
+              -DCMAKE_CXX_COMPILER=g++-10
+              -DCMAKE_CXX_STANDARD=17
+            preset: GNU
+          - name: Clang-11
+            os: ubuntu-20.04
+            cmake_args: >
+              -DCMAKE_C_COMPILER=clang-11
+              -DCMAKE_CXX_COMPILER=clang++-11
+              -DCMAKE_CXX_STANDARD=17
+            preset: Clang
           - name: MinGW
             os: ubuntu-latest
             preset: MinGW
