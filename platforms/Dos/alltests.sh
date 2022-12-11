@@ -1,5 +1,7 @@
 #!/bin/bash
 
+: "${CPPUTEST_HOME:=.}"
+
 checkForCppUTestToolsEnvVariable() {
 	if [ -z "$CPPUTEST_HOME" ] ; then
 	   echo "CPPUTEST_HOME not set. You must set CPPUTEST_HOME to the top level CppUTest directory"

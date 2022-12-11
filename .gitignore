@@ -97,3 +97,6 @@ generated/
 *.LIB
 *.LST
 *.EXE
+*.LOG
+/console_output
+/exit
