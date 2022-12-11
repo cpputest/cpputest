@@ -218,6 +218,10 @@ jobs:
             os: macos-latest
             preset: defaults
             install: true
+          - name: Apple Clang 14
+            os: macos-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=14
+            preset: Clang
           - name: Apple Clang 17
             os: macos-latest
             cmake_args: -DCMAKE_CXX_STANDARD=17
@@ -401,7 +405,7 @@ jobs:
               make CPPUTEST_USE_VPATH=Y -C examples gcov
           - name: VPATH Install
             make_args: CPPUTEST_USE_VPATH=Y everythingInstall
-            test_cmd:
+            test_cmd: >
               make -f Makefile_using_MakefileWorker flags &&
               make -f Makefile_using_MakefileWorker debug
     name: Make ${{ matrix.name }}

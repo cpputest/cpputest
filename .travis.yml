@@ -25,61 +25,8 @@ jobs:
 
 # Basic builds
 
-# Mac OSX
-    - stage: basic build & test
-      compiler: gcc
-      os: osx
-      env: BUILD=autotools
-    - compiler: clang
-      env: BUILD=autotools
-      os: osx
-
-# Windows
-    - compiler: msbuild
-      os: windows
-      env: BUILD=vc_windows CPP_STD=17
-        - MSBUILD_PATH="c:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin"
-        - VCTargetsPath="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\Common7\IDE\VC\VCTargets"
-
-# Linux
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=17
-    - compiler: gcc
-      env: BUILD=autotools
-    - compiler: clang
-      env: BUILD=autotools
-
 # Extended builds, different C++ version and build tools
     - stage: extended build & test
-
-# Mac OSX
-      compiler: clang
-      os: osx
-      env: BUILD=cmake CPP_STD=17
-    - compiler: gcc
-      os: osx
-      env: BUILD=cmake CPP_STD=14
-
-# Linux
-#   CMake different C++ versions with clang
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=98
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=11
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=14
-    - compiler: clang
-      env: BUILD=cmake CPP_STD=17
-
-#   CMake different C++ versions with gcc
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=98
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=11
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=14
-    - compiler: gcc
-      env: BUILD=cmake CPP_STD=17
 
 #   New compilers can be added here. Need to be cleared when compiler becomes standard
     - compiler: gcc
@@ -104,37 +51,13 @@ jobs:
 
 #   Specific other tests
     - compiler: gcc
-      env: BUILD=test_report
-      addons:
-        apt:
-          packages:
-          - ant-optional
-    - compiler: gcc
-      env: BUILD=cmake_coverage
-    - compiler: gcc
-      env: BUILD=cmake_gtest
-    - compiler: clang
-      env: BUILD=autotools_gtest
-    - compiler: gcc
       env: BUILD=autotools_cmake_install_test
-
-#   MS DOS Build
-    - env: BUILD=make_dos
-      addons:
-        apt:
-          packages:
-          - dosbox
 
 #   Docker images. Need to be cleared at times
     - env: BUILD=docker_ubuntu_autotools
     - env: BUILD=docker_ubuntu_dos
     - env: BUILD=autotools_dist
 
-    - stage: extensive daily tests
-      compiler: gcc
-      env: BUILD=extensive_check
-    - compiler: clang
-      env: BUILD=extensive_check
     - arch: ppc64le
       compiler: gcc
       env: BUILD=autotools
@@ -144,8 +67,6 @@ jobs:
     - arch: arm64
       compiler: gcc
       env: BUILD=autotools
-    - compiler: gcc
-      env: BUILD=makefileworker
     - compiler: clang
       env: BUILD=autotools_install_and_test_examples
 
