@@ -136,9 +136,10 @@ CPPUTEST_DO_NOT_SANITIZE_ADDRESS
 static void freeInvalidatesMemory()
 {
     unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
+    size_t const address = (size_t)memory;
     *memory = 0xAD;
     cpputest_free(memory);
-    CHECK(*memory != 0xAD);
+    CHECK(*(unsigned char*)address != 0xAD);
 }
 
 TEST(BasicBehavior, freeInvalidatesMemory)
