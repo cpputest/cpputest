@@ -9,7 +9,7 @@ comma := ,
 path_separator := /
 drive = $(subst $(CYGDRIVE),$(lastword $(subst /, ,$(CYGDRIVE))):/,$(1))
 convert_paths = $(if $(CYGDRIVE),$(subst /,$(path_separator),$(call drive,$(1))),$(1))
-CPPUTEST_HOME ?= .
+export CPPUTEST_HOME ?= .
 
 -include $(CPPUTEST_HOME)/platforms/Dos/platform.mk
 include $(CPPUTEST_HOME)/platforms/Dos/sources.mk
@@ -63,3 +63,7 @@ clean:
 %.EXE: $$($$*_OBJECTS) | CPPU.LIB CPPUX.LIB
 	$(LINK) opt q,map,st=50k sys dos lib CPPU.LIB,CPPUX.LIB \
     file $(subst $(space),$(comma),$(call convert_paths,$?)) name $@
+
+.PHONY:
+test:
+	$(CPPUTEST_HOME)/platforms/Dos/alltests.sh

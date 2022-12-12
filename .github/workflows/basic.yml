@@ -422,6 +422,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WATCOM: "./watcom"
+      TERM: linux
     steps:
       - name: Checkout
         uses: actions/checkout@main
@@ -433,9 +434,7 @@ jobs:
       - name: Build
         run: make -f platforms/Dos/Makefile
       - name: Test
-        env:
-          TERM: linux
-        run: platforms/Dos/alltests.sh
+        run: make -f platforms/Dos/Makefile test
 
   cmake_msys:
     name: CMake MSYS
