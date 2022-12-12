@@ -137,8 +137,11 @@ static void freeInvalidatesMemory()
 {
     unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
     *memory = 0xAD;
+    // After we free memory, reading it is undefined behavior.
+    // We set up a volatile alias to avoid intermittent failures.
+    unsigned char volatile * spy = memory;
     cpputest_free(memory);
-    CHECK(*memory != 0xAD);
+    CHECK(*spy != 0xAD);
 }
 
 TEST(BasicBehavior, freeInvalidatesMemory)
