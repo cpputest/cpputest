@@ -92,3 +92,11 @@ generated/
 #IAR automatically generated files
 *.dep
 *.ewt
+
+# Watcom
+*.LIB
+*.LST
+*.EXE
+*.LOG
+/console_output
+/exit
