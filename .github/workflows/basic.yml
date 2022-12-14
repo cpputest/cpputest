@@ -111,7 +111,7 @@ jobs:
           autoreconf -i .
           ./configure ${{ matrix.configure_args }}
       - name: Build and test
-        run: make ${{ matrix.target }}
+        run: make -j ${{ matrix.target }}
 
   cmake:
     strategy:
@@ -412,6 +412,7 @@ jobs:
         run: >
           make
           -f Makefile_using_MakefileWorker
+          -j
           ${{ matrix.make_args }}
       - name: Test
         run: ${{ matrix.test_cmd }}
@@ -432,7 +433,7 @@ jobs:
           git clone https://github.com/cpputest/watcom-compiler.git $WATCOM
           echo "$WATCOM/binl" >> $GITHUB_PATH
       - name: Build
-        run: make -f platforms/Dos/Makefile
+        run: make -f platforms/Dos/Makefile -j
       - name: Test
         run: make -f platforms/Dos/Makefile test
 
@@ -487,4 +488,4 @@ jobs:
           autoreconf -i .
           ./configure
       - name: Build and test
-        run: make tdd
+        run: make -j tdd
