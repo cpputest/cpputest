@@ -133,7 +133,7 @@ static void failTryingToAllocateTooMuchMemory(void)
 {
     TestMemoryAllocator allocator;
     allocator.alloc_memory(MAX_SIZE_FOR_ALLOC, "file", 1);
-} // LCOV_EXCL_LINE
+}
 
 TEST(TestMemoryAllocatorTest, TryingToAllocateTooMuchFailsTest)
 {

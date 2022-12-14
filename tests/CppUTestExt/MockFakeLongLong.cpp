@@ -50,8 +50,8 @@ static void actualCallWithFakeLongLongParameter_()
 
     mock().expectOneCall("foo").withParameter("bar", 0);
     mock().actualCall("foo").withParameter("bar", value);
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ActualCallWithFakeLongLongParameterFAILS)
 {
@@ -66,8 +66,8 @@ static void actualCallWithFakeUnsignedLongLongParameter_()
 
     mock().expectOneCall("foo").withParameter("bar", 0);
     mock().actualCall("foo").withParameter("bar", value);
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ActualCallWithFakeUnsignedLongLongParameterFAILS)
 {
@@ -80,8 +80,8 @@ static void actualCallWithFakeLongLongReturn_()
 {
     mock().expectOneCall("foo").andReturnValue(0);
     mock().actualCall("foo").returnLongLongIntValue();
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ActualCallWithFakeLongLongReturnFAILS)
 {
@@ -94,8 +94,8 @@ static void actualCallWithFakeUnsignedLongLongReturn_()
 {
     mock().expectOneCall("foo").andReturnValue(0);
     mock().actualCall("foo").returnUnsignedLongLongIntValue();
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ActualCallWithFakeUnsignedLongLongReturnFAILS)
 {
@@ -110,8 +110,8 @@ static void expectOneCallWithFakeLongLongParameter_()
 
     mock().expectOneCall("foo").withParameter("bar", value);
     mock().actualCall("foo").withParameter("bar", 0);
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ExpectedCallWithFakeLongLongParameterFAILS)
 {
@@ -126,8 +126,8 @@ static void expectOneCallWithFakeUnsignedLongLongParameter_()
 
     mock().expectOneCall("foo").withParameter("bar", value);
     mock().actualCall("foo").withParameter("bar", 0);
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ExpectedCallWithFakeUnsignedLongLongParameterFAILS)
 {
@@ -142,8 +142,8 @@ static void expectOneCallWithFakeLongLongReturn_()
 
     mock().expectOneCall("foo").andReturnValue(value);
     mock().actualCall("foo").returnIntValue();
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ExpectedCallWithFakeLongLongReturnFAILS)
 {
@@ -158,8 +158,8 @@ static void expectOneCallWithFakeUnsignedLongLongReturn_()
 
     mock().expectOneCall("foo").andReturnValue(value);
     mock().actualCall("foo").returnIntValue();
-    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    TestTestingFixture::lineExecutedAfterCheck();
+}
 
 TEST(FakeLongLongs, ExpectedCallWithFakeUnsignedLongLongReturnFAILS)
 {

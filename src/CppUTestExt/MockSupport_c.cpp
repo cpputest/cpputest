@@ -47,12 +47,12 @@ public:
             UT_CRASH();
 
         UtestShell::getCurrentTestTerminatorWithoutExceptions().exitCurrentTest();
-    } // LCOV_EXCL_LINE
-    // LCOV_EXCL_START
+    }
+
     virtual ~MockFailureReporterTestTerminatorForInCOnlyCode() _destructor_override
     {
     }
-    // LCOV_EXCL_STOP
+
 private:
     bool crashOnFailure_;
 
@@ -65,7 +65,7 @@ public:
     {
         if (!getTestToFail()->hasFailed())
             getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
-    } // LCOV_EXCL_LINE
+    }
 
 };
 

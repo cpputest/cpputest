@@ -87,8 +87,8 @@ TEST(BasicBehavior, DeleteWithSizeParameterWorks)
 static void deleteUnallocatedMemory()
 {
     delete (char*) 0x1234678;
-    FAIL("Should never come here"); // LCOV_EXCL_LINE
-} // LCOV_EXCL_LINE
+    FAIL("Should never come here");
+}
 
 #ifdef NEEDS_DISABLE_FREE_NON_HEEP_WARNING
 # pragma GCC diagnostic pop

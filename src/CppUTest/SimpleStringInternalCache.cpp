@@ -84,7 +84,7 @@ size_t SimpleStringInternalCache::getIndexForCache(size_t size)
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++)
       if (size <= cache_[i].size_)
         return i;
-    return 0; // LCOV_EXCL_LINE
+    return 0;
 }
 
 SimpleStringInternalCacheNode* SimpleStringInternalCache::getCacheNodeFromSize(size_t size)

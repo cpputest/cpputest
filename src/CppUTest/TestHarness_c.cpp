@@ -107,12 +107,12 @@ extern void CHECK_EQUAL_C_BITS_LOCATION(unsigned int expected, unsigned int actu
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, size_t lineNumber)
 {
     UtestShell::getCurrent()->fail(text,  fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
-} // LCOV_EXCL_LINE
+}
 
 void FAIL_C_LOCATION(const char* fileName, size_t lineNumber)
 {
     UtestShell::getCurrent()->fail("",  fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
-} // LCOV_EXCL_LINE
+}
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* text, const char* fileName, size_t lineNumber)
 {

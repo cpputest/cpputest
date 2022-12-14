@@ -44,7 +44,7 @@ public:
             UT_CRASH();
 
         UtestShell::getCurrentTestTerminator().exitCurrentTest();
-    } // LCOV_EXCL_LINE
+    }
 
     virtual ~MockFailureReporterTestTerminator() _destructor_override
     {
@@ -58,7 +58,7 @@ void MockFailureReporter::failTest(const MockFailure& failure)
 {
     if (!getTestToFail()->hasFailed())
         getTestToFail()->failWith(failure, MockFailureReporterTestTerminator(crashOnFailure_));
-} // LCOV_EXCL_LINE
+}
 
 UtestShell* MockFailureReporter::getTestToFail()
 {
