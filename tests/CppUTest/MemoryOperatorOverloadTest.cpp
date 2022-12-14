@@ -46,15 +46,6 @@ static void deleteArrayInvalidatesMemory()
     CHECK(memory[5] != 0xAB);
 }
 
-CPPUTEST_DO_NOT_SANITIZE_ADDRESS
-static void deleteInvalidatesMemory()
-{
-    unsigned char* memory = new unsigned char;
-    *memory = 0xAD;
-    delete memory;
-    CHECK(*memory != 0xAD);
-}
-
 #ifdef NEEDS_DISABLE_USE_AFTER_FREE
 # pragma GCC diagnostic pop
 #endif /* NEEDS_DISABLE_USE_AFTER_FREE */
@@ -62,11 +53,6 @@ static void deleteInvalidatesMemory()
 TEST(BasicBehavior, deleteArrayInvalidatesMemory)
 {
     deleteArrayInvalidatesMemory();
-}
-
-TEST(BasicBehavior, deleteInvalidatesMemory)
-{
-    deleteInvalidatesMemory();
 }
 
 #if __cplusplus >= 201402L
