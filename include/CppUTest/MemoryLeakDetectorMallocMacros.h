@@ -65,4 +65,25 @@ extern char* cpputest_strndup_location(const char* str, size_t n, const char* fi
 #define CPPUTEST_USE_STRDUP_MACROS 1
 #endif /* CPPUTEST_USE_STRDUP_MACROS */
 #endif /* CPPUTEST_HAVE_STRDUP */
+
+/* This prevents asnprintf macros to get defined, unless it has been enabled by the user or generated config */
+#ifdef CPPUTEST_HAVE_ASNPRINTF
+
+/* This prevents the declaration from done twice and makes sure the file only #defines asnprintf, so it can be included anywhere */
+#ifndef CPPUTEST_USE_ASNPRINTF_MACROS
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+int cpputest_asprintf(char **strp, const char *fmt, ...);
+#ifdef __cplusplus
+}
+#endif
+#define asprintf(strp, fmt, ...) cpputest_asprintf(strp, fmt, ##__VA_ARGS__)
+
+#define CPPUTEST_USE_ASNPRINTF_MACROS 1
+#endif /* CPPUTEST_USE_ASNPRINTF_MACROS */
+#endif /* CPPUTEST_HAVE_ASNPRINTF */
+
 #endif /* CPPUTEST_USE_MEM_LEAK_DETECTION */

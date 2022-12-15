@@ -33,6 +33,7 @@
 
 extern "C"
 {
+#include <stdio.h>
 
 void CHECK_EQUAL_C_BOOL_LOCATION(int expected, int actual, const char* text, const char* fileName, size_t lineNumber)
 {
@@ -248,6 +249,26 @@ void* cpputest_calloc_location(size_t num, size_t size, const char* file, size_t
 void* cpputest_realloc_location(void* memory, size_t size, const char* file, size_t line)
 {
     return cpputest_realloc_location_with_leak_detection(memory, size, file, line);
+}
+
+int cpputest_asprintf(char **strp, const char *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
+    // determine how large the string is
+    int total_size_without_null_term = vsnprintf(NULL, 0, fmt, args);
+    if (total_size_without_null_term < 0) {
+        *strp = NULL;
+        va_end(args);
+        return 0;
+    }
+    size_t total_size_with_null_term = (size_t) (total_size_without_null_term + 1);
+    char* mem = (char*) cpputest_malloc(total_size_with_null_term);
+    // write the string
+    vsnprintf(mem, total_size_with_null_term, fmt, args);
+    *strp = mem;
+    va_end(args);
+    return total_size_without_null_term;
 }
 
 void cpputest_free_location(void* buffer, const char* file, size_t line)
