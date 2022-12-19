@@ -41,7 +41,7 @@ jobs:
       - name: CodeQL Analysis
         uses: github/codeql-action/analyze@v2
 
-  automake:
+  autotools:
     strategy:
       matrix:
         include:
@@ -49,49 +49,55 @@ jobs:
             os: macos-latest
             cc: gcc
             cxx: g++
-            target: tdd
+            make_args: tdd
           - name: Mac Clang
             os: macos-latest
             cc: clang
             cxx: clang++
-            target: tdd
+            make_args: tdd
           - name: Linux GNU
             os: ubuntu-latest
             cc: gcc
             cxx: g++
-            target: tdd
+            make_args: tdd
           - name: Linux Clang
             os: ubuntu-latest
             cc: clang
             cxx: clang++
-            target: tdd
+            make_args: tdd
           - name: GTest 1.5
             os: ubuntu-20.04
-            target: check_gtest15
+            make_args: check_gtest15
           - name: GTest 1.6
             os: ubuntu-20.04
-            target: check_gtest16
+            make_args: check_gtest16
           - name: GTest 1.7
             os: ubuntu-20.04
-            target: check_gtest17
+            make_args: check_gtest17
           - name: GTest 1.8
             os: ubuntu-20.04
-            target: check_gtest18
+            make_args: check_gtest18
           - name: GTest 1.10
             os: ubuntu-20.04
-            target: check_gtest110
+            make_args: check_gtest110
           - name: GTest 1.11
             os: ubuntu-20.04
-            target: check_gtest111
+            make_args: check_gtest111
           - name: GTest 1.12
             os: ubuntu-20.04
-            target: check_gtest112
+            make_args: check_gtest112
           - name: Disable long long
             os: ubuntu-latest
             configure_args: --disable-longlong
-            target: tdd
+            make_args: tdd
+          - name: Distribution
+            os: ubuntu-latest
+            make_args: dist dist-zip VERSION=latest
+          - name: Install
+            os: ubuntu-latest
+            make_args: DESTDIR=install_autotools install
     runs-on: ${{ matrix.os }}
-    name: Automake ${{ matrix.name }}
+    name: Autotools ${{ matrix.name }}
     steps:
       - name: Install Python 2
         uses: actions/setup-python@v4
@@ -111,7 +117,15 @@ jobs:
           autoreconf -i .
           ./configure ${{ matrix.configure_args }}
       - name: Build and test
-        run: make ${{ matrix.target }}
+        run: make ${{ matrix.make_args }}
+      - name: Save Distributions
+        uses: actions/upload-artifact@v3
+        with:
+          name: "Distribution"
+          path: |
+            cpputest-latest.tar.gz
+            cpputest-latest.zip
+        if: ${{ matrix.name == 'Distribution' }}
 
   cmake:
     strategy:
@@ -182,6 +196,20 @@ jobs:
             os: ubuntu-latest
             cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: GNU
+          - name: GCC-10
+            os: ubuntu-20.04
+            cmake_args: >
+              -DCMAKE_C_COMPILER=gcc-10
+              -DCMAKE_CXX_COMPILER=g++-10
+              -DCMAKE_CXX_STANDARD=17
+            preset: GNU
+          - name: Clang-11
+            os: ubuntu-20.04
+            cmake_args: >
+              -DCMAKE_C_COMPILER=clang-11
+              -DCMAKE_CXX_COMPILER=clang++-11
+              -DCMAKE_CXX_STANDARD=17
+            preset: Clang
           - name: MinGW
             os: ubuntu-latest
             preset: MinGW
@@ -218,6 +246,10 @@ jobs:
             os: macos-latest
             preset: defaults
             install: true
+          - name: Apple Clang 14
+            os: macos-latest
+            cmake_args: -DCMAKE_CXX_STANDARD=14
+            preset: Clang
           - name: Apple Clang 17
             os: macos-latest
             cmake_args: -DCMAKE_CXX_STANDARD=17
@@ -401,7 +433,7 @@ jobs:
               make CPPUTEST_USE_VPATH=Y -C examples gcov
           - name: VPATH Install
             make_args: CPPUTEST_USE_VPATH=Y everythingInstall
-            test_cmd:
+            test_cmd: >
               make -f Makefile_using_MakefileWorker flags &&
               make -f Makefile_using_MakefileWorker debug
     name: Make ${{ matrix.name }}
@@ -464,7 +496,7 @@ jobs:
         run: ctest --test-dir cpputest_build --output-on-failure
 
   autotools_msys:
-    name: Automake MSYS
+    name: Autotools MSYS
     runs-on: windows-latest
     defaults:
       run:
