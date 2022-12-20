@@ -5,7 +5,7 @@ name: Basic builds
   push:
   pull_request:
   schedule:
-    - cron: '0 5 * * 3'
+    - cron: "0 5 * * 3"
 
 jobs:
   clang-format:
@@ -376,78 +376,39 @@ jobs:
       matrix:
         include:
           - name: Defaults
-            test_cmd: ./CppUTest_tests -r
+            make_target: test_defaults
           - name: STDC++ disabled
-            make_args: >
-              CPPUTEST_USE_STD_CPP_LIB=N
-              extensions
+            make_target: test_disable_std_cpp
           - name: Memory Leak Detection disabled
-            make_args: >
-              CPPUTEST_USE_MEM_LEAK_DETECTION=N
-              extensions
-          - name: Memory Leak Detection disabled and STD C++ disabled
-            make_args: >
-              CPPUTEST_USE_MEM_LEAK_DETECTION=N
-              CPPUTEST_USE_STD_CPP_LIB=Y
-              extensions
+            make_target: test_disable_memory_leak_detection
+          - name: Disable Leak Detection and STD C++
+            make_target: test_disable_std_cpp_and_leak_detection
           - name: debug disabled
-            make_args: >
-              CPPUTEST_ENABLE_DEBUG=N
-              extensions
+            make_target: test_disable_debug
           - name: overridden CXXFLAGS and CFLAGS and CPPFLAGS
-            make_args: >
-              CLFAGS=""
-              CXXFLAGS=""
-              CPPFLAGS="-Iinclude"
+            make_target: test_override_flags
           - name: without Standard C library includes
-            make_args: >
-              CPPUTEST_USE_STD_C_LIB=N
-              CPPUTEST_ADDITIONAL_CPPFLAGS=-DCPPUTEST_CHAR_BIT=8
-              all_no_tests
+            make_target: test_disable_std_c
           - name: different TARGET_PLATFORM
-            make_args: TARGET_PLATFORM=real_platform
-          - name: overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
-            make_args: >
-              CLFAGS=""
-              CXXFLAGS=""
-              CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
+            make_target: test_target_platform
+          - name: override flags and disable memory leak and STDC++
+            make_target: test_override_and_disable
           - name: Examples
-            make_args: examples
+            make_target: test_examples
           - name: JUnit Output
-            test_cmd: ./CppUTest_tests -ojunit
-          - name: gcov
-            make_args: >
-              CPPUTEST_USE_GCOV=Y
-              everythingInstall
-            test_cmd: >
-              make -f Makefile_using_MakefileWorker gcov &&
-              make -f Makefile_CppUTestExt gcov &&
-              make -C examples gcov
+            make_target: test_junit_output
+          # - name: gcov
+          #   make_target: test_gcov
           - name: VPATH usage
-            make_args: >
-              CPPUTEST_USE_GCOV=Y
-              CPPUTEST_USE_VPATH=Y
-              everythingInstall
-            test_cmd: >
-              make CPPUTEST_USE_VPATH=Y -f Makefile_CppUTestExt gcov &&
-              make CPPUTEST_USE_VPATH=Y -C examples gcov
+            make_target: test_vpath
           - name: VPATH Install
-            make_args: CPPUTEST_USE_VPATH=Y everythingInstall
-            test_cmd: >
-              make -f Makefile_using_MakefileWorker flags &&
-              make -f Makefile_using_MakefileWorker debug
+            make_target: test_vpath_install
     name: Make ${{ matrix.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
       - name: Build
-        run: >
-          make
-          -f Makefile_using_MakefileWorker
-          ${{ matrix.make_args }}
-      - name: Test
-        run: ${{ matrix.test_cmd }}
-        if: ${{ matrix.test_cmd }}
+        run: make -f Makefile_using_MakefileWorker ${{ matrix.make_target }}
 
   make_dos:
     name: Make OpenWatcom DOS
