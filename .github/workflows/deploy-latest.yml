@@ -9,7 +9,7 @@ name: Deploy Latest
 
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: github.event.workflow_run.conclusion == 'success' && github.repository == 'cpputest/cpputest'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
