@@ -28,3 +28,15 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CUSTOM_TAG: latest-passing-build
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest-passing-build
+          name: Latest passing build
+          body: |
+            This is the automatic release from GitHub Actions.
+            Whenever a build passes, it gets released as Latest Passing Build.
+          files: |
+            cpputest-latest.tar.gz
+            cpputest-latest.zip
+          fail_on_unmatched_files: true
