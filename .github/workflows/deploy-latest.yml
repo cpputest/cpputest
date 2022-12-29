@@ -12,8 +12,14 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      # https://github.com/actions/download-artifact/issues/3
+      - name: Download artifact
+        id: download-artifact
+        uses: dawidd6/action-download-artifact@v2
         with:
+          workflow: basic.yml
           name: Distribution
+          workflow_conclusion: success
+          branch: master
       # TODO: let's just validate that this is triggered as expected first
       - run: ls -R
