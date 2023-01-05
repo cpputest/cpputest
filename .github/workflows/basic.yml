@@ -116,14 +116,6 @@ jobs:
           ./configure ${{ matrix.configure_args }}
       - name: Build and test
         run: make ${{ matrix.make_args }}
-      - name: Save Distributions
-        uses: actions/upload-artifact@v3
-        with:
-          name: "Distribution"
-          path: |
-            cpputest-latest.tar.gz
-            cpputest-latest.zip
-        if: ${{ matrix.name == 'Distribution' }}
 
   cmake:
     strategy:
