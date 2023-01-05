@@ -43,7 +43,7 @@ static void deleteArrayInvalidatesMemory()
     unsigned char* memory = new unsigned char[10];
     PlatformSpecificMemset(memory, 0xAB, 10);
     delete [] memory;
-    CHECK(memory[5] != 0xCB);
+    CHECK(memory[5] != 0xAB);
 }
 
 CPPUTEST_DO_NOT_SANITIZE_ADDRESS
