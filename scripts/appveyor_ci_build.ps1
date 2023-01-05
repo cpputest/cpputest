@@ -2,6 +2,8 @@
 # Load functions from the helper file
 . (Join-Path (Split-Path $MyInvocation.MyCommand.Path) 'appveyor_helpers.ps1')
 
+mkdir cpputest_build
+
 function Invoke-BuildCommand($command, $directory = '.')
 {
     $command_wrapped = "$command;`$err = `$?"

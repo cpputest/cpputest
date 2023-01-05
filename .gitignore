@@ -100,3 +100,6 @@ generated/
 *.LOG
 /console_output
 /exit
+
+# Builds
+/cpputest_build/
