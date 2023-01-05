@@ -217,8 +217,12 @@
     #endif
   #else
     #define UT_THROW(exception)
-    #ifdef __clang__
-      #define UT_NOTHROW throw()
+    #if defined(__clang__) || defined(__GNUC__)
+      #if defined(__cplusplus) && __cplusplus >= 201103L
+        #define UT_NOTHROW noexcept
+      #else
+        #define UT_NOTHROW throw()
+      #endif
     #else
       #define UT_NOTHROW
     #endif
