@@ -67,7 +67,10 @@
     {
       "name": "arm-embedded",
       "inherits": ["defaults"],
-      "toolchainFile": "${sourceDir}/cmake/Toolchains/arm-none-eabi-gcc.toolchain.cmake"
+      "toolchainFile": "${sourceDir}/cmake/Toolchains/arm-none-eabi-gcc.toolchain.cmake",
+      "cacheVariables": {
+        "CMAKE_CROSSCOMPILING_EMULATOR": "docker;run;--rm;-v=${sourceDir}:${sourceDir};multiarch/qemu-user-static:x86_64-arm;qemu-arm-static;-cpu;cortex-m4"
+      }
     },
     {
       "name": "coverage",
