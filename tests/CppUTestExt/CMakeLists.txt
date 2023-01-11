@@ -59,7 +59,9 @@ function(add_cpputestext_test number)
         string(APPEND name ${number})
         add_executable(${name})
         add_mapfile(${name})
-        cpputest_discover_tests(${name})
+        if(CPPUTEST_TEST_DISCOVERY)
+            cpputest_discover_tests(${name})
+        endif()
     endif()
 
     target_sources(${name}
