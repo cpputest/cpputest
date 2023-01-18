@@ -68,7 +68,6 @@ You can build and install cpputest using [vcpkg](https://github.com/Microsoft/vc
 $ vcpkg install cpputest (More information: https://github.com/microsoft/vcpkg)
 ```
 
-
 ## Command line switches
 
 * -h help, shows the latest help, including the parameters we've implemented after updating this README page.
