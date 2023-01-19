@@ -59,12 +59,6 @@ TEST(FirstTestGroup, FirstTest)
 }
 ```
 
-You can build and install cpputest using [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
-
-```console
-$ vcpkg install cpputest (More information: https://github.com/microsoft/vcpkg)
-```
-
 ## Command line switches
 
 * `-h` help, shows the latest help, including the parameters we've implemented after updating this README page.
@@ -230,6 +224,14 @@ add_executable(example_test ExampleTest.cpp)
 target_link_libraries(example_test PRIVATE
     CppUTest::CppUTest
     CppUTest::CppUTestExt)
+```
+
+## vcpkg
+
+You can build and install CppUTest using [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
+
+```bash
+vcpkg install cpputest
 ```
 
 ## Integration as external CMake project
