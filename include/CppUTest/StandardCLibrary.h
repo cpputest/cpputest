@@ -14,6 +14,7 @@
 #ifdef __cplusplus
  #if CPPUTEST_USE_STD_CPP_LIB
   #include <cstdlib>
+  #include <cstring>
   #include <string>
  #endif
 #endif
