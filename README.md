@@ -19,7 +19,7 @@ You'll need to do the following to get started:
 Building from source (Unix-based, Cygwin, MacOS):
 
 ```bash
-git clone git://github.com/cpputest/cpputest.git
+git clone https://github.com/cpputest/cpputest.git
 cd cpputest_build
 autoreconf .. -i
 ../configure
@@ -31,7 +31,7 @@ You can use `make install` if you want to install CppUTest system-wide.
 You can also use CMake, which also works for Windows Visual Studio.
 
 ```bash
-git clone git://github.com/cpputest/cpputest.git
+git clone https://github.com/cpputest/cpputest.git
 cmake -B cpputest_build
 cmake --build cpputest_build
 ```
