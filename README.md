@@ -20,7 +20,7 @@ Building from source (Unix-based, Cygwin, MacOS):
 
 ```bash
 git clone https://github.com/cpputest/cpputest.git
-cd cpputest_build
+cd cpputest/build
 autoreconf .. -i
 ../configure
 make
