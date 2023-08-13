@@ -198,6 +198,8 @@ public:
     virtual void printFailure(const TestFailure& failure) _override;
     virtual void setProgressIndicator(const char*) _override;
 
+    virtual void printVeryVerbose(const char*) _override;
+
     virtual void flush() _override;
 
 protected:
