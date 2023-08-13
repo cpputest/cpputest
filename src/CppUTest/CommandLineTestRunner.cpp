@@ -191,7 +191,7 @@ bool CommandLineTestRunner::parseArguments(TestPlugin* plugin)
 
   if (arguments_->isJUnitOutput()) {
     output_= createJUnitOutput(arguments_->getPackageName());
-    if (arguments_->isVerbose())
+    if (arguments_->isVerbose() || arguments_->isVeryVerbose())
       output_ = createCompositeOutput(output_, createConsoleOutput());
   } else if (arguments_->isTeamCityOutput()) {
     output_ = createTeamCityOutput();
