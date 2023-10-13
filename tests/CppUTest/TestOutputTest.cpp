@@ -470,3 +470,11 @@ TEST(CompositeTestOutput, deletePreviousInstanceWhenSettingNew)
 
   // CHECK NO MEMORY LEAKS
 }
+
+TEST(CompositeTestOutput, printVeryVerbose)
+{
+  compositeOutput.verbose(TestOutput::level_veryVerbose);
+  compositeOutput.printVeryVerbose("very-verbose");
+  STRCMP_EQUAL("very-verbose", output1->getOutput().asCharString());
+  STRCMP_EQUAL("very-verbose", output2->getOutput().asCharString());
+}
