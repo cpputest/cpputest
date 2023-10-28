@@ -21,6 +21,7 @@ if(
         -Wno-reserved-id-macro
         -Wno-keyword-macro
         -Wno-long-long
+        -Wno-unsafe-buffer-usage
     )
 
     set(WARNING_C_FLAGS
