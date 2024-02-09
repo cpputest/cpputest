@@ -19,7 +19,7 @@ You'll need to do the following to get started:
 Building from source (Unix-based, Cygwin, MacOS):
 
 ```bash
-git clone git://github.com/cpputest/cpputest.git
+git clone https://github.com/cpputest/cpputest.git
 cd cpputest_build
 autoreconf .. -i
 ../configure
@@ -31,7 +31,7 @@ You can use `make install` if you want to install CppUTest system-wide.
 You can also use CMake, which also works for Windows Visual Studio.
 
 ```bash
-git clone git://github.com/cpputest/cpputest.git
+git clone https://github.com/cpputest/cpputest.git
 cmake -B cpputest_build
 cmake --build cpputest_build
 ```
@@ -57,6 +57,12 @@ TEST(FirstTestGroup, FirstTest)
 {
    FAIL("Fail me!");
 }
+```
+
+You can build and install cpputest using [vcpkg](https://github.com/Microsoft/vcpkg/) dependency manager:
+
+```console
+$ vcpkg install cpputest (More information: https://github.com/microsoft/vcpkg)
 ```
 
 ## Command line switches
@@ -236,7 +242,7 @@ include(FetchContent)
 FetchContent_Declare(
     CppUTest
     GIT_REPOSITORY https://github.com/cpputest/cpputest.git
-    GIT_TAG        latest-passing-build # or use release tag, eg. v3.8
+    GIT_TAG        master # or use release tag, eg. v4.0
 )
 # Set this to ON if you want to have the CppUTests in your project as well.
 set(TESTS OFF CACHE BOOL "Switch off CppUTest Test build")

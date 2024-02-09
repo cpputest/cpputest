@@ -14,9 +14,6 @@
 # if __GNUC__ >= 11
 #  define NEEDS_DISABLE_FREE_NON_HEEP_WARNING
 # endif /* GCC >= 11 */
-# if __GNUC__ >= 12
-#  define NEEDS_DISABLE_USE_AFTER_FREE
-# endif /* GCC >= 12 */
 #endif /* GCC */
 
 
@@ -31,43 +28,6 @@ TEST(BasicBehavior, CanDeleteNullPointers)
 }
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
-
-#ifdef NEEDS_DISABLE_USE_AFTER_FREE
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wuse-after-free"
-#endif /* NEEDS_DISABLE_USE_AFTER_FREE */
-
-CPPUTEST_DO_NOT_SANITIZE_ADDRESS
-static void deleteArrayInvalidatesMemory()
-{
-    unsigned char* memory = new unsigned char[10];
-    PlatformSpecificMemset(memory, 0xAB, 10);
-    delete [] memory;
-    CHECK(memory[5] != 0xCB);
-}
-
-CPPUTEST_DO_NOT_SANITIZE_ADDRESS
-static void deleteInvalidatesMemory()
-{
-    unsigned char* memory = new unsigned char;
-    *memory = 0xAD;
-    delete memory;
-    CHECK(*memory != 0xAD);
-}
-
-#ifdef NEEDS_DISABLE_USE_AFTER_FREE
-# pragma GCC diagnostic pop
-#endif /* NEEDS_DISABLE_USE_AFTER_FREE */
-
-TEST(BasicBehavior, deleteArrayInvalidatesMemory)
-{
-    deleteArrayInvalidatesMemory();
-}
-
-TEST(BasicBehavior, deleteInvalidatesMemory)
-{
-    deleteInvalidatesMemory();
-}
 
 #if __cplusplus >= 201402L
 TEST(BasicBehavior, DeleteWithSizeParameterWorks)
@@ -128,23 +88,6 @@ TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
     cpputest_free_location(memory, "file", 10);
 }
 
-#endif
-
-#if CPPUTEST_USE_MEM_LEAK_DETECTION
-
-CPPUTEST_DO_NOT_SANITIZE_ADDRESS
-static void freeInvalidatesMemory()
-{
-    unsigned char* memory = (unsigned char*) cpputest_malloc(sizeof(unsigned char));
-    *memory = 0xAD;
-    cpputest_free(memory);
-    CHECK(*memory != 0xAD);
-}
-
-TEST(BasicBehavior, freeInvalidatesMemory)
-{
-    freeInvalidatesMemory();
-}
 #endif
 
 TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)

@@ -400,6 +400,12 @@ void CompositeTestOutput::setProgressIndicator(const char* indicator)
   if (outputTwo_) outputTwo_->setProgressIndicator(indicator);
 }
 
+void CompositeTestOutput::printVeryVerbose(const char* str)
+{
+  if (outputOne_) outputOne_->printVeryVerbose(str);
+  if (outputTwo_) outputTwo_->printVeryVerbose(str);
+}
+
 void CompositeTestOutput::flush()
 {
   if (outputOne_) outputOne_->flush();

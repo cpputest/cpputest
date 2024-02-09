@@ -29,38 +29,85 @@ include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 #these are a sample of the other alternative flag settings
 .PHONY: test_all
 test_all: start
+	$(MAKE_CMD) test_defaults
+	$(MAKE_CMD) test_disable_std_cpp
+	$(MAKE_CMD) test_disable_memory_leak_detection
+	$(MAKE_CMD) test_disable_std_cpp_and_leak_detection
+	$(MAKE_CMD) test_disable_debug
+	$(MAKE_CMD) test_override_flags
+	$(MAKE_CMD) test_disable_std_c
+	$(MAKE_CMD) test_target_platform
+	$(MAKE_CMD) test_override_and_disable
+	$(MAKE_CMD) test_examples
+	$(MAKE_CMD) test_junit_output
+	$(MAKE_CMD) test_gcov
+	$(MAKE_CMD) test_vpath
+	$(MAKE_CMD) test_vpath_install
+
+.PHONY: test_defaults
+test_defaults: start
 	@echo Building with the default flags.
 	$(MAKE_CMD) clean
 	$(TIME) $(MAKE_CMD)
 	./$(TEST_TARGET) -r
 	$(MAKE_CMD) clean
+
+.PHONY: test_disable_std_cpp
+test_disable_std_cpp: start
 	@echo Building with the STDC++ new disabled.
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_STD_CPP_LIB=N extensions
 	$(MAKE_CMD) CPPUTEST_USE_STD_CPP_LIB=N cleanExtensions
+
+.PHONY: test_disable_memory_leak_detection
+test_disable_memory_leak_detection: start
 	@echo Building with Memory Leak Detection disabled
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_MEM_LEAK_DETECTION=N extensions
 	$(MAKE_CMD) CPPUTEST_USE_MEM_LEAK_DETECTION=N cleanExtensions
+
+.PHONY: test_disable_std_cpp_and_leak_detection
+test_disable_std_cpp_and_leak_detection: start
 	@echo Building with Memory Leak Detection disabled and STD C++ disabled
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_MEM_LEAK_DETECTION=N CPPUTEST_USE_STD_CPP_LIB=Y extensions
 	$(MAKE_CMD) CPPUTEST_USE_MEM_LEAK_DETECTION=N CPPUTEST_USE_STD_CPP_LIB=Y cleanExtensions
+
+.PHONY: test_disable_debug
+test_disable_debug: start
 	@echo Building with debug disabled
 	$(TIME) $(MAKE_CMD) CPPUTEST_ENABLE_DEBUG=N extensions
 	$(MAKE_CMD) CPPUTEST_ENABLE_DEBUG=N cleanExtensions
+
+.PHONY: test_override_flags
+test_override_flags: start
 	@echo Building with overridden CXXFLAGS and CFLAGS and CPPFLAGS
-	$(TIME) $(MAKE_CMD) CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
+	$(TIME) $(MAKE_CMD) CFLAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude"
 	$(MAKE_CMD) CFLAGS="" CXXFLAGS="" clean
+
+.PHONY: test_disable_std_c
+test_disable_std_c: start
 	@echo Building without Standard C library includes
-	$(TIME) $(MAKE_CMD) CPPUTEST_USE_STD_C_LIB=N all_no_tests
+	$(TIME) $(MAKE_CMD) CPPUTEST_USE_STD_C_LIB=N CPPUTEST_ADDITIONAL_CPPFLAGS="-DCPPUTEST_CHAR_BIT=8" all_no_tests
 	$(MAKE_CMD) CPPUTEST_USE_STD_C_LIB=N clean
+
+.PHONY: test_target_platform
+test_target_platform: start
 	@echo Building with a different TARGET_PLATFORM
 	$(MAKE_CMD) TARGET_PLATFORM=real_platform
+
+.PHONY: test_override_and_disable
+test_override_and_disable: start
 	@echo Building with overridden CXXFLAGS and CFLAGS and memory leak and STDC++ disabled
-	$(TIME) $(MAKE_CMD) CLFAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
+	$(TIME) $(MAKE_CMD) CFLAGS="" CXXFLAGS="" CPPFLAGS="-Iinclude -DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED"
 	$(MAKE_CMD) CFLAGS="" CXXFLAGS="" CPPFLAGS="-DCPPUTEST_STD_CPP_LIB_DISABLED -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED" clean
+
+.PHONY: test_examples
+test_examples: start
 	@echo Building examples
 	$(MAKE_CMD) cleanExamples
 	$(TIME) $(MAKE_CMD) examples
 	$(MAKE_CMD) cleanExamples
+
+.PHONY: test_junit_output
+test_junit_output: start
 	@echo Testing JUnit output
 	$(TIME) $(MAKE_CMD)
 	$(SILENCE)./$(TEST_TARGET) -ojunit > junit_run_output
@@ -68,18 +115,27 @@ test_all: start
 	$(MAKE_CMD) clean
 	$(MAKE_CMD) CPPUTEST_MAP_FILE=map.txt
 	$(MAKE_CMD) clean
+
+.PHONY: test_gcov
+test_gcov: start
 	@echo Testing GCOV usage
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_GCOV=Y everythingInstall
 	$(MAKE_CMD) gcov
 	$(MAKE) -f Makefile_CppUTestExt gcov
 	$(MAKE) -C examples gcov
 	$(MAKE_CMD) cleanEverythingInstall
+
+.PHONY: test_vpath
+test_vpath: start
 	@echo Testing VPATH usage
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_GCOV=Y CPPUTEST_USE_VPATH=Y everythingInstall
 	$(MAKE_CMD) CPPUTEST_USE_VPATH=Y gcov
 	$(MAKE) CPPUTEST_USE_VPATH=Y -f Makefile_CppUTestExt gcov
 	$(MAKE) CPPUTEST_USE_VPATH=Y -C examples gcov
 	$(MAKE_CMD) clean cleanExamples
+
+.PHONY: test_vpath_install
+test_vpath_install: start
 	@echo Testing VPATH usage
 	$(TIME) $(MAKE_CMD) CPPUTEST_USE_VPATH=Y everythingInstall
 	$(MAKE_CMD) CPPUTEST_USE_VPATH=Y cleanEverythingInstall
