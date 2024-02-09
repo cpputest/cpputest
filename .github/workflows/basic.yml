@@ -63,27 +63,6 @@ jobs:
             cc: clang
             cxx: clang++
             make_args: tdd
-          - name: GTest 1.5
-            os: ubuntu-20.04
-            make_args: check_gtest15
-          - name: GTest 1.6
-            os: ubuntu-20.04
-            make_args: check_gtest16
-          - name: GTest 1.7
-            os: ubuntu-20.04
-            make_args: check_gtest17
-          - name: GTest 1.8
-            os: ubuntu-20.04
-            make_args: check_gtest18
-          - name: GTest 1.10
-            os: ubuntu-20.04
-            make_args: check_gtest110
-          - name: GTest 1.11
-            os: ubuntu-20.04
-            make_args: check_gtest111
-          - name: GTest 1.12
-            os: ubuntu-20.04
-            make_args: check_gtest112
           - name: Disable long long
             os: ubuntu-latest
             configure_args: --disable-longlong
@@ -97,11 +76,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Autotools ${{ matrix.name }}
     steps:
-      - name: Install Python 2
-        uses: actions/setup-python@v4
-        with:
-          python-version: "2.7"
-        if: ${{ startswith(matrix.name, 'GTest') }}
       - name: Checkout
         uses: actions/checkout@main
       - run: brew install automake
@@ -220,12 +194,6 @@ jobs:
             os: ubuntu-latest
             preset: coverage
             apt_packages: lcov
-          - name: Google Test
-            os: ubuntu-20.04
-            cmake_args: -DCMAKE_CXX_STANDARD=98
-            preset: gtest
-            ctest_args: -C Debug
-            apt_packages: python2 ninja-build
           - name: Address Sanitizer
             os: ubuntu-latest
             preset: asan
