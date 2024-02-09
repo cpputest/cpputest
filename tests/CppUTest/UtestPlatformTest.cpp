@@ -122,7 +122,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSepa
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
-#if (! CPPUTEST_SANITIZE_ADDRESS)
+#if !CPPUTEST_SANITIZE_ADDRESS && !CPPUTEST_SANITIZE_MEMORY
 
 static int accessViolationTestFunction_()
 {
