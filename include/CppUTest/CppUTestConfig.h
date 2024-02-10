@@ -146,6 +146,9 @@
 #endif
 
 #if CPPUTEST_SANITIZE_ADDRESS
+  #if defined(__linux__) && defined(__clang__) && CPPUTEST_USE_STD_CPP_LIB
+    #warning Compiling with Address Sanitizer with clang on linux may cause duplicate symbols for operator new. Turning off memory leak detection. Compile with -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED to get rid of this warning.
+  #endif
   #define CPPUTEST_DO_NOT_SANITIZE_ADDRESS __attribute__((no_sanitize_address))
 #else
   #define CPPUTEST_DO_NOT_SANITIZE_ADDRESS
