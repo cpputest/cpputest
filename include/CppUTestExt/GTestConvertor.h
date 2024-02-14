@@ -54,7 +54,7 @@ class GTestFlagsThatAllocateMemory;
 
 namespace testing {
     class TestInfo;
-    class TestCase;
+    class TestSuite;
     class Test;
 }
 
@@ -181,7 +181,7 @@ protected:
     virtual void simulateGTestFailureToPreAllocateAllTheThreadLocalData();
 
     virtual void addNewTestCaseForTestInfo(::testing::TestInfo* testinfo);
-    virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase);
+    virtual void addAllTestsFromTestCaseToTestRegistry(::testing::TestSuite* testcase);
 
     virtual void createDummyInSequenceToAndFailureReporterAvoidMemoryLeakInGMock();
 private:
@@ -346,7 +346,7 @@ inline void GTestConvertor::addNewTestCaseForTestInfo(::testing::TestInfo* testi
     TestRegistry::getCurrentRegistry()->addTest(first_);
 }
 
-inline void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::TestCase* testcase)
+inline void GTestConvertor::addAllTestsFromTestCaseToTestRegistry(::testing::TestSuite* testcase)
 {
     int currentTestCount = 0;
     ::testing::TestInfo* currentTest = (::testing::TestInfo*) testcase->GetTestInfo(currentTestCount);
@@ -375,11 +375,11 @@ inline void GTestConvertor::addAllGTestToTestRegistry()
     ::testing::UnitTest* unitTests = ::testing::UnitTest::GetInstance();
 
     int currentUnitTestCount = 0;
-    ::testing::TestCase* currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
+    ::testing::TestSuite* currentTestCase = (::testing::TestSuite*) unitTests->GetTestCase(currentUnitTestCount);
     while (currentTestCase) {
         addAllTestsFromTestCaseToTestRegistry(currentTestCase);
         currentUnitTestCount++;
-        currentTestCase = (::testing::TestCase*) unitTests->GetTestCase(currentUnitTestCount);
+        currentTestCase = (::testing::TestSuite*) unitTests->GetTestCase(currentUnitTestCount);
     }
 }
 
