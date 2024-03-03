@@ -114,6 +114,12 @@
 #define CHECK_EQUAL_C_POINTER_TEXT(expected,actual,text) \
   CHECK_EQUAL_C_POINTER_LOCATION(expected,actual,text,__FILE__,__LINE__)
 
+#define CHECK_EQUAL_C_MEMCMP(expected, actual, size) \
+  CHECK_EQUAL_C_MEMCMP_LOCATION(expected, actual, size, NULLPTR, __FILE__, __LINE__)
+
+#define CHECK_EQUAL_C_MEMCMP_TEXT(expected, actual, size, text) \
+  CHECK_EQUAL_C_MEMCMP_LOCATION(expected, actual, size, text, __FILE__, __LINE__)
+
 #define CHECK_EQUAL_C_BITS(expected, actual, mask) \
   CHECK_EQUAL_C_BITS_LOCATION(expected, actual, mask, sizeof(actual), NULL, __FILE__, __LINE__)
 
@@ -205,6 +211,7 @@ extern void CHECK_EQUAL_C_UBYTE_LOCATION(unsigned char expected, unsigned char a
 extern void CHECK_EQUAL_C_SBYTE_LOCATION(signed char expected, signed char actual, const char* text, const char* fileName, size_t lineNumber);
 extern void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* text, const char* fileName, size_t lineNumber);
 extern void CHECK_EQUAL_C_POINTER_LOCATION(const void* expected, const void* actual, const char* text, const char* fileName, size_t lineNumber);
+extern void CHECK_EQUAL_C_MEMCMP_LOCATION(const void* expected, const void* actual, size_t size, const char* text, const char* fileName, size_t lineNumber);
 extern void CHECK_EQUAL_C_BITS_LOCATION(unsigned int expected, unsigned int actual, unsigned int mask, size_t size, const char* text, const char* fileName, size_t lineNumber);
 extern void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, size_t lineNumber);
 extern void FAIL_C_LOCATION(const char* fileName, size_t lineNumber);
