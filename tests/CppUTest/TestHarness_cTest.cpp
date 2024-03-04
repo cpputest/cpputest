@@ -581,6 +581,45 @@ TEST(TestHarness_c, checkPointerText)
     CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled);
 }
 
+static void failMemcmpMethod_()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
+    unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
+
+    CHECK_EQUAL_C_MEMCMP(expectedData, actualData, sizeof(expectedData));
+}
+
+TEST(TestHarness_c, checkMemcmp)
+{
+    CHECK_EQUAL_C_MEMCMP("TEST", "TEST", 5);
+    fixture->setTestFunction(failMemcmpMethod_);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <00 01 02 03>\n\tbut was  <00 01 03 03>");
+    fixture->assertPrintContains("arness_c");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled);
+}
+
+static void failMemcmpTextMethod_()
+{
+    HasTheDestructorBeenCalledChecker checker;
+    unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
+    unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
+
+    CHECK_EQUAL_C_MEMCMP_TEXT(expectedData, actualData, sizeof(expectedData), "MemcmpTestText");
+}
+
+TEST(TestHarness_c, checkMemcmpText)
+{
+    CHECK_EQUAL_C_MEMCMP_TEXT("TEST", "TEST", 5, "Text");
+    fixture->setTestFunction(failMemcmpTextMethod_);
+    fixture->runAllTests();
+    fixture->assertPrintContains("expected <00 01 02 03>\n\tbut was  <00 01 03 03>");
+    fixture->assertPrintContains("arness_c");
+    fixture->assertPrintContains("Message: MemcmpTestText");
+    CHECK(!hasDestructorOfTheDestructorCheckedBeenCalled);
+}
+
 static void failBitsMethod_()
 {
     HasTheDestructorBeenCalledChecker checker;
