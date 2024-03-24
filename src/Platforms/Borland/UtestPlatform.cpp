@@ -193,13 +193,12 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 
 ///////////// Time in millis
 
-static long TimeInMillisImplementation()
+static unsigned long TimeInMillisImplementation()
 {
 #ifdef CPPUTEST_HAVE_GETTIMEOFDAY
     struct timeval tv;
-    struct timezone tz;
-    gettimeofday(&tv, &tz);
-    return (tv.tv_sec * 1000) + (long)((double)tv.tv_usec * 0.001);
+    gettimeofday(&tv, NULL);
+    return ((unsigned long)tv.tv_sec * 1000) + ((unsigned long)tv.tv_usec / 1000));
 #else
     return 0;
 #endif
@@ -214,7 +213,7 @@ static const char* TimeStringImplementation()
     return dateTime;
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+unsigned long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 static int BorlandVSNprintf(char *str, size_t size, const char* format, va_list args)

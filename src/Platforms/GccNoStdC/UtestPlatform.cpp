@@ -48,7 +48,7 @@ void (*PlatformSpecificLongJmp)() = NULLPTR;
 int (*PlatformSpecificSetJmp)(void (*)(void*), void*) = NULLPTR;
 void (*PlatformSpecificRestoreJumpBuffer)() = NULLPTR;
 
-long (*GetPlatformSpecificTimeInMillis)() = NULLPTR;
+unsigned long (*GetPlatformSpecificTimeInMillis)() = NULLPTR;
 const char* (*GetPlatformSpecificTimeString)() = NULLPTR;
 
 /* IO operations */

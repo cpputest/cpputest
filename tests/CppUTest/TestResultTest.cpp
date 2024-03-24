@@ -31,7 +31,7 @@
 
 extern "C" {
 
-    static long MockGetPlatformSpecificTimeInMillis()
+    static unsigned long MockGetPlatformSpecificTimeInMillis()
     {
         return 10;
     }

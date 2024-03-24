@@ -47,7 +47,7 @@ extern void (*PlatformSpecificLongJmp)(void);
 extern void (*PlatformSpecificRestoreJumpBuffer)(void);
 
 /* Time operations */
-extern long (*GetPlatformSpecificTimeInMillis)(void);
+extern unsigned long (*GetPlatformSpecificTimeInMillis)(void);
 extern const char* (*GetPlatformSpecificTimeString)(void);
 
 /* String operations */
