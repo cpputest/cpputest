@@ -135,10 +135,10 @@ public:
 };
 
 extern "C" {
-    static long millisTime = 0;
+    static unsigned long millisTime = 0;
     static const char* theTime = "";
 
-    static long MockGetPlatformSpecificTimeInMillis()
+    static unsigned long MockGetPlatformSpecificTimeInMillis()
     {
         return millisTime;
     }
@@ -156,7 +156,7 @@ class JUnitTestOutputTestRunner
     const char* currentGroupName_;
     UtestShell* currentTest_;
     bool firstTestInGroup_;
-    int timeTheTestTakes_;
+    unsigned int timeTheTestTakes_;
     unsigned int numberOfChecksInTest_;
     TestFailure* testFailure_;
 
@@ -279,7 +279,7 @@ public:
         return *this;
     }
 
-    JUnitTestOutputTestRunner& thatTakes(int timeElapsed)
+    JUnitTestOutputTestRunner& thatTakes(unsigned int timeElapsed)
     {
         timeTheTestTakes_ = timeElapsed;
         return *this;

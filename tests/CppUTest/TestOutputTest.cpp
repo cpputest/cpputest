@@ -30,11 +30,11 @@
 #include "CppUTest/TestResult.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-static long millisTime;
+static unsigned long millisTime;
 
 extern "C" {
 
-    static long MockGetPlatformSpecificTimeInMillis()
+    static unsigned long MockGetPlatformSpecificTimeInMillis()
     {
         return millisTime;
     }

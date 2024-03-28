@@ -41,11 +41,11 @@ static void fakeRestoreJumpBuffer()
 }
 void (*PlatformSpecificRestoreJumpBuffer)(void) = fakeRestoreJumpBuffer;
 
-static long fakeTimeInMillis(void)
+static unsigned long fakeTimeInMillis(void)
 {
     return 0;
 }
-long (*GetPlatformSpecificTimeInMillis)(void) = fakeTimeInMillis;
+unsigned long (*GetPlatformSpecificTimeInMillis)(void) = fakeTimeInMillis;
 
 static const char* fakeTimeString(void)
 {

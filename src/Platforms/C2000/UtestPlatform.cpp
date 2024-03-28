@@ -100,7 +100,7 @@ int (*PlatformSpecificSetJmp)(void (*function) (void*), void*) = C2000SetJmp;
 void (*PlatformSpecificLongJmp)(void) = C2000LongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = C2000RestoreJumpBuffer;
 
-static long C2000TimeInMillis()
+static unsigned long C2000TimeInMillis()
 {
     /* The TI c2000 platform does not have Posix support and thus lacks struct timespec.
      * Also, clock() always returns 0 in the simulator. Hence we work with struct tm.tm_hour
@@ -112,7 +112,7 @@ static long C2000TimeInMillis()
      */
     time_t t        = time((time_t*)0);
     struct tm * ptm = gmtime(&t);
-    long result = (long)
+    unsigned long result = (unsigned long)
         ((ptm->tm_sec + ptm->tm_min * (time_t)60 + ptm->tm_hour * (time_t)3600) * (time_t)1000);
     return result;
 }
@@ -123,7 +123,7 @@ static const char* TimeStringImplementation()
     return ctime(&tm);
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = C2000TimeInMillis;
+unsigned long (*GetPlatformSpecificTimeInMillis)() = C2000TimeInMillis;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 extern int vsnprintf(char*, size_t, const char*, va_list); // not std::vsnprintf()

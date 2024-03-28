@@ -67,14 +67,14 @@ void PlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin* pl
    shell->runOneTest(plugin, *result);
 }
 
-static long TimeInMillisImplementation() {
+static unsigned long TimeInMillisImplementation() {
     struct timeval tv;
     struct timezone tz;
     ::gettimeofday(&tv, &tz);
-    return (tv.tv_sec * 1000) + (long)(tv.tv_usec * 0.001);
+    return ((unsigned long)tv.tv_sec * 1000) + ((unsigned long)tv.tv_usec / 1000);
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+unsigned long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {

@@ -101,13 +101,13 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 
 ///////////// Time in millis
 
-static long TimeInMillisImplementation()
+static unsigned long TimeInMillisImplementation()
 {
     clock_t t = clock();
 
     t = t * 10;
 
-    return t;
+    return (unsigned long)t;
 }
 
 ///////////// Time in String
@@ -121,7 +121,7 @@ static const char* TimeStringImplementation()
     return (pTimeStr);
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+unsigned long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list args) = vsnprintf;

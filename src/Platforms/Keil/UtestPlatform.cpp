@@ -108,16 +108,16 @@ extern "C"
     *  In Keil MDK-ARM, clock() default implementation used semihosting.
     *  Resolutions is user adjustable (1 ms for now)
     */
-    static long TimeInMillisImplementation()
+    static unsigned long TimeInMillisImplementation()
     {
         clock_t t = clock();
 
-       t = t * 10;
+        t = t * 10;
 
-        return t;
+        return (unsigned long)t;
     }
 
-    long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
+    unsigned long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 
     static const char* TimeStringImplementation()
     {

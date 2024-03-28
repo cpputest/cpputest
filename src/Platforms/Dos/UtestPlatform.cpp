@@ -104,9 +104,9 @@ int (*PlatformSpecificSetJmp)(void (*function) (void*), void*) = DosSetJmp;
 void (*PlatformSpecificLongJmp)(void) = DosLongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = DosRestoreJumpBuffer;
 
-static long DosTimeInMillis()
+static unsigned long DosTimeInMillis()
 {
-    return clock() * 1000 / CLOCKS_PER_SEC;
+    return (unsigned long)(clock() * 1000 / CLOCKS_PER_SEC);
 }
 
 static const char* DosTimeString()
@@ -119,7 +119,7 @@ static int DosVSNprintf(char* str, size_t size, const char* format, va_list args
     return vsnprintf(str, size, format, args);
 }
 
-long (*GetPlatformSpecificTimeInMillis)() = DosTimeInMillis;
+unsigned long (*GetPlatformSpecificTimeInMillis)() = DosTimeInMillis;
 const char* (*GetPlatformSpecificTimeString)() = DosTimeString;
 int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = DosVSNprintf;
 

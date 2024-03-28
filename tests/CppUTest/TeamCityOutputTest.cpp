@@ -32,11 +32,11 @@ private:
     SimpleString output;
 };
 
-static long millisTime;
+static unsigned long millisTime;
 
 extern "C" {
 
-    static long MockGetPlatformSpecificTimeInMillis()
+    static unsigned long MockGetPlatformSpecificTimeInMillis()
     {
         return millisTime;
     }
