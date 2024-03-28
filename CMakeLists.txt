@@ -29,14 +29,10 @@ include(CTest)
 include(CMakeDependentOption)
 option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
 
-if((CMAKE_CXX_COMPILER_ID STREQUAL "Clang") AND (CMAKE_CXX_SIMULATE_ID STREQUAL "MSVC"))
-  set(is_clang_cl TRUE)
-endif()
-
 cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
   OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
-  OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED;NOT is_clang_cl" ON)
+  OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
 include(CheckTypeSize)
 check_type_size("long long" SIZEOF_LONGLONG)
