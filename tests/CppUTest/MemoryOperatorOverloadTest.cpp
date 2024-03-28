@@ -10,12 +10,6 @@
 #include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
 
-#if defined(__GNUC__)
-# if __GNUC__ >= 11
-#  define NEEDS_DISABLE_FREE_NON_HEEP_WARNING
-# endif /* GCC >= 11 */
-#endif /* GCC */
-
 
 TEST_GROUP(BasicBehavior)
 {
