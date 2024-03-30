@@ -12,10 +12,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-      - uses: DoozyX/clang-format-lint-action@v0.14
+      - uses: DoozyX/clang-format-lint-action@v0.17
         with:
-          clangFormatVersion: 14
-          source: examples
+          clangFormatVersion: 17
 
   codeql:
     runs-on: ubuntu-20.04
