@@ -3,7 +3,7 @@ extern "C" {
 #include "MockIO.h"
 }
 
-//CppUTest includes should be after your and system includes
+// CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
 
 TEST_GROUP(ClassName)
@@ -25,4 +25,3 @@ TEST(ClassName, Create)
 {
     FAIL("Start here");
 }
-

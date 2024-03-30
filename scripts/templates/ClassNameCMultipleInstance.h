@@ -7,9 +7,9 @@
  *
  **********************************************************************/
 
-typedef struct ClassNameStruct * ClassName;
+typedef struct ClassNameStruct* ClassName;
 
 ClassName ClassName_Create(void);
 void ClassName_Destroy(ClassName);
 
-#endif  /* D_FakeClassName_H */
+#endif /* D_FakeClassName_H */

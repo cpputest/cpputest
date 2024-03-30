@@ -31,7 +31,7 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 
 #if CPPUTEST_USE_STD_C_LIB
-#include <math.h>
+    #include <math.h>
 #endif
 
 TEST_GROUP(UtestShell)
@@ -168,8 +168,6 @@ TEST(UtestShell, FailWillCrashIfEnabled)
     UtestShell::resetCrashMethod();
 }
 
-
-
 static int teardownCalled = 0;
 
 static void teardownMethod_()
@@ -224,8 +222,7 @@ static bool shouldThrowException = true;
 
 static void thrownUnknownExceptionMethod_()
 {
-    if (shouldThrowException)
-    {
+    if (shouldThrowException) {
         throw 33;
     }
     stopAfterFailure++;
@@ -253,12 +250,10 @@ TEST(UtestShell, NoExceptionIsRethrownIfEnabledButNotThrown)
     UtestShell::setRethrowExceptions(true);
     shouldThrowException = false;
     fixture.setTestFunction(thrownUnknownExceptionMethod_);
-    try
-    {
+    try {
         fixture.runAllTests();
     }
-    catch(...)
-    {
+    catch (...) {
         exceptionRethrown = true;
     }
     CHECK_FALSE(exceptionRethrown);
@@ -275,13 +270,11 @@ TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
     UtestShell::setRethrowExceptions(true);
     shouldThrowException = true;
     fixture.setTestFunction(thrownUnknownExceptionMethod_);
-    try
-    {
+    try {
         fixture.runAllTests();
         stopAfterFailure++;
     }
-    catch(...)
-    {
+    catch (...) {
         exceptionRethrown = true;
     }
     CHECK_TRUE(exceptionRethrown);
@@ -291,11 +284,10 @@ TEST(UtestShell, UnknownExceptionIsRethrownIfEnabled)
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+    #if CPPUTEST_USE_STD_CPP_LIB
 static void thrownStandardExceptionMethod_()
 {
-    if (shouldThrowException)
-    {
+    if (shouldThrowException) {
         throw std::runtime_error("exception text");
     }
     stopAfterFailure++;
@@ -310,13 +302,13 @@ TEST(UtestShell, TestStopsAfterStandardExceptionIsThrown)
     fixture.setTestFunction(thrownStandardExceptionMethod_);
     fixture.runAllTests();
     LONGS_EQUAL(1, fixture.getFailureCount());
-#if CPPUTEST_HAVE_RTTI
+        #if CPPUTEST_HAVE_RTTI
     fixture.assertPrintContains("Unexpected exception of type '");
     fixture.assertPrintContains("runtime_error");
     fixture.assertPrintContains("' was thrown: exception text");
-#else
+        #else
     fixture.assertPrintContains("Unexpected exception of unknown type was thrown");
-#endif
+        #endif
     LONGS_EQUAL(0, stopAfterFailure);
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
@@ -329,13 +321,11 @@ TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
     UtestShell::setRethrowExceptions(true);
     shouldThrowException = true;
     fixture.setTestFunction(thrownStandardExceptionMethod_);
-    try
-    {
+    try {
         fixture.runAllTests();
         stopAfterFailure++;
     }
-    catch(const std::exception &)
-    {
+    catch (const std::exception&) {
         exceptionRethrown = true;
     }
     CHECK_TRUE(exceptionRethrown);
@@ -346,8 +336,8 @@ TEST(UtestShell, StandardExceptionIsRethrownIfEnabled)
     LONGS_EQUAL(0, stopAfterFailure);
     UtestShell::setRethrowExceptions(initialRethrowExceptions);
 }
-#endif // CPPUTEST_USE_STD_CPP_LIB
-#endif // CPPUTEST_HAVE_EXCEPTIONS
+    #endif // CPPUTEST_USE_STD_CPP_LIB
+#endif     // CPPUTEST_HAVE_EXCEPTIONS
 
 TEST(UtestShell, veryVebose)
 {
@@ -361,7 +351,7 @@ TEST(UtestShell, veryVebose)
     STRCMP_CONTAINS("\n------ before runTest", normalOutput.getOutput().asCharString());
 }
 
-class defaultUtestShell: public UtestShell
+class defaultUtestShell : public UtestShell
 {
 };
 
@@ -372,7 +362,6 @@ TEST(UtestShell, this_test_covers_the_UtestShell_createTest_and_Utest_testBody_m
     fixture.runAllTests();
     LONGS_EQUAL(2, fixture.getTestCount());
 }
-
 
 static void StubPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
@@ -503,10 +492,7 @@ TEST(IgnoredUtestShell, runIgnoredOptionSpecifiedThenWillRunReturnTrue)
 
 TEST_BASE(MyOwnTest)
 {
-    MyOwnTest() :
-        inTest(false)
-    {
-    }
+    MyOwnTest() : inTest(false) {}
     bool inTest;
 
     void setup() _override
@@ -521,16 +507,14 @@ TEST_BASE(MyOwnTest)
     }
 };
 
-TEST_GROUP_BASE(UtestMyOwn, MyOwnTest)
-{
-};
+TEST_GROUP_BASE(UtestMyOwn, MyOwnTest){};
 
 TEST(UtestMyOwn, test)
 {
     CHECK(inTest);
 }
 
-class NullParameterTest: public UtestShell
+class NullParameterTest : public UtestShell
 {
 };
 
@@ -545,21 +529,19 @@ class AllocateAndDeallocateInConstructorAndDestructor
 {
     char* memory_;
     char* morememory_;
+
 public:
     AllocateAndDeallocateInConstructorAndDestructor()
     {
         memory_ = new char[100];
         morememory_ = NULLPTR;
     }
-    void allocateMoreMemory()
-    {
-        morememory_ = new char[123];
-    }
+    void allocateMoreMemory() { morememory_ = new char[123]; }
 
     ~AllocateAndDeallocateInConstructorAndDestructor()
     {
-        delete [] memory_;
-        delete [] morememory_;
+        delete[] memory_;
+        delete[] morememory_;
     }
 };
 
@@ -607,7 +589,6 @@ TEST_GROUP(UtestShellPointerArrayTest)
     }
 };
 
-
 TEST(UtestShellPointerArrayTest, empty)
 {
     UtestShellPointerArray tests(NULLPTR);
@@ -631,7 +612,6 @@ TEST(UtestShellPointerArrayTest, relinkingTestsWillKeepThemTheSameWhenNothingWas
     CHECK(tests.get(1) == test1);
     CHECK(tests.get(2) == test2);
 }
-
 
 TEST(UtestShellPointerArrayTest, firstTestisNotTheFirstTestWithSeed1234)
 {

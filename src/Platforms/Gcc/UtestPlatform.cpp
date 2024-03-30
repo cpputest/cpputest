@@ -35,12 +35,12 @@
 #undef strndup
 
 #ifdef CPPUTEST_HAVE_GETTIMEOFDAY
-#include <sys/time.h>
+    #include <sys/time.h>
 #endif
 #if defined(CPPUTEST_HAVE_FORK) && defined(CPPUTEST_HAVE_WAITPID)
-#include <unistd.h>
-#include <sys/wait.h>
-#include <errno.h>
+    #include <unistd.h>
+    #include <sys/wait.h>
+    #include <errno.h>
 #endif
 
 #include <time.h>
@@ -53,7 +53,7 @@
 #include <signal.h>
 
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
-#include <pthread.h>
+    #include <pthread.h>
 #endif
 
 #include "CppUTest/PlatformSpecificFunctions.h"
@@ -108,30 +108,30 @@ static void GccPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, Test
         return;
     }
 
-    if (cpid == 0) {            /* Code executed by child */
+    if (cpid == 0) {                                                  /* Code executed by child */
         const size_t initialFailureCount = result->getFailureCount(); // LCOV_EXCL_LINE
-        shell->runOneTestInCurrentProcess(plugin, *result);        // LCOV_EXCL_LINE
-        _exit(initialFailureCount < result->getFailureCount());    // LCOV_EXCL_LINE
-    } else {                    /* Code executed by parent */
+        shell->runOneTestInCurrentProcess(plugin, *result);           // LCOV_EXCL_LINE
+        _exit(initialFailureCount < result->getFailureCount());       // LCOV_EXCL_LINE
+    } else {                                                          /* Code executed by parent */
         size_t amountOfRetries = 0;
         do {
             w = PlatformSpecificWaitPid(cpid, &status, WUNTRACED);
             if (w == syscallError) {
                 // OS X debugger causes EINTR
                 if (EINTR == errno) {
-                  if (amountOfRetries > 30) {
-                    result->addFailure(TestFailure(shell, "Call to waitpid() failed with EINTR. Tried 30 times and giving up! Sometimes happens in debugger"));
-                    return;
-                  }
-                  amountOfRetries++;
-                }
-                else {
+                    if (amountOfRetries > 30) {
+                        result->addFailure(TestFailure(shell, "Call to waitpid() failed with EINTR. Tried 30 times and giving up! Sometimes happens in debugger"));
+                        return;
+                    }
+                    amountOfRetries++;
+                } else {
                     result->addFailure(TestFailure(shell, "Call to waitpid() failed"));
                     return;
                 }
             } else {
                 SetTestFailureByStatusCode(shell, result, status);
-                if (WIFSTOPPED(status)) kill(w, SIGCONT);
+                if (WIFSTOPPED(status))
+                    kill(w, SIGCONT);
             }
         } while ((w == syscallError) || (!WIFEXITED(status) && !WIFSIGNALED(status)));
     }
@@ -154,14 +154,13 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
     return TestOutput::eclipse;
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        GccPlatformSpecificRunTestInASeperateProcess;
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) = GccPlatformSpecificRunTestInASeperateProcess;
 int (*PlatformSpecificFork)(void) = PlatformSpecificForkImplementation;
 int (*PlatformSpecificWaitPid)(int, int*, int) = PlatformSpecificWaitPidImplementation;
 
 extern "C" {
 
-static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), void* data)
+static int PlatformSpecificSetJmpImplementation(void (*function)(void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -177,11 +176,12 @@ static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), v
  * The later clang compilers complain when it isn't there. So only way is to check the clang compiler here :(
  */
 #ifdef __clang__
- #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
- _no_return_
- #endif
+    #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
+_no_return_
+    #endif
 #endif
-static void PlatformSpecificLongJmpImplementation()
+    static void
+    PlatformSpecificLongJmpImplementation()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
@@ -216,9 +216,9 @@ static const char* TimeStringImplementation()
 #ifdef STDC_WANT_SECURE_LIB
     static struct tm lastlocaltime;
     localtime_s(&lastlocaltime, &theTime);
-    struct tm *tmp = &lastlocaltime;
+    struct tm* tmp = &lastlocaltime;
 #else
-    struct tm *tmp = localtime(&theTime);
+    struct tm* tmp = localtime(&theTime);
 #endif
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", tmp);
     return dateTime;
@@ -229,38 +229,38 @@ const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
 /* Wish we could add an attribute to the format for discovering mis-use... but the __attribute__(format) seems to not work on va_list */
 #ifdef __clang__
-#pragma clang diagnostic ignored "-Wformat-nonliteral"
+    #pragma clang diagnostic ignored "-Wformat-nonliteral"
 #endif
 
 #ifdef __clang__
-#pragma clang diagnostic ignored "-Wused-but-marked-unused"
+    #pragma clang diagnostic ignored "-Wused-but-marked-unused"
 #endif
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = vsnprintf;
+int (*PlatformSpecificVSNprintf)(char* str, size_t size, const char* format, va_list va_args_list) = vsnprintf;
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
 #ifdef STDC_WANT_SECURE_LIB
-  FILE* file;
-   fopen_s(&file, filename, flag);
-   return file;
+    FILE* file;
+    fopen_s(&file, filename, flag);
+    return file;
 #else
-   return fopen(filename, flag);
+    return fopen(filename, flag);
 #endif
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+    fputs(str, (FILE*)file);
 }
 
 static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
 {
-   fclose((FILE*)file);
+    fclose((FILE*)file);
 }
 
 static void PlatformSpecificFlushImplementation()
 {
-  fflush(stdout);
+    fflush(stdout);
 }
 
 PlatformSpecificFile PlatformSpecificStdOut = stdout;
@@ -281,7 +281,7 @@ void* (*PlatformSpecificMemset)(void*, int, size_t) = memset;
  * in GCC's own (macro) implementation of isnan() and isinf().
  */
 #if defined(__GNUC__) && (__GNUC__ >= 5 || (__GNUC__ == 4 && __GNUC_MINOR__ > 8))
-#pragma GCC diagnostic ignored "-Wfloat-conversion"
+    #pragma GCC diagnostic ignored "-Wfloat-conversion"
 #endif
 
 static int IsNanImplementation(double d)
@@ -299,54 +299,47 @@ void (*PlatformSpecificSrand)(unsigned int) = srand;
 int (*PlatformSpecificRand)(void) = rand;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
+int (*PlatformSpecificAtExit)(void (*func)(void)) = atexit; /// this was undefined before
 
 static PlatformSpecificMutex PThreadMutexCreate(void)
 {
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
-    pthread_mutex_t *mutex = new pthread_mutex_t;
+    pthread_mutex_t* mutex = new pthread_mutex_t;
 
     pthread_mutex_init(mutex, NULLPTR);
     return (PlatformSpecificMutex)mutex;
 #else
     return NULLPTR;
 #endif
-
 }
 
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexLock(PlatformSpecificMutex mtx)
 {
-    pthread_mutex_lock((pthread_mutex_t *)mtx);
+    pthread_mutex_lock((pthread_mutex_t*)mtx);
 }
 #else
-static void PThreadMutexLock(PlatformSpecificMutex)
-{
-}
+static void PThreadMutexLock(PlatformSpecificMutex) {}
 #endif
 
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexUnlock(PlatformSpecificMutex mtx)
 {
-    pthread_mutex_unlock((pthread_mutex_t *)mtx);
+    pthread_mutex_unlock((pthread_mutex_t*)mtx);
 }
 #else
-static void PThreadMutexUnlock(PlatformSpecificMutex)
-{
-}
+static void PThreadMutexUnlock(PlatformSpecificMutex) {}
 #endif
 
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 static void PThreadMutexDestroy(PlatformSpecificMutex mtx)
 {
-    pthread_mutex_t *mutex = (pthread_mutex_t *)mtx;
+    pthread_mutex_t* mutex = (pthread_mutex_t*)mtx;
     pthread_mutex_destroy(mutex);
     delete mutex;
 }
 #else
-static void PThreadMutexDestroy(PlatformSpecificMutex)
-{
-}
+static void PThreadMutexDestroy(PlatformSpecificMutex) {}
 #endif
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = PThreadMutexCreate;
@@ -354,5 +347,4 @@ void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = PThreadMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = PThreadMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = PThreadMutexDestroy;
 void (*PlatformSpecificAbort)(void) = abort;
-
 }

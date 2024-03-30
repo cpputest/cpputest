@@ -50,13 +50,13 @@ void MockFailureReporterForTest::clearReporter()
 
 MockFailureReporterInstaller::MockFailureReporterInstaller()
 {
-  mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
+    mock().setMockFailureStandardReporter(MockFailureReporterForTest::getReporter());
 }
 
 MockFailureReporterInstaller::~MockFailureReporterInstaller()
 {
-  mock().setMockFailureStandardReporter(NULLPTR);
-  MockFailureReporterForTest::clearReporter();
+    mock().setMockFailureStandardReporter(NULLPTR);
+    MockFailureReporterForTest::clearReporter();
 }
 
 UtestShell* mockFailureTest()
@@ -79,8 +79,7 @@ void CHECK_EXPECTED_MOCK_FAILURE_LOCATION(const MockFailure& expectedFailure, co
     SimpleString expectedFailureString = expectedFailure.getMessage();
     SimpleString actualFailureString = mockFailureString();
     CLEAR_MOCK_FAILURE();
-    if (expectedFailureString != actualFailureString)
-    {
+    if (expectedFailureString != actualFailureString) {
         SimpleString error = "MockFailures are different.\n";
         error += "Expected MockFailure:\n\t";
         error += expectedFailureString;
@@ -97,37 +96,34 @@ void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, size_t line)
         error += mockFailureString();
         CLEAR_MOCK_FAILURE();
         FAIL_LOCATION(error.asCharString(), file, line);
-
     }
     CLEAR_MOCK_FAILURE();
 }
 
 MockExpectedCallsListForTest::~MockExpectedCallsListForTest()
 {
-  deleteAllExpectationsAndClearList();
+    deleteAllExpectationsAndClearList();
 }
 
 MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(const SimpleString& name)
 {
-  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
-  newCall->withName(name);
-  addExpectedCall(newCall);
-  return newCall;
+    MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall;
+    newCall->withName(name);
+    addExpectedCall(newCall);
+    return newCall;
 }
 
 MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunction(unsigned int numCalls, const SimpleString& name)
 {
-  MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall(numCalls);
-  newCall->withName(name);
-  addExpectedCall(newCall);
-  return newCall;
+    MockCheckedExpectedCall* newCall = new MockCheckedExpectedCall(numCalls);
+    newCall->withName(name);
+    addExpectedCall(newCall);
+    return newCall;
 }
 
 MockCheckedExpectedCall* MockExpectedCallsListForTest::addFunctionOrdered(const SimpleString& name, unsigned int order)
 {
-  MockCheckedExpectedCall* newCall = addFunction(name);
-  newCall->withCallOrder(order);
-  return newCall;
+    MockCheckedExpectedCall* newCall = addFunction(name);
+    newCall->withCallOrder(order);
+    return newCall;
 }
-
-

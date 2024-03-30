@@ -34,15 +34,9 @@
 class MyDummyComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2) _override
-    {
-        return object1 == object2;
-    }
+    virtual bool isEqual(const void* object1, const void* object2) _override { return object1 == object2; }
 
-    virtual SimpleString valueToString(const void* object) _override
-    {
-        return StringFrom(object);
-    }
+    virtual SimpleString valueToString(const void* object) _override { return StringFrom(object); }
 };
 
 int main(int ac, char** av)

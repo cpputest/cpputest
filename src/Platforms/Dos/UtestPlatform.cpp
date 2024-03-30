@@ -37,7 +37,7 @@
 #undef strdup
 #undef strndup
 
-#define  far  // eliminate "meaningless type qualifier" warning
+#define far // eliminate "meaningless type qualifier" warning
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -78,7 +78,7 @@ int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
 
 extern "C" {
 
-static int DosSetJmp(void (*function) (void* data), void* data)
+static int DosSetJmp(void (*function)(void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -89,18 +89,18 @@ static int DosSetJmp(void (*function) (void* data), void* data)
     return 0;
 }
 
-static void  DosLongJmp()
+static void DosLongJmp()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);
 }
 
-static void  DosRestoreJumpBuffer()
+static void DosRestoreJumpBuffer()
 {
     jmp_buf_index--;
 }
 
-int (*PlatformSpecificSetJmp)(void (*function) (void*), void*) = DosSetJmp;
+int (*PlatformSpecificSetJmp)(void (*function)(void*), void*) = DosSetJmp;
 void (*PlatformSpecificLongJmp)(void) = DosLongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = DosRestoreJumpBuffer;
 
@@ -115,13 +115,14 @@ static const char* DosTimeString()
     return ctime(&tm);
 }
 
-static int DosVSNprintf(char* str, size_t size, const char* format, va_list args) {
+static int DosVSNprintf(char* str, size_t size, const char* format, va_list args)
+{
     return vsnprintf(str, size, format, args);
 }
 
 unsigned long (*GetPlatformSpecificTimeInMillis)() = DosTimeInMillis;
 const char* (*GetPlatformSpecificTimeString)() = DosTimeString;
-int (*PlatformSpecificVSNprintf)(char *, size_t, const char*, va_list) = DosVSNprintf;
+int (*PlatformSpecificVSNprintf)(char*, size_t, const char*, va_list) = DosVSNprintf;
 
 PlatformSpecificFile DosFOpen(const char* filename, const char* flag)
 {
@@ -130,12 +131,12 @@ PlatformSpecificFile DosFOpen(const char* filename, const char* flag)
 
 static void DosFPuts(const char* str, PlatformSpecificFile file)
 {
-   fputs(str, (FILE*)file);
+    fputs(str, (FILE*)file);
 }
 
 static void DosFClose(PlatformSpecificFile file)
 {
-   fclose((FILE*)file);
+    fclose((FILE*)file);
 }
 
 PlatformSpecificFile PlatformSpecificStdOut = stdout;
@@ -145,17 +146,17 @@ void (*PlatformSpecificFClose)(PlatformSpecificFile file) = DosFClose;
 
 static void DosFlush()
 {
-  fflush(stdout);
+    fflush(stdout);
 }
 
 extern void (*PlatformSpecificFlush)(void) = DosFlush;
 
 static void* DosMalloc(size_t size)
 {
-   return malloc(size);
+    return malloc(size);
 }
 
-static void* DosRealloc (void* memory, size_t size)
+static void* DosRealloc(void* memory, size_t size)
 {
     return realloc(memory, size);
 }
@@ -217,17 +218,11 @@ static PlatformSpecificMutex DummyMutexCreate(void)
     return 0;
 }
 
-static void DummyMutexLock(PlatformSpecificMutex mtx)
-{
-}
+static void DummyMutexLock(PlatformSpecificMutex mtx) {}
 
-static void DummyMutexUnlock(PlatformSpecificMutex mtx)
-{
-}
+static void DummyMutexUnlock(PlatformSpecificMutex mtx) {}
 
-static void DummyMutexDestroy(PlatformSpecificMutex mtx)
-{
-}
+static void DummyMutexDestroy(PlatformSpecificMutex mtx) {}
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
@@ -240,5 +235,4 @@ static void DosAbort()
 }
 
 void (*PlatformSpecificAbort)(void) = DosAbort;
-
 }

@@ -31,11 +31,10 @@
 
 extern "C" {
 
-    static unsigned long MockGetPlatformSpecificTimeInMillis()
-    {
-        return 10;
-    }
-
+static unsigned long MockGetPlatformSpecificTimeInMillis()
+{
+    return 10;
+}
 }
 
 TEST_GROUP(TestResult)

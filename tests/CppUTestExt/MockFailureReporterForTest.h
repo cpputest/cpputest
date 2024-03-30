@@ -41,13 +41,14 @@ public:
     virtual void failTest(const MockFailure& failure) _override;
     static MockFailureReporterForTest* getReporter();
     static void clearReporter();
+
 private:
     static MockFailureReporterForTest* instance_;
 };
 
 class MockFailureReporterInstaller
 {
-  public:
+public:
     MockFailureReporterInstaller();
     ~MockFailureReporterInstaller();
 };
@@ -60,7 +61,7 @@ void CHECK_NO_MOCK_FAILURE_LOCATION(const char* file, size_t line);
 
 class MockExpectedCallsListForTest : public MockExpectedCallsList
 {
-  public:
+public:
     ~MockExpectedCallsListForTest() _destructor_override;
     MockCheckedExpectedCall* addFunction(const SimpleString& name);
     MockCheckedExpectedCall* addFunction(unsigned int numCalls, const SimpleString& name);

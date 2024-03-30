@@ -10,37 +10,36 @@
 #include "CppUTest/TestHarness_c.h"
 #include "AllocationInCFile.h"
 
-
 TEST_GROUP(BasicBehavior)
 {
 };
 
 TEST(BasicBehavior, CanDeleteNullPointers)
 {
-    delete (char*) NULLPTR;
-    delete [] (char*) NULLPTR;
+    delete (char*)NULLPTR;
+    delete[] (char*)NULLPTR;
 }
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#if __cplusplus >= 201402L
+    #if __cplusplus >= 201402L
 TEST(BasicBehavior, DeleteWithSizeParameterWorks)
 {
     char* charMemory = new char;
     char* charArrayMemory = new char[10];
     ::operator delete(charMemory, sizeof(char));
-    ::operator delete[](charArrayMemory, sizeof(char)* 10);
+    ::operator delete[](charArrayMemory, sizeof(char) * 10);
 }
-#endif
+    #endif
 
 #endif
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
 
-/* This include is added because *sometimes* the cstdlib does an #undef. This should have been prevented */
-#if CPPUTEST_USE_STD_CPP_LIB
-#include <cstdlib>
-#endif
+    /* This include is added because *sometimes* the cstdlib does an #undef. This should have been prevented */
+    #if CPPUTEST_USE_STD_CPP_LIB
+        #include <cstdlib>
+    #endif
 
 TEST(BasicBehavior, bothMallocAndFreeAreOverloaded)
 {
@@ -65,63 +64,63 @@ TEST_GROUP(MemoryLeakOverridesToBeUsedInProductionCode)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #undef new
-#endif
+    #ifdef CPPUTEST_USE_NEW_MACROS
+        #undef new
+    #endif
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithIntLineWorks)
 {
     const int line = 42;
-    char* leak = new("TestFile.cpp", line) char;
+    char* leak = new ("TestFile.cpp", line) char;
 
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
 
-    ::operator delete (leak, "TestFile.cpp", line);
+    ::operator delete(leak, "TestFile.cpp", line);
 
-    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    LONGS_EQUAL(memLeaks - 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteOverloadsWithSizeTLineWorks)
 {
     const size_t line = 42;
-    char* leak = new("TestFile.cpp", line) char;
+    char* leak = new ("TestFile.cpp", line) char;
 
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
 
-    ::operator delete (leak, "TestFile.cpp", line);
+    ::operator delete(leak, "TestFile.cpp", line);
 
-    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    LONGS_EQUAL(memLeaks - 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteArrayOverloadsWithIntLineWorks)
 {
     const int line = 42;
-    char* leak = new("TestFile.cpp", line) char[10];
+    char* leak = new ("TestFile.cpp", line) char[10];
 
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
 
-    ::operator delete [] (leak, "TestFile.cpp", line);
+    ::operator delete[](leak, "TestFile.cpp", line);
 
-    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    LONGS_EQUAL(memLeaks - 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, newDeleteArrayOverloadsWithSizeTLineWorks)
 {
     const size_t line = 42;
-    char* leak = new("TestFile.cpp", line) char[10];
+    char* leak = new ("TestFile.cpp", line) char[10];
 
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     STRCMP_NOCASE_CONTAINS("Allocated at: TestFile.cpp and line: 42.", memLeakDetector->report(mem_leak_period_checking));
 
-    ::operator delete [] (leak, "TestFile.cpp", line);
+    ::operator delete[](leak, "TestFile.cpp", line);
 
-    LONGS_EQUAL(memLeaks-1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    LONGS_EQUAL(memLeaks - 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
 }
-#ifdef CPPUTEST_USE_NEW_MACROS
-    #include "CppUTest/MemoryLeakDetectorNewMacros.h" // redefine the 'new' macro
-#endif
+    #ifdef CPPUTEST_USE_NEW_MACROS
+        #include "CppUTest/MemoryLeakDetectorNewMacros.h" // redefine the 'new' macro
+    #endif
 #endif
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
@@ -130,28 +129,28 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideIsUsed)
 {
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     void* memory = malloc(10);
-    LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-    free (memory);
+    LONGS_EQUAL(memLeaks + 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free(memory);
 }
 
-#ifdef CPPUTEST_USE_STRDUP_MACROS
+    #ifdef CPPUTEST_USE_STRDUP_MACROS
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideIsUsed)
 {
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strdup("0123456789");
-    LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-    free (memory);
+    LONGS_EQUAL(memLeaks + 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free(memory);
 }
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideIsUsed)
 {
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
     char* memory = strndup("0123456789", 10);
-    LONGS_EQUAL(memLeaks+1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-    free (memory);
+    LONGS_EQUAL(memLeaks + 1, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
+    free(memory);
 }
-#endif
+    #endif
 
 #endif
 
@@ -166,15 +165,15 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeMallocByTemporarlySwi
 #if CPPUTEST_USE_STD_C_LIB
     void* memory = malloc(10);
     LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-    free (memory);
+    free(memory);
 #else
     void* memory = PlatformSpecificMalloc(10);
     LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-    PlatformSpecificFree (memory);
+    PlatformSpecificFree(memory);
 #endif
 
 #ifdef CPPUTEST_USE_MALLOC_MACROS
-#include "CppUTest/MemoryLeakDetectorMallocMacros.h"
+    #include "CppUTest/MemoryLeakDetectorMallocMacros.h"
 #endif
 }
 
@@ -187,7 +186,7 @@ public:
 #ifdef CPPUTEST_USE_NEW_MACROS
     #undef new
 #endif
-    void* operator new (size_t size)
+    void* operator new(size_t size)
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
@@ -225,12 +224,11 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, UseNativeNewByTemporarlySwitch
     #undef delete
 #endif
     char* memory = new char[10];
-    delete [] memory;
+    delete[] memory;
 #ifdef CPPUTEST_USE_NEW_MACROS
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
-
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
@@ -255,7 +253,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocOverrideWorks)
     freeAllocation(leak);
 }
 
-#ifdef CPPUTEST_USE_STRDUP_MACROS
+    #ifdef CPPUTEST_USE_STRDUP_MACROS
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrdupOverrideWorks)
 {
     char* leak = strdupAllocation();
@@ -269,7 +267,7 @@ TEST(MemoryLeakOverridesToBeUsedInProductionCode, StrndupOverrideWorks)
     STRCMP_NOCASE_CONTAINS("AllocationInCFile.c", memLeakDetector->report(mem_leak_period_checking));
     freeAllocation(leak);
 }
-#endif
+    #endif
 
 TEST(MemoryLeakOverridesToBeUsedInProductionCode, MallocWithButFreeWithoutLeakDetectionDoesntCrash)
 {
@@ -325,7 +323,7 @@ TEST_GROUP(OutOfMemoryTestsForOperatorNew)
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
-#if CPPUTEST_HAVE_EXCEPTIONS
+    #if CPPUTEST_HAVE_EXCEPTIONS
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorThrowsAnExceptionWhenUsingStdCppNew)
 {
@@ -341,17 +339,17 @@ TEST_GROUP(TestForExceptionsInConstructor)
 {
 };
 
-TEST(TestForExceptionsInConstructor,ConstructorThrowsAnException)
+TEST(TestForExceptionsInConstructor, ConstructorThrowsAnException)
 {
     CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor);
 }
 
-TEST(TestForExceptionsInConstructor,ConstructorThrowsAnExceptionAllocatedAsArray)
+TEST(TestForExceptionsInConstructor, ConstructorThrowsAnExceptionAllocatedAsArray)
 {
     CHECK_THROWS(int, new ClassThatThrowsAnExceptionInTheConstructor[10]);
 }
 
-#else
+    #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNull)
 {
@@ -363,12 +361,11 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNull)
     POINTERS_EQUAL(NULLPTR, new char[10]);
 }
 
-#endif
+    #endif
 
-#undef new
+    #undef new
 
-#if CPPUTEST_HAVE_EXCEPTIONS
-
+    #if CPPUTEST_HAVE_EXCEPTIONS
 
 /*
  * CLang 4.2 and memory allocation.
@@ -414,7 +411,7 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorThrowsAnExceptionWhe
     CHECK_THROWS(CPPUTEST_BAD_ALLOC, some_memory = new char[10]);
 }
 
-#if CPPUTEST_USE_STD_CPP_LIB
+        #if CPPUTEST_USE_STD_CPP_LIB
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
     POINTERS_EQUAL(NULLPTR, new (std::nothrow) char);
@@ -424,9 +421,9 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOv
 {
     POINTERS_EQUAL(NULLPTR, new (std::nothrow) char[10]);
 }
-#endif
+        #endif
 
-#else
+    #else
 
 TEST(OutOfMemoryTestsForOperatorNew, FailingNewOperatorReturnsNullWithoutOverride)
 {
@@ -438,6 +435,6 @@ TEST(OutOfMemoryTestsForOperatorNew, FailingNewArrayOperatorReturnsNullWithoutOv
     POINTERS_EQUAL(NULLPTR, new char[10]);
 }
 
-#endif
+    #endif
 
 #endif

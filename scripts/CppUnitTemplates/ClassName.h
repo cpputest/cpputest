@@ -8,16 +8,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 class ClassName
-  {
-  public:
+{
+public:
     explicit ClassName();
     virtual ~ClassName();
 
-  private:
-
+private:
     ClassName(const ClassName&);
     ClassName& operator=(const ClassName&);
+};
 
-  };
-
-#endif  // D_ClassName_H
+#endif // D_ClassName_H

@@ -32,28 +32,21 @@
 
 namespace
 {
-const int testLineNumber = 1;
+    const int testLineNumber = 1;
 }
 
-class MockTest: public UtestShell
+class MockTest : public UtestShell
 {
 public:
-    MockTest(const char* group = "Group") :
-        UtestShell(group, "Name", "File", testLineNumber), hasRun_(false)
-    {
-    }
-    virtual void runOneTest(TestPlugin*, TestResult&) _override
-    {
-        hasRun_ = true;
-    }
+    MockTest(const char* group = "Group") : UtestShell(group, "Name", "File", testLineNumber), hasRun_(false) {}
+    virtual void runOneTest(TestPlugin*, TestResult&) _override { hasRun_ = true; }
 
     bool hasRun_;
 };
 
-class MockTestResult: public TestResult
+class MockTestResult : public TestResult
 {
 public:
-
     int countTestsStarted;
     int countTestsEnded;
     int countCurrentTestStarted;
@@ -61,15 +54,9 @@ public:
     int countCurrentGroupStarted;
     int countCurrentGroupEnded;
 
-    MockTestResult(TestOutput& p) :
-        TestResult(p)
-    {
-        resetCount();
-    }
+    MockTestResult(TestOutput& p) : TestResult(p) { resetCount(); }
 
-    virtual ~MockTestResult() _destructor_override
-    {
-    }
+    virtual ~MockTestResult() _destructor_override {}
 
     void resetCount()
     {
@@ -81,31 +68,12 @@ public:
         countCurrentGroupEnded = 0;
     }
 
-    virtual void testsStarted() _override
-    {
-        countTestsStarted++;
-    }
-    virtual void testsEnded() _override
-    {
-        countTestsEnded++;
-    }
-    virtual void currentTestStarted(UtestShell* /*test*/) _override
-    {
-        countCurrentTestStarted++;
-    }
-    virtual void currentTestEnded(UtestShell* /*test*/) _override
-    {
-        countCurrentTestEnded++;
-    }
-    virtual void currentGroupStarted(UtestShell* /*test*/) _override
-    {
-        countCurrentGroupStarted++;
-    }
-    virtual void currentGroupEnded(UtestShell* /*test*/) _override
-    {
-        countCurrentGroupEnded++;
-    }
-
+    virtual void testsStarted() _override { countTestsStarted++; }
+    virtual void testsEnded() _override { countTestsEnded++; }
+    virtual void currentTestStarted(UtestShell* /*test*/) _override { countCurrentTestStarted++; }
+    virtual void currentTestEnded(UtestShell* /*test*/) _override { countCurrentTestEnded++; }
+    virtual void currentGroupStarted(UtestShell* /*test*/) _override { countCurrentGroupStarted++; }
+    virtual void currentGroupEnded(UtestShell* /*test*/) _override { countCurrentGroupEnded++; }
 };
 
 TEST_GROUP(TestRegistry)
@@ -116,8 +84,8 @@ TEST_GROUP(TestRegistry)
     MockTest* test2;
     MockTest* test3;
     MockTest* test4;
-    TestResult *result;
-    MockTestResult *mockResult;
+    TestResult* result;
+    MockTestResult* mockResult;
     void setup() _override
     {
         output = new StringBufferTestOutput();
@@ -308,7 +276,7 @@ TEST(TestRegistry, CurrentRepetitionIsCorrectTwo)
     LONGS_EQUAL(2, myRegistry->getCurrentRepetition());
 }
 
-class MyTestPluginDummy: public TestPlugin
+class MyTestPluginDummy : public TestPlugin
 {
 public:
     MyTestPluginDummy(const SimpleString& name) : TestPlugin(name) {}
@@ -381,7 +349,10 @@ TEST(TestRegistry, listTestLocations_shouldListBackwardsGroupATestaAfterGroupAte
 
     myRegistry->listTestLocations(*result);
     SimpleString s = output->getOutput();
-    STRCMP_EQUAL("GROUP_A.test_aa.cpptest_simple/my_tests/testaa.cpp.300\nGROUP_B.test_b.cpptest_simple/my tests/testb.cpp.200\nGROUP_A.test_a.cpptest_simple/my_tests/testa.cpp.100\n", s.asCharString());
+    STRCMP_EQUAL(
+        "GROUP_A.test_aa.cpptest_simple/my_tests/testaa.cpp.300\nGROUP_B.test_b.cpptest_simple/my tests/testb.cpp.200\nGROUP_A.test_a.cpptest_simple/my_tests/testa.cpp.100\n",
+        s.asCharString()
+    );
 }
 
 TEST(TestRegistry, shuffleEmptyListIsNoOp)
@@ -410,25 +381,25 @@ IGNORE_TEST(TestRegistry, shuffleTestList)
     myRegistry->addTest(test2);
     myRegistry->addTest(test1);
 
-    UtestShell* first_before  = myRegistry->getFirstTest();
+    UtestShell* first_before = myRegistry->getFirstTest();
     UtestShell* second_before = first_before->getNext();
-    UtestShell* third_before  = second_before->getNext();
+    UtestShell* third_before = second_before->getNext();
 
-    CHECK_TRUE(first_before  == test1);
+    CHECK_TRUE(first_before == test1);
     CHECK_TRUE(second_before == test2);
-    CHECK_TRUE(third_before  == test3);
-    CHECK_TRUE(third_before->getNext()  == NULLPTR);
+    CHECK_TRUE(third_before == test3);
+    CHECK_TRUE(third_before->getNext() == NULLPTR);
 
     // shuffle always with element at index 0: [1] 2 [3] --> [3] [2] 1 --> 2 3 1
     myRegistry->shuffleTests(0);
 
-    UtestShell* first_after  = myRegistry->getFirstTest();
+    UtestShell* first_after = myRegistry->getFirstTest();
     UtestShell* second_after = first_after->getNext();
-    UtestShell* third_after  = second_after->getNext();
+    UtestShell* third_after = second_after->getNext();
 
-    CHECK_TRUE(first_after  == test2);
+    CHECK_TRUE(first_after == test2);
     CHECK_TRUE(second_after == test3);
-    CHECK_TRUE(third_after  == test1);
+    CHECK_TRUE(third_after == test1);
     CHECK_TRUE(third_after->getNext() == NULLPTR);
 }
 

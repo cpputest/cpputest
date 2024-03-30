@@ -1,5 +1,4 @@
-extern "C"
-{
+extern "C" {
 #include "ClassName.h"
 }
 
@@ -9,17 +8,16 @@ TEST_GROUP(ClassName)
 {
     void setup()
     {
-      ClassName_Create();
+        ClassName_Create();
     }
 
     void teardown()
     {
-       ClassName_Destroy();
+        ClassName_Destroy();
     }
 };
 
 TEST(ClassName, Create)
 {
-  FAIL("Start here");
+    FAIL("Start here");
 }
-

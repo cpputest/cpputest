@@ -4,7 +4,7 @@
 #include "TestOutput.h"
 #include "SimpleString.h"
 
-class TeamCityTestOutput: public ConsoleTestOutput
+class TeamCityTestOutput : public ConsoleTestOutput
 {
 public:
     TeamCityTestOutput(void);
@@ -18,10 +18,9 @@ public:
     virtual void printFailure(const TestFailure& failure) _override;
 
 protected:
-
 private:
     void printEscaped(const char* s);
-    const UtestShell *currtest_;
+    const UtestShell* currtest_;
     SimpleString currGroup_;
 };
 

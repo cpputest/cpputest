@@ -32,10 +32,10 @@
 #include "CppUTestExt/MockSupportPlugin.h"
 
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
-#include "CppUTestExt/GTestConvertor.h"
+    #include "CppUTestExt/GTestConvertor.h"
 #endif
 
-int main(int ac, const char *const *av)
+int main(int ac, const char* const* av)
 {
     int result = 0;
     GlobalSimpleStringCache simpleStringCache;
@@ -66,4 +66,3 @@ int main(int ac, const char *const *av)
 
     return result;
 }
-

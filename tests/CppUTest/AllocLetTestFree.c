@@ -3,7 +3,7 @@
 
 #if CPPUTEST_USE_STD_C_LIB
 
-#include "AllocLetTestFree.h"
+    #include "AllocLetTestFree.h"
 
 typedef struct AllocLetTestFreeStruct
 {
@@ -23,6 +23,5 @@ void AllocLetTestFree_Destroy(AllocLetTestFree self)
     self = NULL;
     self = no_use;
     (void)self;
-
 }
 #endif

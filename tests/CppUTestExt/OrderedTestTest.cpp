@@ -129,7 +129,7 @@ TEST(TestOrderedTest, MultipleOrderedTests)
     InstallNormalTest(normalTest3);
     InstallOrderedTest(orderedTest3, 7);
 
-    UtestShell * firstOrderedTest = firstTest()->getNext()->getNext()->getNext();
+    UtestShell* firstOrderedTest = firstTest()->getNext()->getNext()->getNext();
     CHECK(firstOrderedTest == &orderedTest2);
     CHECK(firstOrderedTest->getNext() == &orderedTest);
     CHECK(firstOrderedTest->getNext()->getNext() == &orderedTest3);
@@ -144,21 +144,20 @@ TEST(TestOrderedTest, MultipleOrderedTests2)
     CHECK(firstTest() == &orderedTest2);
     CHECK(secondTest() == &orderedTest3);
     CHECK(secondTest()->getNext() == &orderedTest);
-
 }
 
 class OrderedTestTestingFixture
 {
 public:
-    static void checkRun(int run) {
-        if(run != run_) {
+    static void checkRun(int run)
+    {
+        if (run != run_) {
             run_ = run;
             count_ = 0;
         }
     }
-    static int count(void) {
-        return count_++;
-    }
+    static int count(void) { return count_++; }
+
 private:
     static int run_;
     static int count_;
@@ -234,7 +233,8 @@ TEST_ORDERED(TestOrderedTestMacros, Test8, 8)
 
 // Export to be usable in OrderedTestTest_c.c
 extern "C" {
-int orderedTestFixtureCWrapper(void) {
+int orderedTestFixtureCWrapper(void)
+{
     return OrderedTestTestingFixture::count();
 }
 }

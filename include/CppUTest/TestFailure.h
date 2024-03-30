@@ -32,14 +32,13 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef D_TestFailure_H
 #define D_TestFailure_H
 
 #include "SimpleString.h"
 
 #if CPPUTEST_USE_STD_CPP_LIB
-#include <stdexcept>
+    #include <stdexcept>
 #endif
 
 class UtestShell;
@@ -65,7 +64,6 @@ public:
     bool isOutsideTestFile() const;
     bool isInHelperFunction() const;
 
-
 protected:
     SimpleString createButWasString(const SimpleString& expected, const SimpleString& actual);
     SimpleString createDifferenceAtPosString(const SimpleString& actual, size_t offset, size_t reportedPosition);
@@ -80,17 +78,16 @@ protected:
     SimpleString message_;
 
     TestFailure& operator=(const TestFailure&);
-
 };
 
-class EqualsFailure: public TestFailure
+class EqualsFailure : public TestFailure
 {
 public:
     EqualsFailure(UtestShell*, const char* fileName, size_t lineNumber, const char* expected, const char* actual, const SimpleString& text);
     EqualsFailure(UtestShell*, const char* fileName, size_t lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
 };
 
-class DoublesEqualFailure: public TestFailure
+class DoublesEqualFailure : public TestFailure
 {
 public:
     DoublesEqualFailure(UtestShell*, const char* fileName, size_t lineNumber, double expected, double actual, double threshold, const SimpleString& text);
@@ -105,10 +102,10 @@ public:
 class ComparisonFailure : public TestFailure
 {
 public:
-    ComparisonFailure(UtestShell* test, const char *fileName, size_t lineNumber, const SimpleString& checkString, const SimpleString& comparisonString, const SimpleString& text);
+    ComparisonFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& checkString, const SimpleString& comparisonString, const SimpleString& text);
 };
 
-class ContainsFailure: public TestFailure
+class ContainsFailure : public TestFailure
 {
 public:
     ContainsFailure(UtestShell*, const char* fileName, size_t lineNumber, const SimpleString& expected, const SimpleString& actual, const SimpleString& text);
@@ -117,7 +114,9 @@ public:
 class CheckFailure : public TestFailure
 {
 public:
-    CheckFailure(UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = "");
+    CheckFailure(
+        UtestShell* test, const char* fileName, size_t lineNumber, const SimpleString& checkString, const SimpleString& conditionString, const SimpleString& textString = ""
+    );
 };
 
 class FailFailure : public TestFailure
@@ -153,7 +152,7 @@ public:
 class SignedBytesEqualFailure : public TestFailure
 {
 public:
-    SignedBytesEqualFailure (UtestShell* test, const char* fileName, size_t lineNumber, signed char expected, signed char actual, const SimpleString& text);
+    SignedBytesEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, signed char expected, signed char actual, const SimpleString& text);
 };
 
 class StringEqualFailure : public TestFailure
@@ -171,13 +170,17 @@ public:
 class BinaryEqualFailure : public TestFailure
 {
 public:
-	BinaryEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text);
+    BinaryEqualFailure(
+        UtestShell* test, const char* fileName, size_t lineNumber, const unsigned char* expected, const unsigned char* actual, size_t size, const SimpleString& text
+    );
 };
 
 class BitsEqualFailure : public TestFailure
 {
 public:
-	BitsEqualFailure(UtestShell* test, const char* fileName, size_t lineNumber, unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount, const SimpleString& text);
+    BitsEqualFailure(
+        UtestShell* test, const char* fileName, size_t lineNumber, unsigned long expected, unsigned long actual, unsigned long mask, size_t byteCount, const SimpleString& text
+    );
 };
 
 class FeatureUnsupportedFailure : public TestFailure
@@ -191,9 +194,9 @@ class UnexpectedExceptionFailure : public TestFailure
 {
 public:
     UnexpectedExceptionFailure(UtestShell* test);
-#if CPPUTEST_USE_STD_CPP_LIB
-    UnexpectedExceptionFailure(UtestShell* test, const std::exception &e);
-#endif
+    #if CPPUTEST_USE_STD_CPP_LIB
+    UnexpectedExceptionFailure(UtestShell* test, const std::exception& e);
+    #endif
 };
 #endif
 

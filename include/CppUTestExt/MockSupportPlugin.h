@@ -44,6 +44,7 @@ public:
     virtual void installCopier(const SimpleString& name, MockNamedValueCopier& copier);
 
     void clear();
+
 private:
     MockNamedValueComparatorsAndCopiersRepository repository_;
 };

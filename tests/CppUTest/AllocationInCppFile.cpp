@@ -31,7 +31,7 @@ char* newArrayAllocationWithoutMacro()
 
 ClassThatThrowsAnExceptionInTheConstructor::ClassThatThrowsAnExceptionInTheConstructor()
 {
-  throw 1;
+    throw 1;
 }
 
 #endif

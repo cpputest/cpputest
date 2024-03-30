@@ -55,8 +55,6 @@ static void StubMutexDestroy(PlatformSpecificMutex)
     mutexDestroyCount++;
 }
 
-
-
 TEST_GROUP(SimpleMutexTest)
 {
     void setup() _override
@@ -72,9 +70,7 @@ TEST_GROUP(SimpleMutexTest)
         mutexUnlockCount = 0;
     }
 
-    void teardown() _override
-    {
-    }
+    void teardown() _override {}
 };
 
 TEST(SimpleMutexTest, CreateAndDestroy)

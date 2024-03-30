@@ -37,7 +37,7 @@ class TestPlugin;
 class CommandLineArguments
 {
 public:
-    explicit CommandLineArguments(int ac, const char *const *av);
+    explicit CommandLineArguments(int ac, const char* const* av);
     virtual ~CommandLineArguments();
 
     bool parse(TestPlugin* plugin);
@@ -66,14 +66,15 @@ public:
     const char* help() const;
 
 private:
-
     enum OutputType
     {
-        OUTPUT_ECLIPSE, OUTPUT_JUNIT, OUTPUT_TEAMCITY
+        OUTPUT_ECLIPSE,
+        OUTPUT_JUNIT,
+        OUTPUT_TEAMCITY
     };
 
     int ac_;
-    const char *const *av_;
+    const char* const* av_;
 
     bool needHelp_;
     bool verbose_;
@@ -96,25 +97,24 @@ private:
     OutputType outputType_;
     SimpleString packageName_;
 
-    SimpleString getParameterField(int ac, const char *const *av, int& i, const SimpleString& parameterName);
-    void setRepeatCount(int ac, const char *const *av, int& index);
-    bool setShuffle(int ac, const char *const *av, int& index);
-    void addGroupFilter(int ac, const char *const *av, int& index);
-    bool addGroupDotNameFilter(int ac, const char *const *av, int& index, const SimpleString& parameterName, bool strict, bool exclude);
-    void addStrictGroupFilter(int ac, const char *const *av, int& index);
-    void addExcludeGroupFilter(int ac, const char *const *av, int& index);
-    void addExcludeStrictGroupFilter(int ac, const char *const *av, int& index);
-    void addNameFilter(int ac, const char *const *av, int& index);
-    void addStrictNameFilter(int ac, const char *const *av, int& index);
-    void addExcludeNameFilter(int ac, const char *const *av, int& index);
-    void addExcludeStrictNameFilter(int ac, const char *const *av, int& index);
-    void addTestToRunBasedOnVerboseOutput(int ac, const char *const *av, int& index, const char* parameterName);
-    bool setOutputType(int ac, const char *const *av, int& index);
-    void setPackageName(int ac, const char *const *av, int& index);
+    SimpleString getParameterField(int ac, const char* const* av, int& i, const SimpleString& parameterName);
+    void setRepeatCount(int ac, const char* const* av, int& index);
+    bool setShuffle(int ac, const char* const* av, int& index);
+    void addGroupFilter(int ac, const char* const* av, int& index);
+    bool addGroupDotNameFilter(int ac, const char* const* av, int& index, const SimpleString& parameterName, bool strict, bool exclude);
+    void addStrictGroupFilter(int ac, const char* const* av, int& index);
+    void addExcludeGroupFilter(int ac, const char* const* av, int& index);
+    void addExcludeStrictGroupFilter(int ac, const char* const* av, int& index);
+    void addNameFilter(int ac, const char* const* av, int& index);
+    void addStrictNameFilter(int ac, const char* const* av, int& index);
+    void addExcludeNameFilter(int ac, const char* const* av, int& index);
+    void addExcludeStrictNameFilter(int ac, const char* const* av, int& index);
+    void addTestToRunBasedOnVerboseOutput(int ac, const char* const* av, int& index, const char* parameterName);
+    bool setOutputType(int ac, const char* const* av, int& index);
+    void setPackageName(int ac, const char* const* av, int& index);
 
     CommandLineArguments(const CommandLineArguments&);
     CommandLineArguments& operator=(const CommandLineArguments&);
-
 };
 
 #endif

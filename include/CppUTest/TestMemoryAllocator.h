@@ -81,7 +81,6 @@ public:
     virtual TestMemoryAllocator* actualAllocator();
 
 protected:
-
     const char* name_;
     const char* alloc_name_;
     const char* free_name_;
@@ -103,6 +102,7 @@ public:
     virtual const char* free_name() const _override;
 
     virtual TestMemoryAllocator* actualAllocator() _override;
+
 private:
     TestMemoryAllocator* originalAllocator_;
 };
@@ -110,6 +110,7 @@ private:
 class CrashOnAllocationAllocator : public TestMemoryAllocator
 {
     unsigned allocationToCrashOn_;
+
 public:
     CrashOnAllocationAllocator();
     virtual ~CrashOnAllocationAllocator() _destructor_override;
@@ -119,8 +120,7 @@ public:
     virtual char* alloc_memory(size_t size, const char* file, size_t line) _override;
 };
 
-
-class NullUnknownAllocator: public TestMemoryAllocator
+class NullUnknownAllocator : public TestMemoryAllocator
 {
 public:
     NullUnknownAllocator();
@@ -134,7 +134,7 @@ public:
 
 class LocationToFailAllocNode;
 
-class FailableMemoryAllocator: public TestMemoryAllocator
+class FailableMemoryAllocator : public TestMemoryAllocator
 {
 public:
     FailableMemoryAllocator(const char* name_str = "failable alloc", const char* alloc_name_str = "alloc", const char* free_name_str = "free");
@@ -150,7 +150,6 @@ public:
     virtual void clearFailedAllocs();
 
 protected:
-
     LocationToFailAllocNode* head_;
     int currentAllocNumber_;
 };
@@ -180,6 +179,7 @@ public:
     SimpleString report() const;
 
     void setAllocator(TestMemoryAllocator* allocator);
+
 private:
     MemoryAccountantAllocationNode* findOrCreateNodeOfSize(size_t size);
     MemoryAccountantAllocationNode* findNodeOfSize(size_t size) const;
@@ -198,7 +198,6 @@ private:
     SimpleString reportHeader() const;
     SimpleString reportFooter() const;
     SimpleString stringSize(size_t size) const;
-
 };
 
 struct AccountingTestMemoryAllocatorMemoryNode;
@@ -217,8 +216,8 @@ public:
 
     virtual const char* alloc_name() const _override;
     virtual const char* free_name() const _override;
-private:
 
+private:
     void addMemoryToMemoryTrackingToKeepTrackOfSize(char* memory, size_t size);
     size_t removeMemoryFromTrackingAndReturnAllocatedSize(char* memory);
 
@@ -248,7 +247,6 @@ public:
     TestMemoryAllocator* getNewArrayAllocator();
 
 private:
-
     void restoreMemoryAllocators();
 
     MemoryAccountant accountant_;
@@ -258,4 +256,3 @@ private:
 };
 
 #endif
-

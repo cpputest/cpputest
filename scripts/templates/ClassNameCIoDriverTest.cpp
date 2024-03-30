@@ -24,4 +24,3 @@ TEST(ClassName, Create)
 {
     FAIL("Start here");
 }
-

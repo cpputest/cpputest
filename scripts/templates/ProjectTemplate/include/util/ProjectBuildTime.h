@@ -9,20 +9,18 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 class ProjectBuildTime
-  {
-  public:
+{
+public:
     explicit ProjectBuildTime();
     virtual ~ProjectBuildTime();
-    
+
     const char* GetDateTime();
 
-  private:
-      
+private:
     const char* dateTime;
 
     ProjectBuildTime(const ProjectBuildTime&);
     ProjectBuildTime& operator=(const ProjectBuildTime&);
+};
 
-  };
-
-#endif  // D_ProjectBuildTime_H
+#endif // D_ProjectBuildTime_H

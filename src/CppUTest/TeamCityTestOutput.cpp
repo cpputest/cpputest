@@ -1,13 +1,9 @@
 #include "CppUTest/TestHarness.h"
 #include "CppUTest/TeamCityTestOutput.h"
 
-TeamCityTestOutput::TeamCityTestOutput() : currtest_(NULLPTR), currGroup_()
-{
-}
+TeamCityTestOutput::TeamCityTestOutput() : currtest_(NULLPTR), currGroup_() {}
 
-TeamCityTestOutput::~TeamCityTestOutput()
-{
-}
+TeamCityTestOutput::~TeamCityTestOutput() {}
 
 void TeamCityTestOutput::printCurrentTestStarted(const UtestShell& test)
 {

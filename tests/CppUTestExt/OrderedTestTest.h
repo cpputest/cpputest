@@ -39,4 +39,3 @@ extern int orderedTestFixtureCWrapper(void);
 #endif
 
 #endif /* ORDEREDTESTTEST_H */
-

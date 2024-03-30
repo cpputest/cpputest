@@ -172,8 +172,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUAL)
 
 TEST(UnitTestStringMacros, STRCMP_EQUALBehavesAsProperMacro)
 {
-    if (false) STRCMP_EQUAL("1", "2");
-    else STRCMP_EQUAL("1", "1");
+    if (false)
+        STRCMP_EQUAL("1", "2");
+    else
+        STRCMP_EQUAL("1", "1");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_EQUALWorksInAnIgnoredTest)
@@ -197,8 +199,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_EQUAL_TEXT)
 
 TEST(UnitTestStringMacros, STRCMP_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) STRCMP_EQUAL_TEXT("1", "2", "Failed because it failed");
-    else STRCMP_EQUAL_TEXT("1", "1", "Failed because it failed");
+    if (false)
+        STRCMP_EQUAL_TEXT("1", "2", "Failed because it failed");
+    else
+        STRCMP_EQUAL_TEXT("1", "1", "Failed because it failed");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_EQUAL_TEXTWorksInAnIgnoredTest)
@@ -221,8 +225,10 @@ TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUAL)
 
 TEST(UnitTestStringMacros, STRNCMP_EQUALBehavesAsProperMacro)
 {
-    if (false) STRNCMP_EQUAL("1", "2", 1);
-    else STRNCMP_EQUAL("1", "1", 1);
+    if (false)
+        STRNCMP_EQUAL("1", "2", 1);
+    else
+        STRNCMP_EQUAL("1", "1", 1);
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRNCMP_EQUALWorksInAnIgnoredTest)
@@ -246,8 +252,10 @@ TEST(UnitTestStringMacros, FailureWithSTRNCMP_EQUAL_TEXT)
 
 TEST(UnitTestStringMacros, STRNCMP_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) STRNCMP_EQUAL_TEXT("1", "2", 1, "Failed because it failed");
-    else STRNCMP_EQUAL_TEXT("1", "1", 1, "Failed because it failed");
+    if (false)
+        STRNCMP_EQUAL_TEXT("1", "2", 1, "Failed because it failed");
+    else
+        STRNCMP_EQUAL_TEXT("1", "1", 1, "Failed because it failed");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRNCMP_EQUAL_TEXTWorksInAnIgnoredTest)
@@ -270,8 +278,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUAL)
 
 TEST(UnitTestStringMacros, STRCMP_NOCASE_EQUALBehavesAsProperMacro)
 {
-    if (false) STRCMP_NOCASE_EQUAL("1", "2");
-    else STRCMP_NOCASE_EQUAL("1", "1");
+    if (false)
+        STRCMP_NOCASE_EQUAL("1", "2");
+    else
+        STRCMP_NOCASE_EQUAL("1", "1");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_NOCASE_EQUALWorksInAnIgnoredTest)
@@ -295,8 +305,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_EQUAL_TEXT)
 
 TEST(UnitTestStringMacros, STRCMP_NOCASE_EQUAL_TEXTBehavesAsProperMacro)
 {
-    if (false) STRCMP_NOCASE_EQUAL_TEXT("1", "2", "Failed because it failed");
-    else STRCMP_NOCASE_EQUAL_TEXT("1", "1", "Failed because it failed");
+    if (false)
+        STRCMP_NOCASE_EQUAL_TEXT("1", "2", "Failed because it failed");
+    else
+        STRCMP_NOCASE_EQUAL_TEXT("1", "1", "Failed because it failed");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_NOCASE_EQUAL_TEXTWorksInAnIgnoredTest)
@@ -319,8 +331,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINS)
 
 TEST(UnitTestStringMacros, STRCMP_CONTAINSBehavesAsProperMacro)
 {
-    if (false) STRCMP_CONTAINS("1", "2");
-    else STRCMP_CONTAINS("1", "1");
+    if (false)
+        STRCMP_CONTAINS("1", "2");
+    else
+        STRCMP_CONTAINS("1", "1");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_CONTAINSWorksInAnIgnoredTest)
@@ -344,8 +358,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_CONTAINS_TEXT)
 
 TEST(UnitTestStringMacros, STRCMP_CONTAINS_TEXTBehavesAsProperMacro)
 {
-    if (false) STRCMP_CONTAINS_TEXT("1", "2", "Failed because it failed");
-    else STRCMP_CONTAINS_TEXT("1", "1", "Failed because it failed");
+    if (false)
+        STRCMP_CONTAINS_TEXT("1", "2", "Failed because it failed");
+    else
+        STRCMP_CONTAINS_TEXT("1", "1", "Failed because it failed");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_CONTAINS_TEXTWorksInAnIgnoredTest)
@@ -368,8 +384,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINS)
 
 TEST(UnitTestStringMacros, STRCMP_NOCASE_CONTAINSBehavesAsProperMacro)
 {
-    if (false) STRCMP_NOCASE_CONTAINS("never", "executed");
-    else STRCMP_NOCASE_CONTAINS("hello", "HELLO WORLD");
+    if (false)
+        STRCMP_NOCASE_CONTAINS("never", "executed");
+    else
+        STRCMP_NOCASE_CONTAINS("hello", "HELLO WORLD");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_NO_CASE_CONTAINSWorksInAnIgnoredTest)
@@ -393,8 +411,10 @@ TEST(UnitTestStringMacros, FailureWithSTRCMP_NOCASE_CONTAINS_TEXT)
 
 TEST(UnitTestStringMacros, STRCMP_NOCASE_CONTAINS_TEXTBehavesAsProperMacro)
 {
-    if (false) STRCMP_NOCASE_CONTAINS_TEXT("never", "executed", "Failed because it failed");
-    else STRCMP_NOCASE_CONTAINS_TEXT("hello", "HELLO WORLD", "Failed because it failed");
+    if (false)
+        STRCMP_NOCASE_CONTAINS_TEXT("never", "executed", "Failed because it failed");
+    else
+        STRCMP_NOCASE_CONTAINS_TEXT("hello", "HELLO WORLD", "Failed because it failed");
 }
 
 IGNORE_TEST(UnitTestStringMacros, STRCMP_NO_CASE_CONTAINS_TEXTWorksInAnIgnoredTest)

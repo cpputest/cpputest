@@ -10,20 +10,15 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "ClassName.h"
 
-
 class MockClassName : public ClassName
-  {
-  public:
-    explicit MockClassName()
-    {}
-    virtual ~MockClassName()
-    {}
+{
+public:
+    explicit MockClassName() {}
+    virtual ~MockClassName() {}
 
-  private:
-
+private:
     MockClassName(const MockClassName&);
     MockClassName& operator=(const MockClassName&);
+};
 
-  };
-
-#endif  // D_MockClassName_H
+#endif // D_MockClassName_H

@@ -33,25 +33,21 @@
 #include "CppUTest/JUnitTestOutput.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-
 class DummyPluginWhichCountsThePlugins : public TestPlugin
 {
 public:
-
     bool returnValue;
     int amountOfPlugins;
 
-    DummyPluginWhichCountsThePlugins(const SimpleString& name, TestRegistry* registry) :
-        TestPlugin(name), returnValue(true), amountOfPlugins(0), registry_(registry)
-    {
-    }
+    DummyPluginWhichCountsThePlugins(const SimpleString& name, TestRegistry* registry) : TestPlugin(name), returnValue(true), amountOfPlugins(0), registry_(registry) {}
 
-    virtual bool parseArguments(int, const char *const *, int) _override
+    virtual bool parseArguments(int, const char* const*, int) _override
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
         return returnValue;
     }
+
 private:
     TestRegistry* registry_;
 };
@@ -59,53 +55,54 @@ private:
 class CommandLineTestRunnerWithStringBufferOutput : public CommandLineTestRunner
 {
 public:
-  StringBufferTestOutput* fakeJUnitOutputWhichIsReallyABuffer_;
-  StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
-  StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
+    StringBufferTestOutput* fakeJUnitOutputWhichIsReallyABuffer_;
+    StringBufferTestOutput* fakeConsoleOutputWhichIsReallyABuffer;
+    StringBufferTestOutput* fakeTCOutputWhichIsReallyABuffer;
 
-  CommandLineTestRunnerWithStringBufferOutput(int argc, const char *const *argv, TestRegistry* registry)
-    : CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULLPTR),
-    fakeConsoleOutputWhichIsReallyABuffer(NULLPTR), fakeTCOutputWhichIsReallyABuffer(NULLPTR)
-  {}
+    CommandLineTestRunnerWithStringBufferOutput(int argc, const char* const* argv, TestRegistry* registry) :
+        CommandLineTestRunner(argc, argv, registry), fakeJUnitOutputWhichIsReallyABuffer_(NULLPTR), fakeConsoleOutputWhichIsReallyABuffer(NULLPTR),
+        fakeTCOutputWhichIsReallyABuffer(NULLPTR)
+    {
+    }
 
-  TestOutput* createConsoleOutput() _override
-  {
-    fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
-    return fakeConsoleOutputWhichIsReallyABuffer;
-  }
+    TestOutput* createConsoleOutput() _override
+    {
+        fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
+        return fakeConsoleOutputWhichIsReallyABuffer;
+    }
 
-  TestOutput* createJUnitOutput(const SimpleString&) _override
-  {
-    fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
-    return fakeJUnitOutputWhichIsReallyABuffer_;
-  }
+    TestOutput* createJUnitOutput(const SimpleString&) _override
+    {
+        fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
+        return fakeJUnitOutputWhichIsReallyABuffer_;
+    }
 
-  TestOutput* createTeamCityOutput() _override
-  {
-    fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
-    return fakeTCOutputWhichIsReallyABuffer;
-  }
+    TestOutput* createTeamCityOutput() _override
+    {
+        fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
+        return fakeTCOutputWhichIsReallyABuffer;
+    }
 };
 
 TEST_GROUP(CommandLineTestRunner)
 {
     TestRegistry registry;
-    UtestShell *test1;
-    UtestShell *test2;
+    UtestShell* test1;
+    UtestShell* test2;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup() _override
     {
-      test1 = new UtestShell("group1", "test1", "file1", 1);
-      test2 = new UtestShell("group2", "test2", "file2", 2);
-      registry.addTest(test1);
-      pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
+        test1 = new UtestShell("group1", "test1", "file1", 1);
+        test2 = new UtestShell("group2", "test2", "file2", 2);
+        registry.addTest(test1);
+        pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
     void teardown() _override
     {
-      delete pluginCountingPlugin;
-      delete test2;
-      delete test1;
+        delete pluginCountingPlugin;
+        delete test2;
+        delete test1;
     }
 
     SimpleString runAndGetOutput(const int argc, const char* argv[])
@@ -118,7 +115,7 @@ TEST_GROUP(CommandLineTestRunner)
 
 TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
 {
-    const char* argv[] = { "tests.exe", "-psomething"};
+    const char* argv[] = {"tests.exe", "-psomething"};
 
     registry.installPlugin(pluginCountingPlugin);
 
@@ -132,18 +129,17 @@ TEST(CommandLineTestRunner, OnePluginGetsInstalledDuringTheRunningTheTests)
 
 TEST(CommandLineTestRunner, NoPluginsAreInstalledAtTheEndOfARunWhenTheArgumentsAreInvalid)
 {
-    const char* argv[] = { "tests.exe", "-fdskjnfkds"};
+    const char* argv[] = {"tests.exe", "-fdskjnfkds"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
     LONGS_EQUAL(0, registry.countPlugins());
-
 }
 
 TEST(CommandLineTestRunner, ReturnsOneWhenTheArgumentsAreInvalid)
 {
-    const char* argv[] = { "tests.exe", "-some-invalid=parameter" };
+    const char* argv[] = {"tests.exe", "-some-invalid=parameter"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
@@ -153,7 +149,7 @@ TEST(CommandLineTestRunner, ReturnsOneWhenTheArgumentsAreInvalid)
 
 TEST(CommandLineTestRunner, ReturnsOnePrintsHelpOnHelp)
 {
-    const char* argv[] = { "tests.exe", "-h" };
+    const char* argv[] = {"tests.exe", "-h"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
@@ -162,10 +158,9 @@ TEST(CommandLineTestRunner, ReturnsOnePrintsHelpOnHelp)
     STRCMP_CONTAINS("Thanks for using CppUTest.", commandLineTestRunner.fakeConsoleOutputWhichIsReallyABuffer->getOutput().asCharString());
 }
 
-
 TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
 {
-    const char* argv[] = { "tests.exe" };
+    const char* argv[] = {"tests.exe"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
@@ -175,7 +170,7 @@ TEST(CommandLineTestRunner, ReturnsZeroWhenNoErrors)
 
 TEST(CommandLineTestRunner, ReturnsOneWhenNoTestsMatchProvidedFilter)
 {
-    const char* argv[] = { "tests.exe", "-g", "NoSuchGroup"};
+    const char* argv[] = {"tests.exe", "-g", "NoSuchGroup"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     int returned = commandLineTestRunner.runAllTestsMain();
@@ -193,7 +188,7 @@ TEST(CommandLineTestRunner, TeamcityOutputEnabled)
 
 TEST(CommandLineTestRunner, JunitOutputEnabled)
 {
-    const char* argv[] = { "tests.exe", "-ojunit"};
+    const char* argv[] = {"tests.exe", "-ojunit"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
@@ -202,7 +197,7 @@ TEST(CommandLineTestRunner, JunitOutputEnabled)
 
 TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
 {
-    const char* argv[] = { "tests.exe", "-ojunit", "-v"};
+    const char* argv[] = {"tests.exe", "-ojunit", "-v"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
@@ -212,7 +207,7 @@ TEST(CommandLineTestRunner, JunitOutputAndVerboseEnabled)
 
 TEST(CommandLineTestRunner, veryVerboseSetOnOutput)
 {
-    const char* argv[] = { "tests.exe", "-vv"};
+    const char* argv[] = {"tests.exe", "-vv"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
@@ -222,7 +217,7 @@ TEST(CommandLineTestRunner, veryVerboseSetOnOutput)
 
 TEST(CommandLineTestRunner, defaultTestsAreRunInOrderTheyAreInRepository)
 {
-    const char* argv[] = { "tests.exe", "-v"};
+    const char* argv[] = {"tests.exe", "-v"};
 
     registry.addTest(test2);
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
@@ -236,7 +231,7 @@ TEST(CommandLineTestRunner, defaultTestsAreRunInOrderTheyAreInRepository)
 
 TEST(CommandLineTestRunner, testsCanBeRunInReverseOrder)
 {
-    const char* argv[] = { "tests.exe", "-v", "-b"};
+    const char* argv[] = {"tests.exe", "-v", "-b"};
 
     registry.addTest(test2);
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(3, argv, &registry);
@@ -250,7 +245,7 @@ TEST(CommandLineTestRunner, testsCanBeRunInReverseOrder)
 
 TEST(CommandLineTestRunner, listTestGroupNamesShouldWorkProperly)
 {
-    const char* argv[] = { "tests.exe", "-lg" };
+    const char* argv[] = {"tests.exe", "-lg"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
@@ -260,7 +255,7 @@ TEST(CommandLineTestRunner, listTestGroupNamesShouldWorkProperly)
 
 TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
 {
-    const char* argv[] = { "tests.exe", "-ln" };
+    const char* argv[] = {"tests.exe", "-ln"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
@@ -270,7 +265,7 @@ TEST(CommandLineTestRunner, listTestGroupAndCaseNamesShouldWorkProperly)
 
 TEST(CommandLineTestRunner, listTestLocationsShouldWorkProperly)
 {
-    const char* argv[] = { "tests.exe", "-ll" };
+    const char* argv[] = {"tests.exe", "-ll"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
@@ -281,10 +276,10 @@ TEST(CommandLineTestRunner, listTestLocationsShouldWorkProperly)
 TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
 {
     // more than 1 item in test list ensures that shuffle algorithm calls rand_()
-    UtestShell *anotherTest = new UtestShell("group", "test2", "file", 1);
+    UtestShell* anotherTest = new UtestShell("group", "test2", "file", 1);
     registry.addTest(anotherTest);
 
-    const char* argv[] = { "tests.exe", "-s"};
+    const char* argv[] = {"tests.exe", "-s"};
     SimpleString text = runAndGetOutput(2, argv);
     STRCMP_CONTAINS("shuffling enabled with seed:", text.asCharString());
 
@@ -293,21 +288,20 @@ TEST(CommandLineTestRunner, randomShuffleSeedIsPrintedAndRandFuncIsExercised)
 
 TEST(CommandLineTestRunner, specificShuffleSeedIsPrintedVerbose)
 {
-    const char* argv[] = { "tests.exe", "-s2", "-v"};
+    const char* argv[] = {"tests.exe", "-s2", "-v"};
     SimpleString text = runAndGetOutput(3, argv);
     STRCMP_CONTAINS("shuffling enabled with seed: 2", text.asCharString());
 }
 
 extern "C" {
-    typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
-    typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
-    typedef void (*FCloseFunc)(PlatformSpecificFile);
+typedef PlatformSpecificFile (*FOpenFunc)(const char*, const char*);
+typedef void (*FPutsFunc)(const char*, PlatformSpecificFile);
+typedef void (*FCloseFunc)(PlatformSpecificFile);
 }
 
 struct FakeOutput
 {
-    FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts),
-        SaveFClose(PlatformSpecificFClose)
+    FakeOutput() : SaveFOpen(PlatformSpecificFOpen), SaveFPuts(PlatformSpecificFPuts), SaveFClose(PlatformSpecificFClose)
     {
         installFakes();
         currentFake = this;
@@ -333,29 +327,24 @@ struct FakeOutput
         PlatformSpecificFClose = SaveFClose;
     }
 
-    static PlatformSpecificFile fopen_fake(const char*, const char*)
-    {
-        return (PlatformSpecificFile) NULLPTR;
-    }
+    static PlatformSpecificFile fopen_fake(const char*, const char*) { return (PlatformSpecificFile)NULLPTR; }
 
     static void fputs_fake(const char* str, PlatformSpecificFile f)
     {
         if (f == PlatformSpecificStdOut) {
             currentFake->console += str;
-        }
-        else {
+        } else {
             currentFake->file += str;
         }
     }
 
-    static void fclose_fake(PlatformSpecificFile)
-    {
-    }
+    static void fclose_fake(PlatformSpecificFile) {}
 
     SimpleString file;
     SimpleString console;
 
     static FakeOutput* currentFake;
+
 private:
     FOpenFunc SaveFOpen;
     FPutsFunc SaveFPuts;
@@ -366,7 +355,12 @@ FakeOutput* FakeOutput::currentFake = NULLPTR;
 
 TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 {
-    const char* argv[] = { "tests.exe", "-ojunit", "-v", "-kpackage", };
+    const char* argv[] = {
+        "tests.exe",
+        "-ojunit",
+        "-v",
+        "-kpackage",
+    };
 
     FakeOutput fakeOutput; /* UT_PTR_SET() is not reentrant */
 
@@ -377,12 +371,16 @@ TEST(CommandLineTestRunner, realJunitOutputShouldBeCreatedAndWorkProperly)
 
     STRCMP_CONTAINS("<testcase classname=\"package.group1\" name=\"test1\"", fakeOutput.file.asCharString());
     STRCMP_CONTAINS("TEST(group1, test1)", fakeOutput.console.asCharString());
-
 }
 
 TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
 {
-    const char* argv[] = { "tests.exe", "-oteamcity", "-v", "-kpackage", };
+    const char* argv[] = {
+        "tests.exe",
+        "-oteamcity",
+        "-v",
+        "-kpackage",
+    };
 
     FakeOutput fakeOutput; /* UT_PTR_SET() is not reentrant */
 
@@ -397,15 +395,11 @@ TEST(CommandLineTestRunner, realTeamCityOutputShouldBeCreatedAndWorkProperly)
     STRCMP_CONTAINS("##teamcity[testSuiteFinished name='group1'", fakeOutput.console.asCharString());
 }
 
-
 class RunIgnoredUtest : public Utest
 {
 public:
     static bool Checker;
-    void testBody() _override
-    {
-        Checker = true;
-    }
+    void testBody() _override { Checker = true; }
 };
 
 bool RunIgnoredUtest::Checker = false;
@@ -413,47 +407,46 @@ bool RunIgnoredUtest::Checker = false;
 class RunIgnoredUtestShell : public IgnoredUtestShell
 {
 public:
-    RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber)
-        : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
+    RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber) : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
     virtual Utest* createTest() _override { return new RunIgnoredUtest; }
 };
 
 TEST_GROUP(RunIgnoredTest)
 {
     TestRegistry registry;
-    RunIgnoredUtestShell *runIgnoredTest;
+    RunIgnoredUtestShell* runIgnoredTest;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
     void setup() _override
     {
-      runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
-      registry.addTest(runIgnoredTest);
-      pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
+        runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
+        registry.addTest(runIgnoredTest);
+        pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
     void teardown() _override
     {
-      delete pluginCountingPlugin;
-      delete runIgnoredTest;
-      RunIgnoredUtest::Checker = false;
+        delete pluginCountingPlugin;
+        delete runIgnoredTest;
+        RunIgnoredUtest::Checker = false;
     }
 };
 
 TEST(RunIgnoredTest, IgnoreTestWillBeIgnoredIfNoOptionSpecified)
 {
-    const char* argv[] = { "tests.exe" };
+    const char* argv[] = {"tests.exe"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(1, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    CHECK_FALSE( RunIgnoredUtest::Checker );
+    CHECK_FALSE(RunIgnoredUtest::Checker);
 }
 
 TEST(RunIgnoredTest, IgnoreTestWillGetRunIfOptionSpecified)
 {
-    const char* argv[] = { "tests.exe", "-ri" };
+    const char* argv[] = {"tests.exe", "-ri"};
 
     CommandLineTestRunnerWithStringBufferOutput commandLineTestRunner(2, argv, &registry);
     commandLineTestRunner.runAllTestsMain();
 
-    CHECK_TRUE( RunIgnoredUtest::Checker );
+    CHECK_TRUE(RunIgnoredUtest::Checker);
 }

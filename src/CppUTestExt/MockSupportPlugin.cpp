@@ -33,27 +33,16 @@ class MockSupportPluginReporter : public MockFailureReporter
 {
     UtestShell& test_;
     TestResult& result_;
+
 public:
-    MockSupportPluginReporter(UtestShell& test, TestResult& result)
-        : test_(test), result_(result)
-    {
-    }
+    MockSupportPluginReporter(UtestShell& test, TestResult& result) : test_(test), result_(result) {}
 
-    virtual void failTest(const MockFailure& failure) _override
-    {
-        result_.addFailure(failure);
-    }
+    virtual void failTest(const MockFailure& failure) _override { result_.addFailure(failure); }
 
-    virtual UtestShell* getTestToFail() _override
-    {
-        return &test_;
-    }
+    virtual UtestShell* getTestToFail() _override { return &test_; }
 };
 
-MockSupportPlugin::MockSupportPlugin(const SimpleString& name)
-    : TestPlugin(name)
-{
-}
+MockSupportPlugin::MockSupportPlugin(const SimpleString& name) : TestPlugin(name) {}
 
 MockSupportPlugin::~MockSupportPlugin()
 {

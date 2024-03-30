@@ -31,7 +31,7 @@
 
 #define SHOW_MEMORY_REPORT 0
 
-int main(int ac, char **av)
+int main(int ac, char** av)
 {
     int returnValue = 0;
     GlobalSimpleStringCache stringCache;
@@ -56,4 +56,3 @@ int main(int ac, char **av)
 
     return returnValue;
 }
-

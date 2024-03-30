@@ -31,12 +31,10 @@
 int main(int ac, char** av)
 {
     /* Specify commandline arguments here as needed */
-    char* argv[] =
-    {
-        (char*) 0,
-        (char*) "-v",
-//      (char*) "-gSimpleStringBuffer",
-//      (char*) "-ojunit",
+    char* argv[] = {
+        (char*)0, (char*)"-v",
+        //      (char*) "-gSimpleStringBuffer",
+        //      (char*) "-ojunit",
     };
 
     ac = sizeof(argv) / sizeof(char*);
@@ -47,4 +45,3 @@ int main(int ac, char** av)
 
     return CommandLineTestRunner::RunAllTests(ac, argv);
 }
-

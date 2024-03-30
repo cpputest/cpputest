@@ -37,16 +37,14 @@ static TestMemoryAllocator* previousNewAllocator;
 class TemporaryDefaultNewAllocator
 {
     TestMemoryAllocator* newAllocator;
+
 public:
     TemporaryDefaultNewAllocator(TestMemoryAllocator* oldAllocator)
     {
         newAllocator = getCurrentNewAllocator();
         setCurrentNewAllocator(oldAllocator);
     }
-    ~TemporaryDefaultNewAllocator()
-    {
-        setCurrentNewAllocator(newAllocator);
-    }
+    ~TemporaryDefaultNewAllocator() { setCurrentNewAllocator(newAllocator); }
 };
 
 class MockMemoryReportFormatter : public MemoryReportFormatter
@@ -76,13 +74,13 @@ public:
         mock("formatter").actualCall("report_test_end").withParameter("result", result).withParameter("test", &test);
     }
 
-    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t, char* , const char* , size_t ) _override
+    virtual void report_alloc_memory(TestResult* result, TestMemoryAllocator* allocator, size_t, char*, const char*, size_t) _override
     {
         TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
         mock("formatter").actualCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", allocator);
     }
 
-    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char* , const char* , size_t ) _override
+    virtual void report_free_memory(TestResult* result, TestMemoryAllocator* allocator, char*, const char*, size_t) _override
     {
         TemporaryDefaultNewAllocator tempAlloc(previousNewAllocator);
         mock("formatter").actualCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", allocator);
@@ -104,15 +102,8 @@ public:
 class TestMemoryAllocatorComparator : public MockNamedValueComparator
 {
 public:
-    bool isEqual(const void* object1, const void* object2) _override
-    {
-        return ((const TestMemoryAllocator*)object1)->name() == ((const TestMemoryAllocator*)object2)->name();
-    }
-    SimpleString valueToString(const void* object) _override
-    {
-        return ((const TestMemoryAllocator*)object)->name();
-    }
-
+    bool isEqual(const void* object1, const void* object2) _override { return ((const TestMemoryAllocator*)object1)->name() == ((const TestMemoryAllocator*)object2)->name(); }
+    SimpleString valueToString(const void* object) _override { return ((const TestMemoryAllocator*)object)->name(); }
 };
 
 TEST_GROUP(MemoryReporterPlugin)
@@ -134,7 +125,7 @@ TEST_GROUP(MemoryReporterPlugin)
         mock("formatter").installComparator("TestMemoryAllocator", memLeakAllocatorComparator);
 
         mock("reporter").disable();
-        const char *cmd_line[] = {"-pmemoryreport=normal"};
+        const char* cmd_line[] = {"-pmemoryreport=normal"};
         reporter->parseArguments(1, cmd_line, 0);
         mock("reporter").enable();
     }
@@ -159,7 +150,7 @@ TEST(MemoryReporterPlugin, offReportsNothing)
 
 TEST(MemoryReporterPlugin, meaninglessArgumentsAreIgnored)
 {
-    const char *cmd_line[] = {"-nothing", "-pnotmemoryreport=normal", "alsomeaningless", "-pmemoryreportnonsensebutnotus"};
+    const char* cmd_line[] = {"-nothing", "-pnotmemoryreport=normal", "alsomeaningless", "-pmemoryreportnonsensebutnotus"};
     CHECK(reporter->parseArguments(3, cmd_line, 1) == false);
 }
 
@@ -167,7 +158,7 @@ TEST(MemoryReporterPlugin, commandLineParameterTurnsOnNormalLogging)
 {
     mock("reporter").expectOneCall("createMemoryFormatter").onObject(reporter).withParameter("type", "normal");
 
-    const char *cmd_line[] = {"-nothing", "-pmemoryreport=normal", "alsomeaningless" };
+    const char* cmd_line[] = {"-nothing", "-pmemoryreport=normal", "alsomeaningless"};
     CHECK(reporter->parseArguments(3, cmd_line, 1));
 }
 
@@ -193,7 +184,7 @@ TEST(MemoryReporterPlugin, newAllocationsAreReportedTest)
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
-    char *memory = getCurrentNewAllocator()->allocMemoryLeakNode(100);
+    char* memory = getCurrentNewAllocator()->allocMemoryLeakNode(100);
     getCurrentNewAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
@@ -205,18 +196,21 @@ TEST(MemoryReporterPlugin, whenUsingOnlyMallocAllocatorNoOtherOfTheAllocatorsAre
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
-    char *memory = getCurrentMallocAllocator()->allocMemoryLeakNode(100);
+    char* memory = getCurrentMallocAllocator()->allocMemoryLeakNode(100);
     getCurrentMallocAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
 TEST(MemoryReporterPlugin, newArrayAllocationsAreReportedTest)
 {
-    mock("formatter").expectOneCall("report_alloc_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewArrayAllocator());
+    mock("formatter")
+        .expectOneCall("report_alloc_memory")
+        .withParameter("result", result)
+        .withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewArrayAllocator());
     mock("formatter").expectOneCall("report_free_memory").withParameter("result", result).withParameterOfType("TestMemoryAllocator", "allocator", reporter->getNewArrayAllocator());
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
-    char *memory = getCurrentNewArrayAllocator()->allocMemoryLeakNode(100);
+    char* memory = getCurrentNewArrayAllocator()->allocMemoryLeakNode(100);
     getCurrentNewArrayAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
@@ -227,7 +221,7 @@ TEST(MemoryReporterPlugin, mallocAllocationsAreReportedTest)
     mock("formatter").ignoreOtherCalls();
 
     reporter->preTestAction(*test, *result);
-    char *memory = getCurrentMallocAllocator()->allocMemoryLeakNode(100);
+    char* memory = getCurrentMallocAllocator()->allocMemoryLeakNode(100);
     getCurrentMallocAllocator()->free_memory(memory, 100, "unknown", 1);
 }
 
@@ -249,10 +243,7 @@ TEST(MemoryReporterPlugin, startOfANewTestWillReportTheTestGroupStart)
 class UtestForMemoryReportingPlugingTest : public UtestShell
 {
 public:
-    UtestForMemoryReportingPlugingTest(const char* groupname, UtestShell* test) : UtestShell(groupname, "testname", "filename", 1, test)
-    {
-
-    }
+    UtestForMemoryReportingPlugingTest(const char* groupname, UtestShell* test) : UtestShell(groupname, "testname", "filename", 1, test) {}
 };
 
 TEST(MemoryReporterPlugin, endOfaTestGroupWillReportSo)
@@ -295,21 +286,21 @@ TEST(MemoryReporterPlugin, postActionRestoresAllocators)
 TEST(MemoryReporterPlugin, shouldCreateNormalMemoryReportFormatterWithoutMock)
 {
     MemoryReporterPlugin realReporter;
-    const char *cmd_line[] = {"-pmemoryreport=normal"};
+    const char* cmd_line[] = {"-pmemoryreport=normal"};
     CHECK(realReporter.parseArguments(1, cmd_line, 0));
 }
 
 TEST(MemoryReporterPlugin, shouldCreateCodeMemoryReportFormatterWithoutMock)
 {
     MemoryReporterPlugin realReporter;
-    const char *cmd_line[] = {"-pmemoryreport=code"};
+    const char* cmd_line[] = {"-pmemoryreport=code"};
     CHECK(realReporter.parseArguments(1, cmd_line, 0));
 }
 
 TEST(MemoryReporterPlugin, shouldntCrashCreateInvalidMemoryReportFormatterWithoutMock)
 {
     MemoryReporterPlugin realReporter;
-    const char *cmd_line[] = {"-pmemoryreport=foo"};
+    const char* cmd_line[] = {"-pmemoryreport=foo"};
     CHECK(realReporter.parseArguments(1, cmd_line, 0));
     realReporter.preTestAction(*test, *result);
     realReporter.postTestAction(*test, *result);

@@ -31,12 +31,13 @@
 #include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TestHarness_c.h"
 
-extern "C"
-{
+extern "C" {
 
 void CHECK_EQUAL_C_BOOL_LOCATION(int expected, int actual, const char* text, const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->assertEquals(!!expected != !!actual, expected ? "true" : "false", actual ? "true" : "false", text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertEquals(
+        !!expected != !!actual, expected ? "true" : "false", actual ? "true" : "false", text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions()
+    );
 }
 
 void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* text, const char* fileName, size_t lineNumber)
@@ -46,7 +47,9 @@ void CHECK_EQUAL_C_INT_LOCATION(int expected, int actual, const char* text, cons
 
 void CHECK_EQUAL_C_UINT_LOCATION(unsigned int expected, unsigned int actual, const char* text, const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertUnsignedLongsEqual(
+        (unsigned long)expected, (unsigned long)actual, text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions()
+    );
 }
 
 void CHECK_EQUAL_C_LONG_LOCATION(long expected, long actual, const char* text, const char* fileName, size_t lineNumber)
@@ -76,17 +79,26 @@ void CHECK_EQUAL_C_REAL_LOCATION(double expected, double actual, double threshol
 
 void CHECK_EQUAL_C_CHAR_LOCATION(char expected, char actual, const char* text, const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->assertEquals(((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertEquals(
+        ((expected) != (actual)), StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), text, fileName, lineNumber,
+        UtestShell::getCurrentTestTerminatorWithoutExceptions()
+    );
 }
 
-extern void CHECK_EQUAL_C_UBYTE_LOCATION(unsigned char expected, unsigned char actual, const char* text, const char* fileName, size_t lineNumber)\
+extern void CHECK_EQUAL_C_UBYTE_LOCATION(unsigned char expected, unsigned char actual, const char* text, const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->assertEquals(((expected) != (actual)),StringFrom((int)expected).asCharString(), StringFrom((int) actual).asCharString(), text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertEquals(
+        ((expected) != (actual)), StringFrom((int)expected).asCharString(), StringFrom((int)actual).asCharString(), text, fileName, lineNumber,
+        UtestShell::getCurrentTestTerminatorWithoutExceptions()
+    );
 }
 
 void CHECK_EQUAL_C_SBYTE_LOCATION(char signed expected, signed char actual, const char* text, const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->assertEquals(((expected) != (actual)),StringFrom((int)expected).asCharString(), StringFrom((int) actual).asCharString(), text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->assertEquals(
+        ((expected) != (actual)), StringFrom((int)expected).asCharString(), StringFrom((int)actual).asCharString(), text, fileName, lineNumber,
+        UtestShell::getCurrentTestTerminatorWithoutExceptions()
+    );
 }
 
 void CHECK_EQUAL_C_STRING_LOCATION(const char* expected, const char* actual, const char* text, const char* fileName, size_t lineNumber)
@@ -111,12 +123,12 @@ extern void CHECK_EQUAL_C_BITS_LOCATION(unsigned int expected, unsigned int actu
 
 void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->fail(text,  fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->fail(text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
 } // LCOV_EXCL_LINE
 
 void FAIL_C_LOCATION(const char* fileName, size_t lineNumber)
 {
-    UtestShell::getCurrent()->fail("",  fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
+    UtestShell::getCurrent()->fail("", fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
 } // LCOV_EXCL_LINE
 
 void CHECK_C_LOCATION(int condition, const char* conditionString, const char* text, const char* fileName, size_t lineNumber)
@@ -124,7 +136,11 @@ void CHECK_C_LOCATION(int condition, const char* conditionString, const char* te
     UtestShell::getCurrent()->assertTrue(condition != 0, "CHECK_C", conditionString, text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
 }
 
-enum { NO_COUNTDOWN = -1, OUT_OF_MEMORRY = 0 };
+enum
+{
+    NO_COUNTDOWN = -1,
+    OUT_OF_MEMORRY = 0
+};
 static int malloc_out_of_memory_counter = NO_COUNTDOWN;
 static int malloc_count = 0;
 
@@ -212,28 +228,29 @@ void* cpputest_malloc_location(size_t size, const char* file, size_t line)
     return cpputest_malloc_location_with_leak_detection(size, file, line);
 }
 
-static size_t test_harness_c_strlen(const char * str)
+static size_t test_harness_c_strlen(const char* str)
 {
     size_t n = 0;
-    while (*str++) n++;
+    while (*str++)
+        n++;
     return n;
 }
 
-static char* strdup_alloc(const char * str, size_t size, const char* file, size_t line)
+static char* strdup_alloc(const char* str, size_t size, const char* file, size_t line)
 {
-    char* result = (char*) cpputest_malloc_location(size, file, line);
+    char* result = (char*)cpputest_malloc_location(size, file, line);
     PlatformSpecificMemCpy(result, str, size);
-    result[size-1] = '\0';
+    result[size - 1] = '\0';
     return result;
 }
 
-char* cpputest_strdup_location(const char * str, const char* file, size_t line)
+char* cpputest_strdup_location(const char* str, const char* file, size_t line)
 {
     size_t length = 1 + test_harness_c_strlen(str);
     return strdup_alloc(str, length, file, line);
 }
 
-char* cpputest_strndup_location(const char * str, size_t n, const char* file, size_t line)
+char* cpputest_strndup_location(const char* str, size_t n, const char* file, size_t line)
 {
     size_t length = test_harness_c_strlen(str);
     length = length < n ? length : n;
@@ -241,12 +258,11 @@ char* cpputest_strndup_location(const char * str, size_t n, const char* file, si
     return strdup_alloc(str, length, file, line);
 }
 
-
 void* cpputest_calloc_location(size_t num, size_t size, const char* file, size_t line)
 {
     void* mem = cpputest_malloc_location(num * size, file, line);
     if (mem)
-        PlatformSpecificMemset(mem, 0, num*size);
+        PlatformSpecificMemset(mem, 0, num * size);
     return mem;
 }
 
@@ -259,5 +275,4 @@ void cpputest_free_location(void* buffer, const char* file, size_t line)
 {
     cpputest_free_location_with_leak_detection(buffer, file, line);
 }
-
 }

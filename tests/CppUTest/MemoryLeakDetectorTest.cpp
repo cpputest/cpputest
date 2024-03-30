@@ -30,29 +30,20 @@
 #include "CppUTest/TestMemoryAllocator.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-class MemoryLeakFailureForTest: public MemoryLeakFailure
+class MemoryLeakFailureForTest : public MemoryLeakFailure
 {
 public:
-    virtual ~MemoryLeakFailureForTest() _destructor_override
-    {
-    }
+    virtual ~MemoryLeakFailureForTest() _destructor_override {}
 
-    virtual void fail(char* fail_string) _override
-    {
-        *message = fail_string;
-    }
+    virtual void fail(char* fail_string) _override { *message = fail_string; }
 
-    SimpleString *message;
+    SimpleString* message;
 };
 
-class NewAllocatorForMemoryLeakDetectionTest: public TestMemoryAllocator
+class NewAllocatorForMemoryLeakDetectionTest : public TestMemoryAllocator
 {
 public:
-    NewAllocatorForMemoryLeakDetectionTest() :
-        TestMemoryAllocator("Standard New Allocator", "new", "delete"),
-        alloc_called(0), free_called(0)
-    {
-    }
+    NewAllocatorForMemoryLeakDetectionTest() : TestMemoryAllocator("Standard New Allocator", "new", "delete"), alloc_called(0), free_called(0) {}
 
     int alloc_called;
     int free_called;
@@ -68,13 +59,10 @@ public:
     }
 };
 
-class AllocatorForMemoryLeakDetectionTest: public TestMemoryAllocator
+class AllocatorForMemoryLeakDetectionTest : public TestMemoryAllocator
 {
 public:
-    AllocatorForMemoryLeakDetectionTest() :
-        alloc_called(0), free_called(0), allocMemoryLeakNodeCalled(0), freeMemoryLeakNodeCalled(0)
-    {
-    }
+    AllocatorForMemoryLeakDetectionTest() : alloc_called(0), free_called(0), allocMemoryLeakNodeCalled(0), freeMemoryLeakNodeCalled(0) {}
 
     int alloc_called;
     int free_called;
@@ -101,14 +89,14 @@ public:
     void freeMemoryLeakNode(char* memory) _override
     {
         freeMemoryLeakNodeCalled++;
-        TestMemoryAllocator::free_memory(memory, 0,  __FILE__, __LINE__);
+        TestMemoryAllocator::free_memory(memory, 0, __FILE__, __LINE__);
     }
 };
 
 TEST_GROUP(MemoryLeakDetectorTest)
 {
     MemoryLeakDetector* detector;
-    MemoryLeakFailureForTest *reporter;
+    MemoryLeakFailureForTest* reporter;
     AllocatorForMemoryLeakDetectionTest* testAllocator;
 
     void setup() _override
@@ -137,7 +125,7 @@ TEST(MemoryLeakDetectorTest, OneLeak)
     STRCMP_CONTAINS("Memory leak(s) found", output.asCharString());
     STRCMP_CONTAINS("size: 3", output.asCharString());
     STRCMP_CONTAINS("alloc", output.asCharString());
-    STRCMP_CONTAINS(StringFromFormat("%p", (void*) mem).asCharString(), output.asCharString());
+    STRCMP_CONTAINS(StringFromFormat("%p", (void*)mem).asCharString(), output.asCharString());
     STRCMP_CONTAINS("Total number of leaks", output.asCharString());
     PlatformSpecificFree(mem);
     LONGS_EQUAL(1, testAllocator->alloc_called);
@@ -167,8 +155,8 @@ TEST(MemoryLeakDetectorTest, memoryDumpOutput)
     SimpleString output = detector->report(mem_leak_period_checking);
 
     STRCMP_CONTAINS("Alloc num (1)", output.asCharString());
-    STRCMP_CONTAINS("Leak size: 6 Allocated at",  output.asCharString());
-    STRCMP_CONTAINS("Content:",  output.asCharString());
+    STRCMP_CONTAINS("Leak size: 6 Allocated at", output.asCharString());
+    STRCMP_CONTAINS("Content:", output.asCharString());
     STRCMP_CONTAINS("0000: 74 65 73 74 31 00                                |test1.|", output.asCharString());
 
     PlatformSpecificFree(mem);
@@ -177,7 +165,7 @@ TEST(MemoryLeakDetectorTest, memoryDumpOutput)
 TEST(MemoryLeakDetectorTest, OneHundredLeaks)
 {
     const int amount_alloc = 100;
-    char *mem[amount_alloc];
+    char* mem[amount_alloc];
     for (int i = 0; i < amount_alloc; i++)
         mem[i] = detector->allocMemory(defaultMallocAllocator(), 3);
     detector->stopChecking();
@@ -188,7 +176,7 @@ TEST(MemoryLeakDetectorTest, OneHundredLeaks)
     STRCMP_CONTAINS("Total number of leaks", output.asCharString());
     STRCMP_CONTAINS("Memory leak reports about malloc and free", output.asCharString());
 
-    //don't reuse i for vc6 compatibility
+    // don't reuse i for vc6 compatibility
     for (int j = 0; j < amount_alloc; j++)
         PlatformSpecificFree(mem[j]);
 }
@@ -410,7 +398,7 @@ TEST(MemoryLeakDetectorTest, newLeakDoesNotGiveAdditionalWarning)
     char* mem = detector->allocMemory(defaultNewAllocator(), 100, "ALLOC.c", 10);
     detector->stopChecking();
     SimpleString output = detector->report(mem_leak_period_checking);
-    CHECK(! output.contains("Memory leak reports about malloc and free"));
+    CHECK(!output.contains("Memory leak reports about malloc and free"));
     PlatformSpecificFree(mem);
 }
 
@@ -529,17 +517,17 @@ TEST(MemoryLeakDetectorTest, allocateWithANullAllocatorCausesNoProblems)
 
 TEST(MemoryLeakDetectorTest, invalidateMemory)
 {
-  unsigned char* mem = (unsigned char*)detector->allocMemory(defaultMallocAllocator(), 2);
+    unsigned char* mem = (unsigned char*)detector->allocMemory(defaultMallocAllocator(), 2);
 
-  detector->invalidateMemory((char*)mem);
-  CHECK(mem[0] == 0xCD);
-  CHECK(mem[1] == 0xCD);
-  detector->deallocMemory(defaultMallocAllocator(), mem);
+    detector->invalidateMemory((char*)mem);
+    CHECK(mem[0] == 0xCD);
+    CHECK(mem[1] == 0xCD);
+    detector->deallocMemory(defaultMallocAllocator(), mem);
 }
 
 TEST(MemoryLeakDetectorTest, invalidateMemoryNULLShouldWork)
 {
-  detector->invalidateMemory(NULLPTR);
+    detector->invalidateMemory(NULLPTR);
 }
 
 TEST_GROUP(MemoryLeakDetectorListTest)
@@ -584,7 +572,7 @@ TEST(SimpleStringBuffer, writePastLimit)
     SimpleStringBuffer buffer;
     for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN * 2; i++)
         buffer.add("h");
-    SimpleString str("h", SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN-1);
+    SimpleString str("h", SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - 1);
     STRCMP_EQUAL(str.asCharString(), buffer.toString());
 }
 
@@ -592,7 +580,7 @@ TEST(SimpleStringBuffer, setWriteLimit)
 {
     SimpleStringBuffer buffer;
     buffer.setWriteLimit(10);
-    for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN ; i++)
+    for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN; i++)
         buffer.add("h");
     SimpleString str("h", 10);
     STRCMP_EQUAL(str.asCharString(), buffer.toString());
@@ -601,10 +589,10 @@ TEST(SimpleStringBuffer, setWriteLimit)
 TEST(SimpleStringBuffer, setWriteLimitTooHighIsIgnored)
 {
     SimpleStringBuffer buffer;
-    buffer.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN+10);
-    for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN+10; i++)
+    buffer.setWriteLimit(SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN + 10);
+    for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN + 10; i++)
         buffer.add("h");
-    SimpleString str("h", SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN-1);
+    SimpleString str("h", SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN - 1);
     STRCMP_EQUAL(str.asCharString(), buffer.toString());
 }
 
@@ -612,7 +600,7 @@ TEST(SimpleStringBuffer, resetWriteLimit)
 {
     SimpleStringBuffer buffer;
     buffer.setWriteLimit(10);
-    for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN ; i++)
+    for (int i = 0; i < SimpleStringBuffer::SIMPLE_STRING_BUFFER_LEN; i++)
         buffer.add("h");
     buffer.resetWriteLimit();
     buffer.add("%s", SimpleString("h", 10).asCharString());
@@ -625,9 +613,11 @@ TEST(SimpleStringBuffer, addMemoryDumpOneLinePlusOnePartial)
 {
     SimpleStringBuffer buffer;
     buffer.addMemoryDump("deadbeefdeadbeefhopsxx", 22);
-    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66  64 65 61 64 62 65 65 66 |deadbeefdeadbeef|\n"
-                 "    0010: 68 6f 70 73 78 78                                |hopsxx|\n",
-                 buffer.toString());
+    STRCMP_EQUAL(
+        "    0000: 64 65 61 64 62 65 65 66  64 65 61 64 62 65 65 66 |deadbeefdeadbeef|\n"
+        "    0010: 68 6f 70 73 78 78                                |hopsxx|\n",
+        buffer.toString()
+    );
 }
 
 TEST(SimpleStringBuffer, addMemoryDumpNonPrintable)
@@ -635,32 +625,28 @@ TEST(SimpleStringBuffer, addMemoryDumpNonPrintable)
     SimpleStringBuffer buffer;
     // Ensure we test edge cases - NUL, 0x1F, 0x7F, 0xFF
     buffer.addMemoryDump("\x15\x7f\xff\x00\x1ftdd", 8);
-    STRCMP_EQUAL("    0000: 15 7f ff 00 1f 74 64 64                          |.....tdd|\n",
-                 buffer.toString());
+    STRCMP_EQUAL("    0000: 15 7f ff 00 1f 74 64 64                          |.....tdd|\n", buffer.toString());
 }
 
 TEST(SimpleStringBuffer, addMemoryDumpOneLine)
 {
     SimpleStringBuffer buffer;
     buffer.addMemoryDump("deadbeefdeadbeef", 16);
-    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66  64 65 61 64 62 65 65 66 |deadbeefdeadbeef|\n",
-                 buffer.toString());
+    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66  64 65 61 64 62 65 65 66 |deadbeefdeadbeef|\n", buffer.toString());
 }
 
 TEST(SimpleStringBuffer, addMemoryDumpOneHalfLine)
 {
     SimpleStringBuffer buffer;
     buffer.addMemoryDump("deadbeef", 8);
-    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66                          |deadbeef|\n",
-                 buffer.toString());
+    STRCMP_EQUAL("    0000: 64 65 61 64 62 65 65 66                          |deadbeef|\n", buffer.toString());
 }
 
 TEST(SimpleStringBuffer, addMemoryDumpOneByte)
 {
     SimpleStringBuffer buffer;
     buffer.addMemoryDump("Z", 1);
-    STRCMP_EQUAL("    0000: 5a                                               |Z|\n",
-                 buffer.toString());
+    STRCMP_EQUAL("    0000: 5a                                               |Z|\n", buffer.toString());
 }
 
 TEST(SimpleStringBuffer, addMemoryDumpZeroBytes)
