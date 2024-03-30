@@ -33,7 +33,7 @@ FixNamespaceComments: false
 IndentPPDirectives: BeforeHash
 IndentWidth: 4
 IndentExternBlock: NoIndent
-PackConstructorInitializers: CurrentLine
+PackConstructorInitializers: BinPack
 PointerAlignment: Left
 SortIncludes: Never
 SpaceBeforeParens: Custom
