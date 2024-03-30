@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -42,7 +41,7 @@
 #undef strdup
 #undef strndup
 
-#define  far  // eliminate "meaningless type qualifier" warning
+#define far // eliminate "meaningless type qualifier" warning
 
 #include "CppUTest/PlatformSpecificFunctions.h"
 
@@ -69,14 +68,13 @@ static int DummyPlatformSpecificWaitPid(int, int*, int)
     return 0;
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        DummyPlatformSpecificRunTestInASeperateProcess;
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) = DummyPlatformSpecificRunTestInASeperateProcess;
 int (*PlatformSpecificFork)(void) = DummyPlatformSpecificFork;
 int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
 
 extern "C" {
 
-static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), void* data)
+static int PlatformSpecificSetJmpImplementation(void (*function)(void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -104,9 +102,9 @@ void (*PlatformSpecificRestoreJumpBuffer)() = PlatformSpecificRestoreJumpBufferI
 
 ///////////// Time in millis
 /*
-*  In Keil MDK-ARM, clock() default implementation used semihosting.
-*  Resolutions is user adjustable (1 ms for now)
-*/
+ *  In Keil MDK-ARM, clock() default implementation used semihosting.
+ *  Resolutions is user adjustable (1 ms for now)
+ */
 static unsigned long TimeInMillisImplementation()
 {
     clock_t t = clock();
@@ -124,11 +122,11 @@ static const char* DummyTimeStringImplementation()
 unsigned long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 const char* (*GetPlatformSpecificTimeString)() = DummyTimeStringImplementation;
 
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list args) = vsnprintf;
+int (*PlatformSpecificVSNprintf)(char* str, size_t size, const char* format, va_list args) = vsnprintf;
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-   return fopen(filename, flag);
+    return fopen(filename, flag);
 }
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
@@ -172,7 +170,7 @@ static int IsInfImplementation(double d)
     return isinf(d);
 }
 
-static int AtExitImplementation(void(*func)(void))
+static int AtExitImplementation(void (*func)(void))
 {
     return atexit(func);
 }
@@ -180,29 +178,22 @@ static int AtExitImplementation(void(*func)(void))
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = AtExitImplementation;
+int (*PlatformSpecificAtExit)(void (*func)(void)) = AtExitImplementation;
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
     return 0;
 }
 
-static void DummyMutexLock(PlatformSpecificMutex)
-{
-}
+static void DummyMutexLock(PlatformSpecificMutex) {}
 
-static void DummyMutexUnlock(PlatformSpecificMutex)
-{
-}
+static void DummyMutexUnlock(PlatformSpecificMutex) {}
 
-static void DummyMutexDestroy(PlatformSpecificMutex)
-{
-}
+static void DummyMutexDestroy(PlatformSpecificMutex) {}
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;
 void (*PlatformSpecificMutexUnlock)(PlatformSpecificMutex) = DummyMutexUnlock;
 void (*PlatformSpecificMutexDestroy)(PlatformSpecificMutex) = DummyMutexDestroy;
 void (*PlatformSpecificAbort)(void) = abort;
-
 }

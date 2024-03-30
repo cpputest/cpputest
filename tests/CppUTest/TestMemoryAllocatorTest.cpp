@@ -125,9 +125,9 @@ TEST(TestMemoryAllocatorTest, NullUnknownNames)
     STRCMP_EQUAL("unknown", allocator->free_name());
 }
 
-#if (! CPPUTEST_SANITIZE_ADDRESS)
+#if (!CPPUTEST_SANITIZE_ADDRESS)
 
-#define MAX_SIZE_FOR_ALLOC ((size_t) -1 > (unsigned short)-1) ? (size_t)(-97) : (size_t)(-1)
+    #define MAX_SIZE_FOR_ALLOC ((size_t)-1 > (unsigned short)-1) ? (size_t)(-97) : (size_t)(-1)
 
 static void failTryingToAllocateTooMuchMemory(void)
 {
@@ -190,7 +190,7 @@ TEST(MemoryLeakAllocator, name)
 }
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
-#if CPPUTEST_USE_MALLOC_MACROS
+    #if CPPUTEST_USE_MALLOC_MACROS
 
 class FailableMemoryAllocatorExecFunction : public ExecFunction
 {
@@ -198,10 +198,7 @@ public:
     FailableMemoryAllocator* allocator_;
     void (*testFunction_)(FailableMemoryAllocator*);
 
-    void exec() _override
-    {
-        testFunction_(allocator_);
-    }
+    void exec() _override { testFunction_(allocator_); }
 
     FailableMemoryAllocatorExecFunction() : allocator_(NULLPTR), testFunction_(NULLPTR) {}
     virtual ~FailableMemoryAllocatorExecFunction() _destructor_override {}
@@ -209,7 +206,7 @@ public:
 
 TEST_GROUP(FailableMemoryAllocator)
 {
-    FailableMemoryAllocator *failableMallocAllocator;
+    FailableMemoryAllocator* failableMallocAllocator;
     FailableMemoryAllocatorExecFunction testFunction;
     TestTestingFixture fixture;
     GlobalMemoryAllocatorStash stash;
@@ -232,7 +229,7 @@ TEST_GROUP(FailableMemoryAllocator)
 
 TEST(FailableMemoryAllocator, MallocWorksNormallyIfNotAskedToFail)
 {
-    int *memory = (int*)malloc(sizeof(int));
+    int* memory = (int*)malloc(sizeof(int));
     CHECK(memory != NULLPTR);
     free(memory);
 }
@@ -247,10 +244,10 @@ TEST(FailableMemoryAllocator, FailSecondAndFourthMalloc)
 {
     failableMallocAllocator->failAllocNumber(2);
     failableMallocAllocator->failAllocNumber(4);
-    int *memory1 = (int*)malloc(sizeof(int));
-    int *memory2 = (int*)malloc(sizeof(int));
-    int *memory3 = (int*)malloc(sizeof(int));
-    int *memory4 = (int*)malloc(sizeof(int));
+    int* memory1 = (int*)malloc(sizeof(int));
+    int* memory2 = (int*)malloc(sizeof(int));
+    int* memory3 = (int*)malloc(sizeof(int));
+    int* memory4 = (int*)malloc(sizeof(int));
 
     CHECK(NULLPTR != memory1);
     POINTERS_EQUAL(NULLPTR, memory2);
@@ -291,16 +288,15 @@ TEST(FailableMemoryAllocator, FailFirstAllocationAtGivenLine)
 
 TEST(FailableMemoryAllocator, FailThirdAllocationAtGivenLine)
 {
-    int *memory[10] = { NULLPTR };
+    int* memory[10] = {NULLPTR};
     int allocation;
     failableMallocAllocator->failNthAllocAt(3, __FILE__, __LINE__ + 4);
 
-    for (allocation = 1; allocation <= 10; allocation++)
-    {
-        memory[allocation - 1] = (int *)malloc(sizeof(int));
+    for (allocation = 1; allocation <= 10; allocation++) {
+        memory[allocation - 1] = (int*)malloc(sizeof(int));
         if (memory[allocation - 1] == NULLPTR)
             break;
-        free(memory[allocation -1]);
+        free(memory[allocation - 1]);
     }
 
     LONGS_EQUAL(3, allocation);
@@ -325,24 +321,18 @@ TEST(FailableMemoryAllocator, CheckAllFailingLocationAllocsWereDone)
     failableMallocAllocator->clearFailedAllocs();
 }
 
-#endif
+    #endif
 #endif
 
-class MemoryAccountantExecFunction
-    : public ExecFunction
+class MemoryAccountantExecFunction : public ExecFunction
 {
 public:
-    virtual ~MemoryAccountantExecFunction() _destructor_override
-    {
-    }
+    virtual ~MemoryAccountantExecFunction() _destructor_override {}
 
     void (*testFunction_)(MemoryAccountant*);
     MemoryAccountant* parameter_;
 
-    virtual void exec() _override
-    {
-        testFunction_(parameter_);
-    }
+    virtual void exec() _override { testFunction_(parameter_); }
 };
 
 TEST_GROUP(TestMemoryAccountant)
@@ -440,12 +430,14 @@ TEST(TestMemoryAccountant, reportAllocations)
     accountant.alloc(4);
     accountant.dealloc(4);
     accountant.alloc(4);
-    STRCMP_EQUAL("CppUTest Memory Accountant report:\n"
-                 "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
-                 "    4                   2                1                 1\n"
-                 "    8                   0                3                 0\n"
-                 "   Thank you for your business\n"
-                 , accountant.report().asCharString());
+    STRCMP_EQUAL(
+        "CppUTest Memory Accountant report:\n"
+        "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
+        "    4                   2                1                 1\n"
+        "    8                   0                3                 0\n"
+        "   Thank you for your business\n",
+        accountant.report().asCharString()
+    );
 }
 
 TEST(TestMemoryAccountant, reportAllocationsWithSizeZero)
@@ -456,14 +448,15 @@ TEST(TestMemoryAccountant, reportAllocationsWithSizeZero)
     accountant.dealloc(4);
     accountant.alloc(4);
 
-    STRCMP_EQUAL("CppUTest Memory Accountant report:\n"
-                 "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
-                 "other                   0                1                 0\n"
-                 "    4                   1                2                 1\n"
-                 "   Thank you for your business\n"
-                 , accountant.report().asCharString());
+    STRCMP_EQUAL(
+        "CppUTest Memory Accountant report:\n"
+        "Allocation size     # allocations    # deallocations   max # allocations at one time\n"
+        "other                   0                1                 0\n"
+        "    4                   1                2                 1\n"
+        "   Thank you for your business\n",
+        accountant.report().asCharString()
+    );
 }
-
 
 static void failUseCacheSizesAfterAllocation_(MemoryAccountant* accountant)
 {
@@ -489,13 +482,14 @@ TEST(TestMemoryAccountant, reportWithCacheSizesEmpty)
     accountant.useCacheSizes(cacheSizes, 0);
     accountant.alloc(4);
 
-    STRCMP_EQUAL("CppUTest Memory Accountant report (with cache sizes):\n"
-                 "Cache size          # allocations    # deallocations   max # allocations at one time\n"
-                 "other                   1                0                 1\n"
-                 "   Thank you for your business\n"
-                 , accountant.report().asCharString());
+    STRCMP_EQUAL(
+        "CppUTest Memory Accountant report (with cache sizes):\n"
+        "Cache size          # allocations    # deallocations   max # allocations at one time\n"
+        "other                   1                0                 1\n"
+        "   Thank you for your business\n",
+        accountant.report().asCharString()
+    );
 }
-
 
 TEST(TestMemoryAccountant, reportWithCacheSizes)
 {
@@ -509,12 +503,14 @@ TEST(TestMemoryAccountant, reportWithCacheSizes)
     accountant.alloc(4);
     accountant.dealloc(4);
     accountant.alloc(4);
-    STRCMP_EQUAL("CppUTest Memory Accountant report (with cache sizes):\n"
-                 "Cache size          # allocations    # deallocations   max # allocations at one time\n"
-                 "    4                   2                1                 1\n"
-                 "other                   0                3                 0\n"
-                 "   Thank you for your business\n"
-                 , accountant.report().asCharString());
+    STRCMP_EQUAL(
+        "CppUTest Memory Accountant report (with cache sizes):\n"
+        "Cache size          # allocations    # deallocations   max # allocations at one time\n"
+        "    4                   2                1                 1\n"
+        "other                   0                3                 0\n"
+        "   Thank you for your business\n",
+        accountant.report().asCharString()
+    );
 }
 
 TEST(TestMemoryAccountant, reportWithCacheSizesMultipleCaches)
@@ -529,21 +525,22 @@ TEST(TestMemoryAccountant, reportWithCacheSizesMultipleCaches)
     accountant.alloc(4);
     accountant.dealloc(4);
     accountant.alloc(4);
-    STRCMP_EQUAL("CppUTest Memory Accountant report (with cache sizes):\n"
-                 "Cache size          # allocations    # deallocations   max # allocations at one time\n"
-                 "    4                   2                1                 1\n"
-                 "   10                   1                0                 1\n"
-                 "   20                   2                0                 2\n"
-                 "other                   0                0                 0\n"
-                 "   Thank you for your business\n"
-                 , accountant.report().asCharString());
+    STRCMP_EQUAL(
+        "CppUTest Memory Accountant report (with cache sizes):\n"
+        "Cache size          # allocations    # deallocations   max # allocations at one time\n"
+        "    4                   2                1                 1\n"
+        "   10                   1                0                 1\n"
+        "   20                   2                0                 2\n"
+        "other                   0                0                 0\n"
+        "   Thank you for your business\n",
+        accountant.report().asCharString()
+    );
 }
-
 
 TEST_GROUP(AccountingTestMemoryAllocator)
 {
     MemoryAccountant accountant;
-    AccountingTestMemoryAllocator *allocator;
+    AccountingTestMemoryAllocator* allocator;
 
     void setup() _override
     {
@@ -572,8 +569,8 @@ TEST(AccountingTestMemoryAllocator, canAllocateAndAccountMemoryMultipleAllocatio
     char* memory2 = allocator->alloc_memory(8, __FILE__, __LINE__);
     char* memory3 = allocator->alloc_memory(12, __FILE__, __LINE__);
 
-    allocator->free_memory(memory1, 10,  __FILE__, __LINE__);
-    allocator->free_memory(memory3, 12,  __FILE__, __LINE__);
+    allocator->free_memory(memory1, 10, __FILE__, __LINE__);
+    allocator->free_memory(memory3, 12, __FILE__, __LINE__);
 
     char* memory4 = allocator->alloc_memory(15, __FILE__, __LINE__);
     char* memory5 = allocator->alloc_memory(20, __FILE__, __LINE__);
@@ -607,18 +604,13 @@ TEST(AccountingTestMemoryAllocator, allocatorForwardsAllocAndFreeName)
     STRCMP_EQUAL("free", allocator->free_name());
 }
 
-
-class GlobalMemoryAccountantExecFunction
-    : public ExecFunction
+class GlobalMemoryAccountantExecFunction : public ExecFunction
 {
 public:
     void (*testFunction_)(GlobalMemoryAccountant*);
     GlobalMemoryAccountant* parameter_;
 
-    virtual void exec() _override
-    {
-        testFunction_(parameter_);
-    }
+    virtual void exec() _override { testFunction_(parameter_); }
 };
 
 TEST_GROUP(GlobalMemoryAccountant)
@@ -672,7 +664,7 @@ TEST(GlobalMemoryAccountant, report)
 {
     accountant.start();
     char* memory = new char[185];
-    delete [] memory;
+    delete[] memory;
     accountant.stop();
 
     /* Allocation includes memory leak info */
@@ -685,13 +677,12 @@ TEST(GlobalMemoryAccountant, reportWithCacheSizes)
     accountant.useCacheSizes(cacheSizes, 1);
     accountant.start();
     char* memory = new char[185];
-    delete [] memory;
+    delete[] memory;
     accountant.stop();
 
     /* Allocation includes memory leak info */
     STRCMP_CONTAINS("512                   1                1                 1", accountant.report().asCharString());
 }
-
 
 #endif
 

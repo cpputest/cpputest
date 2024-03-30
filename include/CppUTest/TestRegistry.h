@@ -47,7 +47,7 @@ public:
     TestRegistry();
     virtual ~TestRegistry();
 
-    virtual void addTest(UtestShell *test);
+    virtual void addTest(UtestShell* test);
     virtual void unDoLastAddTest();
     virtual size_t countTests();
     virtual void runAllTests(TestResult& result);
@@ -79,11 +79,10 @@ public:
     void setRunIgnored();
 
 private:
-
     bool testShouldRun(UtestShell* test, TestResult& result);
     bool endOfGroup(UtestShell* test);
 
-    UtestShell * tests_;
+    UtestShell* tests_;
     const TestFilter* nameFilters_;
     const TestFilter* groupFilters_;
     TestPlugin* firstPlugin_;

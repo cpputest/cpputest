@@ -35,8 +35,8 @@ TEST_GROUP(MockPlugin)
 {
     StringBufferTestOutput output;
 
-    UtestShell *test;
-    TestResult *result;
+    UtestShell* test;
+    TestResult* result;
 
     MockSupportPlugin plugin;
 
@@ -77,10 +77,10 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
     MockFailureReporterInstaller failureReporterInstaller;
 
     MockExpectedCallsListForTest expectations;
-    expectations.addFunction("differentScope::foobar")->onObject((void*) 1);
+    expectations.addFunction("differentScope::foobar")->onObject((void*)1);
     MockExpectedObjectDidntHappenFailure expectedFailure(test, "differentScope::foobar", expectations);
 
-    mock("differentScope").expectOneCall("foobar").onObject((void*) 1);
+    mock("differentScope").expectOneCall("foobar").onObject((void*)1);
     mock("differentScope").actualCall("foobar");
 
     plugin.postTestAction(*test, *result);
@@ -92,14 +92,8 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 class DummyComparator : public MockNamedValueComparator
 {
 public:
-    bool isEqual(const void* object1, const void* object2) _override
-    {
-        return object1 == object2;
-    }
-    SimpleString valueToString(const void*) _override
-    {
-        return "string";
-    }
+    bool isEqual(const void* object1, const void* object2) _override { return object1 == object2; }
+    SimpleString valueToString(const void*) _override { return "string"; }
 };
 
 TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
@@ -120,10 +114,7 @@ TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 class DummyCopier : public MockNamedValueCopier
 {
 public:
-    void copy(void* dst, const void* src) _override
-    {
-        *(int*)dst = *(const int*)src;
-    }
+    void copy(void* dst, const void* src) _override { *(int*)dst = *(const int*)src; }
 };
 
 TEST(MockPlugin, installCopierRecordsTheCopierButNotInstallsItYet)

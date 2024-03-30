@@ -37,18 +37,19 @@ public:
     ~SimpleMutex(void);
     void Lock(void);
     void Unlock(void);
+
 private:
     PlatformSpecificMutex psMtx;
 };
 
-
 class ScopedMutexLock
 {
 public:
-    ScopedMutexLock(SimpleMutex *);
+    ScopedMutexLock(SimpleMutex*);
     ~ScopedMutexLock(void);
+
 private:
-    SimpleMutex * mutex;
+    SimpleMutex* mutex;
 };
 
 #endif

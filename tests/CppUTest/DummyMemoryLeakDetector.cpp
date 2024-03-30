@@ -46,8 +46,7 @@ bool DummyMemoryLeakDetector::wasDeleted()
 
 bool DummyMemoryLeakDetector::memoryLeakDetectorWasDeleted = false;
 
-DummyMemoryLeakFailure::DummyMemoryLeakFailure()
-    : MemoryLeakFailure()
+DummyMemoryLeakFailure::DummyMemoryLeakFailure() : MemoryLeakFailure()
 {
     memoryLeakFailureWasDelete = false;
 }
@@ -62,11 +61,6 @@ bool DummyMemoryLeakFailure::wasDeleted()
     return memoryLeakFailureWasDelete;
 }
 
-void DummyMemoryLeakFailure::fail(char*)
-{
-}
+void DummyMemoryLeakFailure::fail(char*) {}
 
 bool DummyMemoryLeakFailure::memoryLeakFailureWasDelete = false;
-
-
-

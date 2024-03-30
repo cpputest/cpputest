@@ -44,8 +44,8 @@ TEST_GROUP(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess)
     TestTestingFixture fixture;
 };
 
-// There is a possibility that a compiler provides fork but not waitpid.
-#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
+    // There is a possibility that a compiler provides fork but not waitpid.
+    #if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWithMessage)
 {
@@ -54,7 +54,7 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, DummyFailsWit
     fixture.assertPrintContains("-p doesn't work on this platform, as it is lacking fork.\b");
 }
 
-#else
+    #else
 
 static void failFunction_()
 {
@@ -69,37 +69,42 @@ static void exitNonZeroFunction_()
     exit(1);
 }
 
-#include <errno.h>
+        #include <errno.h>
 
 static int waitpid_while_debugging_stub_number_called = 0;
 static int waitpid_while_debugging_stub_forced_failures = 0;
 
 extern "C" {
 
-    static int (*original_waitpid)(int, int*, int) = NULLPTR;
+static int (*original_waitpid)(int, int*, int) = NULLPTR;
 
-    static int fork_failed_stub(void) { return -1; }
-
-    static int waitpid_while_debugging_stub(int pid, int* status, int options)
-    {
-        static int saved_status;
-
-        if (waitpid_while_debugging_stub_number_called++ < waitpid_while_debugging_stub_forced_failures) {
-            saved_status = *status;
-            errno=EINTR;
-            return -1;
-        }
-        else {
-            *status = saved_status;
-            return original_waitpid(pid, status, options);
-        }
-    }
-
-    static int waitpid_failed_stub(int, int*, int) { return -1; }
+static int fork_failed_stub(void)
+{
+    return -1;
 }
 
-#include <unistd.h>
-#include <signal.h>
+static int waitpid_while_debugging_stub(int pid, int* status, int options)
+{
+    static int saved_status;
+
+    if (waitpid_while_debugging_stub_number_called++ < waitpid_while_debugging_stub_forced_failures) {
+        saved_status = *status;
+        errno = EINTR;
+        return -1;
+    } else {
+        *status = saved_status;
+        return original_waitpid(pid, status, options);
+    }
+}
+
+static int waitpid_failed_stub(int, int*, int)
+{
+    return -1;
+}
+}
+
+        #include <unistd.h>
+        #include <signal.h>
 
 static void stoppedTestFunction_()
 {
@@ -122,23 +127,23 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, FailureInSepa
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
-#if (! CPPUTEST_SANITIZE_ADDRESS)
+        #if (!CPPUTEST_SANITIZE_ADDRESS)
 
 static int accessViolationTestFunction_()
 {
-    return *(volatile int*) NULLPTR; // NOLINT(clang-analyzer-core.NullDereference)
+    return *(volatile int*)NULLPTR; // NOLINT(clang-analyzer-core.NullDereference)
 }
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, AccessViolationInSeparateProcessWorks)
 {
     fixture.setRunTestsInSeperateProcess();
-    fixture.setTestFunction((void(*)())accessViolationTestFunction_);
+    fixture.setTestFunction((void (*)())accessViolationTestFunction_);
     fixture.runAllTests();
     fixture.assertPrintContains("Failed in separate process - killed by signal 11");
     fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran");
 }
 
-#endif
+        #endif
 
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, StoppedInSeparateProcessWorks)
 {
@@ -184,7 +189,6 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPid
     CHECK(waitpid_while_debugging_stub_number_called > 30);
 }
 
-
 TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, CallToWaitPidFailedInSeparateProcessWorks)
 {
     UT_PTR_SET(PlatformSpecificWaitPid, waitpid_failed_stub);
@@ -207,5 +211,5 @@ TEST(UTestPlatformsTest_PlatformSpecificRunTestInASeperateProcess, MultipleTests
     fixture.assertPrintContains("Errors (2 failures, 5 tests, 5 ran, 0 checks, 0 ignored, 0 filtered out");
 }
 
-#endif
+    #endif
 #endif

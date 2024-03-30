@@ -27,16 +27,15 @@
 
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
 
-#include "CppUTestExt/GMock.h"
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
-#include "CppUTest/TestRegistry.h"
-#include "CppUTest/TestTestingFixture.h"
-
+    #include "CppUTestExt/GMock.h"
+    #include "CppUTest/TestHarness.h"
+    #include "CppUTest/TestOutput.h"
+    #include "CppUTest/TestRegistry.h"
+    #include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(GMock)
 {
-    TestTestingFixture *fixture;
+    TestTestingFixture* fixture;
     void setup() _override
     {
         fixture = new TestTestingFixture;
@@ -45,7 +44,6 @@ TEST_GROUP(GMock)
     void teardown() _override
     {
         delete fixture;
-
     }
 };
 

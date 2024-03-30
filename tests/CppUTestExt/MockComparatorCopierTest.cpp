@@ -41,15 +41,9 @@ TEST_GROUP(MockComparatorCopierTest)
 class MyTypeForTesting
 {
 public:
-    MyTypeForTesting(long val)
-    {
-        value = new long(val);
-    }
-    virtual ~MyTypeForTesting()
-    {
-        delete value;
-    }
-    long *value;
+    MyTypeForTesting(long val) { value = new long(val); }
+    virtual ~MyTypeForTesting() { delete value; }
+    long* value;
 };
 
 class MyTypeForTestingComparator : public MockNamedValueComparator
@@ -57,13 +51,13 @@ class MyTypeForTestingComparator : public MockNamedValueComparator
 public:
     virtual bool isEqual(const void* object1, const void* object2) _override
     {
-        const MyTypeForTesting* obj1 = (const MyTypeForTesting*) object1;
-        const MyTypeForTesting* obj2 = (const MyTypeForTesting*) object2;
+        const MyTypeForTesting* obj1 = (const MyTypeForTesting*)object1;
+        const MyTypeForTesting* obj2 = (const MyTypeForTesting*)object2;
         return *(obj1->value) == *(obj2->value);
     }
     virtual SimpleString valueToString(const void* object) _override
     {
-        const MyTypeForTesting* obj = (const MyTypeForTesting*) object;
+        const MyTypeForTesting* obj = (const MyTypeForTesting*)object;
         return StringFrom(*(obj->value));
     }
 };
@@ -73,8 +67,8 @@ class MyTypeForTestingCopier : public MockNamedValueCopier
 public:
     virtual void copy(void* dst_, const void* src_) _override
     {
-        MyTypeForTesting* dst = (MyTypeForTesting*) dst_;
-        const MyTypeForTesting* src = (const MyTypeForTesting*) src_;
+        MyTypeForTesting* dst = (MyTypeForTesting*)dst_;
+        const MyTypeForTesting* src = (const MyTypeForTesting*)src_;
         *(dst->value) = *(src->value);
     }
 };
@@ -337,12 +331,11 @@ TEST(MockComparatorCopierTest, twoDifferentCustomTypeOutputParametersInSameFunct
     MyTypeForTestingCopier copier;
     mock().installCopier("MyTypeForTesting", copier);
 
-    mock().expectOneCall("foo")
+    mock()
+        .expectOneCall("foo")
         .withOutputParameterOfTypeReturning("MyTypeForTesting", "bar", &expectedObject1)
         .withOutputParameterOfTypeReturning("MyTypeForTesting", "foobar", &expectedObject2);
-    mock().actualCall("foo")
-        .withOutputParameterOfType("MyTypeForTesting", "bar", &actualObject1)
-        .withOutputParameterOfType("MyTypeForTesting", "foobar", &actualObject2);
+    mock().actualCall("foo").withOutputParameterOfType("MyTypeForTesting", "bar", &actualObject1).withOutputParameterOfType("MyTypeForTesting", "foobar", &actualObject2);
 
     mock().checkExpectations();
     CHECK_EQUAL(11, *(expectedObject1.value));
@@ -414,12 +407,8 @@ TEST(MockComparatorCopierTest, customTypeOutputAndInputParameterOfSameTypeInSame
     mock().installCopier("MyTypeForTesting", copier);
     mock().installComparator("MyTypeForTesting", comparator);
 
-    mock().expectOneCall("foo")
-          .withParameterOfType("MyTypeForTesting", "bar", &expectedObject1)
-          .withOutputParameterOfTypeReturning("MyTypeForTesting", "bar", &expectedObject2);
-    mock().actualCall("foo")
-          .withParameterOfType("MyTypeForTesting", "bar", &actualObject1)
-          .withOutputParameterOfType("MyTypeForTesting", "bar", &actualObject2);
+    mock().expectOneCall("foo").withParameterOfType("MyTypeForTesting", "bar", &expectedObject1).withOutputParameterOfTypeReturning("MyTypeForTesting", "bar", &expectedObject2);
+    mock().actualCall("foo").withParameterOfType("MyTypeForTesting", "bar", &actualObject1).withOutputParameterOfType("MyTypeForTesting", "bar", &actualObject2);
 
     mock().checkExpectations();
     CHECK_EQUAL(45, *(expectedObject1.value));
@@ -464,8 +453,8 @@ TEST(MockComparatorCopierTest, customTypeOutputParameterWithIgnoredParameters)
 
 static void myTypeCopy(void* dst_, const void* src_)
 {
-    MyTypeForTesting* dst = (MyTypeForTesting*) dst_;
-    const MyTypeForTesting* src = (const MyTypeForTesting*) src_;
+    MyTypeForTesting* dst = (MyTypeForTesting*)dst_;
+    const MyTypeForTesting* src = (const MyTypeForTesting*)src_;
     *(dst->value) = *(src->value);
 }
 
@@ -567,14 +556,8 @@ TEST(MockComparatorCopierTest, installCopiersWorksHierarchically)
 class StubComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void*, const void*) _override
-    {
-        return true;
-    }
-    virtual SimpleString valueToString(const void*) _override
-    {
-        return "";
-    }
+    virtual bool isEqual(const void*, const void*) _override { return true; }
+    virtual SimpleString valueToString(const void*) _override { return ""; }
 };
 
 struct SomeClass

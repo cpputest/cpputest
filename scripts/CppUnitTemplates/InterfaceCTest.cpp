@@ -1,7 +1,6 @@
 #include "CppUTest/TestHarness.h"
 
-extern "C"
-{
+extern "C" {
 #include "FakeClassName.h"
 }
 
@@ -9,16 +8,16 @@ TEST_GROUP(FakeClassName)
 {
     void setup()
     {
-      ClassName_Create();
+        ClassName_Create();
     }
 
     void teardown()
     {
-       ClassName_Destroy();
+        ClassName_Destroy();
     }
 };
 
 TEST(FakeClassName, Create)
 {
-  FAIL("Start here");
+    FAIL("Start here");
 }

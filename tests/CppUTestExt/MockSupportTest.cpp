@@ -34,16 +34,16 @@
 
 TEST_GROUP(MockSupportTest)
 {
-  MockExpectedCallsListForTest expectations;
-  MockFailureReporterInstaller failureReporterInstaller;
+    MockExpectedCallsListForTest expectations;
+    MockFailureReporterInstaller failureReporterInstaller;
 
-  void teardown() _override
-  {
-      mock().checkExpectations();
-      CHECK_NO_MOCK_FAILURE();
-      MockFailureReporterForTest::clearReporter();
-      mock().clear();
-  }
+    void teardown() _override
+    {
+        mock().checkExpectations();
+        CHECK_NO_MOCK_FAILURE();
+        MockFailureReporterForTest::clearReporter();
+        mock().clear();
+    }
 };
 
 TEST(MockSupportTest, setDataForUnsignedIntegerValues)
@@ -109,28 +109,28 @@ TEST(MockSupportTest, setDataDouble)
 
 TEST(MockSupportTest, setDataPointer)
 {
-    void * ptr = (void*) 0x001;
+    void* ptr = (void*)0x001;
     mock().setData("data", ptr);
     POINTERS_EQUAL(ptr, mock().getData("data").getPointerValue());
 }
 
 TEST(MockSupportTest, setConstDataPointer)
 {
-    const void * ptr = (const void*) 0x001;
+    const void* ptr = (const void*)0x001;
     mock().setData("data", ptr);
     POINTERS_EQUAL(ptr, mock().getData("data").getConstPointerValue());
 }
 
 TEST(MockSupportTest, setDataFunctionPointer)
 {
-    void (*ptr)() = (void(*)()) 0x001;
+    void (*ptr)() = (void (*)())0x001;
     mock().setData("data", ptr);
     FUNCTIONPOINTERS_EQUAL(ptr, mock().getData("data").getFunctionPointerValue());
 }
 
 TEST(MockSupportTest, setDataObject)
 {
-    void * ptr = (void*) 0x001;
+    void* ptr = (void*)0x001;
     mock().setDataObject("data", "type", ptr);
     POINTERS_EQUAL(ptr, mock().getData("data").getObjectPointer());
     STRCMP_EQUAL("type", mock().getData("data").getType().asCharString());
@@ -138,7 +138,7 @@ TEST(MockSupportTest, setDataObject)
 
 TEST(MockSupportTest, setDataConstObject)
 {
-    void * ptr = (void*) 0x011;
+    void* ptr = (void*)0x011;
     mock().setDataConstObject("data", "type", ptr);
     POINTERS_EQUAL(ptr, mock().getData("data").getConstObjectPointer());
     STRCMP_EQUAL("type", mock().getData("data").getType().asCharString());
@@ -276,8 +276,7 @@ TEST(MockSupportTestWithFixture, failedMockShouldFailAgainWhenRepeated)
 {
     fixture.setTestFunction(unexpectedCallTestFunction_);
     int repeatCount = 2;
-    while(repeatCount--)
-    {
+    while (repeatCount--) {
         fixture.runAllTests();
         fixture.assertPrintContains("Unexpected call to function: unexpected");
         fixture.assertPrintContains("Errors (1 failures, 1 tests, 1 ran, 0 checks, 0 ignored, 0 filtered out");

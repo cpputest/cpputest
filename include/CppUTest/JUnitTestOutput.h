@@ -34,7 +34,7 @@
 struct JUnitTestOutputImpl;
 struct JUnitTestCaseResultNode;
 
-class JUnitTestOutput: public TestOutput
+class JUnitTestOutput : public TestOutput
 {
 public:
     JUnitTestOutput();
@@ -56,10 +56,9 @@ public:
     virtual void flush() _override;
 
     virtual SimpleString createFileName(const SimpleString& group);
-    void setPackageName(const SimpleString &package);
+    void setPackageName(const SimpleString& package);
 
 protected:
-
     JUnitTestOutputImpl* impl_;
     void resetTestGroupResult();
 

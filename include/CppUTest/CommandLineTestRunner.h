@@ -41,10 +41,10 @@ class TestRegistry;
 class CommandLineTestRunner
 {
 public:
-    static int RunAllTests(int ac, const char *const *av);
+    static int RunAllTests(int ac, const char* const* av);
     static int RunAllTests(int ac, char** av);
 
-    CommandLineTestRunner(int ac, const char *const *av, TestRegistry* registry);
+    CommandLineTestRunner(int ac, const char* const* av, TestRegistry* registry);
     virtual ~CommandLineTestRunner();
 
     int runAllTestsMain();
@@ -56,6 +56,7 @@ protected:
     virtual TestOutput* createCompositeOutput(TestOutput* outputOne, TestOutput* outputTwo);
 
     TestOutput* output_;
+
 private:
     CommandLineArguments* arguments_;
     TestRegistry* registry_;

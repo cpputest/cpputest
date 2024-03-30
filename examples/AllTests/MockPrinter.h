@@ -46,10 +46,7 @@ public:
     explicit MockPrinter() {}
     virtual ~MockPrinter() _destructor_override {}
 
-    virtual void Print(const char* s) _override
-    {
-        savedOutput.append(s);
-    }
+    virtual void Print(const char* s) _override { savedOutput.append(s); }
 
     virtual void Print(long int value) _override
     {
@@ -58,10 +55,7 @@ public:
         savedOutput.append(buffer.asCharString());
     }
 
-    std::string getOutput() const
-    {
-        return savedOutput;
-    }
+    std::string getOutput() const { return savedOutput; }
 
 private:
     std::string savedOutput;

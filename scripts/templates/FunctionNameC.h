@@ -9,4 +9,4 @@
 
 void ClassName();
 
-#endif  /* D_FakeClassName_H */
+#endif /* D_FakeClassName_H */

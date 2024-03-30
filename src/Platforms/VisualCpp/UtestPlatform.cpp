@@ -34,7 +34,7 @@
 static jmp_buf test_exit_jmp_buf[10];
 static int jmp_buf_index = 0;
 
-static int VisualCppSetJmp(void (*function) (void* data), void* data)
+static int VisualCppSetJmp(void (*function)(void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -56,7 +56,7 @@ static void VisualCppRestoreJumpBuffer()
     jmp_buf_index--;
 }
 
-int (*PlatformSpecificSetJmp)(void (*function) (void*), void* data) = VisualCppSetJmp;
+int (*PlatformSpecificSetJmp)(void (*function)(void*), void* data) = VisualCppSetJmp;
 void (*PlatformSpecificLongJmp)(void) = VisualCppLongJmp;
 void (*PlatformSpecificRestoreJumpBuffer)(void) = VisualCppRestoreJumpBuffer;
 
@@ -65,8 +65,7 @@ static void VisualCppRunTestInASeperateProcess(UtestShell* shell, TestPlugin* /*
     result->addFailure(TestFailure(shell, "-p doesn't work on this platform, as it is lacking fork.\b"));
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        VisualCppRunTestInASeperateProcess;
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) = VisualCppRunTestInASeperateProcess;
 
 TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 {
@@ -77,26 +76,23 @@ TestOutput::WorkingEnvironment PlatformSpecificGetWorkingEnvironment()
 
 static unsigned long VisualCppTimeInMillis()
 {
-	static LARGE_INTEGER s_frequency;
-	static const BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
-	if (s_use_qpc)
-	{
-		LARGE_INTEGER now;
-		QueryPerformanceCounter(&now);
-		return (unsigned long)((now.QuadPart * 1000) / s_frequency.QuadPart);
-	}
-	else
-	{
-	#ifdef TIMERR_NOERROR
-		return (unsigned long)timeGetTime();
-	#else
-		#if !defined(_WIN32_WINNT) || !defined(_WIN32_WINNT_VISTA) || (_WIN32_WINNT < _WIN32_WINNT_VISTA)
-			return (unsigned long)GetTickCount();
-		#else
-			return (unsigned long)GetTickCount64();
-		#endif
-	#endif
-	}
+    static LARGE_INTEGER s_frequency;
+    static const BOOL s_use_qpc = QueryPerformanceFrequency(&s_frequency);
+    if (s_use_qpc) {
+        LARGE_INTEGER now;
+        QueryPerformanceCounter(&now);
+        return (unsigned long)((now.QuadPart * 1000) / s_frequency.QuadPart);
+    } else {
+#ifdef TIMERR_NOERROR
+        return (unsigned long)timeGetTime();
+#else
+    #if !defined(_WIN32_WINNT) || !defined(_WIN32_WINNT_VISTA) || (_WIN32_WINNT < _WIN32_WINNT_VISTA)
+        return (unsigned long)GetTickCount();
+    #else
+        return (unsigned long)GetTickCount64();
+    #endif
+#endif
+    }
 }
 
 unsigned long (*GetPlatformSpecificTimeInMillis)() = VisualCppTimeInMillis;
@@ -117,29 +113,27 @@ const char* (*GetPlatformSpecificTimeString)() = VisualCppTimeString;
 
 ////// taken from gcc
 
-static int VisualCppVSNprintf(char *str, size_t size, const char* format, va_list args)
+static int VisualCppVSNprintf(char* str, size_t size, const char* format, va_list args)
 {
     char* buf = NULLPTR;
     size_t sizeGuess = size;
 
-    int result = _VSNPRINTF( str, size, _TRUNCATE, format, args);
-    str[size-1] = 0;
-    while (result == -1)
-    {
+    int result = _VSNPRINTF(str, size, _TRUNCATE, format, args);
+    str[size - 1] = 0;
+    while (result == -1) {
         if (buf)
             free(buf);
         sizeGuess += 10;
         buf = (char*)malloc(sizeGuess);
-        result = _VSNPRINTF( buf, sizeGuess, _TRUNCATE, format, args);
+        result = _VSNPRINTF(buf, sizeGuess, _TRUNCATE, format, args);
     }
 
     if (buf)
         free(buf);
     return result;
-
 }
 
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = VisualCppVSNprintf;
+int (*PlatformSpecificVSNprintf)(char* str, size_t size, const char* format, va_list va_args_list) = VisualCppVSNprintf;
 
 static PlatformSpecificFile VisualCppFOpen(const char* filename, const char* flag)
 {
@@ -201,30 +195,30 @@ static int IsInfImplementation(double d)
 double (*PlatformSpecificFabs)(double d) = fabs;
 extern "C" int (*PlatformSpecificIsNan)(double) = _isnan;
 extern "C" int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;
+int (*PlatformSpecificAtExit)(void (*func)(void)) = atexit;
 
 static PlatformSpecificMutex VisualCppMutexCreate(void)
 {
-	CRITICAL_SECTION *critical_section = new CRITICAL_SECTION;
-	InitializeCriticalSection(critical_section);
-	return (PlatformSpecificMutex)critical_section;
+    CRITICAL_SECTION* critical_section = new CRITICAL_SECTION;
+    InitializeCriticalSection(critical_section);
+    return (PlatformSpecificMutex)critical_section;
 }
 
 static void VisualCppMutexLock(PlatformSpecificMutex mutex)
 {
-	EnterCriticalSection((CRITICAL_SECTION*)mutex);
+    EnterCriticalSection((CRITICAL_SECTION*)mutex);
 }
 
 static void VisualCppMutexUnlock(PlatformSpecificMutex mutex)
 {
-	LeaveCriticalSection((CRITICAL_SECTION*)mutex);
+    LeaveCriticalSection((CRITICAL_SECTION*)mutex);
 }
 
 static void VisualCppMutexDestroy(PlatformSpecificMutex mutex)
 {
-	CRITICAL_SECTION *critical_section = (CRITICAL_SECTION*)mutex;
-	DeleteCriticalSection(critical_section);
-	delete critical_section;
+    CRITICAL_SECTION* critical_section = (CRITICAL_SECTION*)mutex;
+    DeleteCriticalSection(critical_section);
+    delete critical_section;
 }
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = VisualCppMutexCreate;

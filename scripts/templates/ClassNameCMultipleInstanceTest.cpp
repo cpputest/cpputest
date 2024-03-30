@@ -1,5 +1,4 @@
-extern "C"
-{
+extern "C" {
 #include "ClassName.h"
 }
 
@@ -24,4 +23,3 @@ TEST(ClassName, Create)
 {
     FAIL("Start here");
 }
-

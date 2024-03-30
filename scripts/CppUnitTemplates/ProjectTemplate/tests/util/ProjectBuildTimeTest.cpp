@@ -3,20 +3,19 @@
 
 TEST_GROUP(ProjectBuildTime)
 {
-  ProjectBuildTime* projectBuildTime;
+    ProjectBuildTime* projectBuildTime;
 
-  void setup()
-  {
-    projectBuildTime = new ProjectBuildTime();
-  }
-  void teardown()
-  {
-    delete projectBuildTime;
-  }
+    void setup()
+    {
+        projectBuildTime = new ProjectBuildTime();
+    }
+    void teardown()
+    {
+        delete projectBuildTime;
+    }
 };
 
 TEST(ProjectBuildTime, Create)
 {
-  CHECK(0 != projectBuildTime->GetDateTime());
+    CHECK(0 != projectBuildTime->GetDateTime());
 }
-

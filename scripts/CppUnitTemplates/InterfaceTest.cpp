@@ -3,7 +3,7 @@
 #include "ClassName.h"
 #include "MockClassName.h"
 
-class MockClassNameTest: public CPPUNIT_NS::TestFixture
+class MockClassNameTest : public CPPUNIT_NS::TestFixture
 {
     CPPUNIT_TEST_SUITE(MockClassNameTest);
     CPPUNIT_TEST(testCreate);
@@ -13,22 +13,15 @@ class MockClassNameTest: public CPPUNIT_NS::TestFixture
     MockClassName* mockClassName;
 
 public:
-
     void setUp()
     {
         mockClassName = new MockClassName();
         aClassName = mockClassName;
     }
 
-    void tearDown()
-    {
-        delete aClassName;
-    }
+    void tearDown() { delete aClassName; }
 
-    void testCreate()
-    {
-        CPPUNIT_FAIL("Start here");
-    }
+    void testCreate() { CPPUNIT_FAIL("Start here"); }
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MockClassNameTest);

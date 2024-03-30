@@ -26,10 +26,10 @@
  */
 
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
-#undef new
+    #undef new
 
-#include "CppUTestExt/GTest.h"
-#include "CppUTestExt/GMock.h"
+    #include "CppUTestExt/GTest.h"
+    #include "CppUTestExt/GMock.h"
 
 static bool g_GTestEqual_has_been_called = false;
 TEST(GTestSimpleTest, GTestEqual)
@@ -65,25 +65,25 @@ TEST(GTestSimpleTest, GTestExpectStreq)
 
 /* Death tests are IMHO not a good idea at all. But for compatibility reason, we'll support it */
 
-static void crashMe ()
+static void crashMe()
 {
     fprintf(stderr, "Crash me!");
-    *((int*) 0) = 10;
+    *((int*)0) = 10;
 }
 
 TEST(GTestSimpleTest, GTestDeathTest)
 {
-#if defined(GTEST_VERSION_GTEST_1_7)
+    #if defined(GTEST_VERSION_GTEST_1_7)
     CppuTestGTestIgnoreLeaksInTest();
-#endif
+    #endif
     ASSERT_DEATH(crashMe(), "Crash me!");
 }
 
-#undef TEST
+    #undef TEST
 
-#include "CppUTest/TestHarness.h"
-#include "CppUTest/TestOutput.h"
-#include "CppUTest/TestTestingFixture.h"
+    #include "CppUTest/TestHarness.h"
+    #include "CppUTest/TestOutput.h"
+    #include "CppUTest/TestTestingFixture.h"
 
 TEST_GROUP(gtest)
 {
@@ -108,7 +108,7 @@ TEST(gtest, SimpleGoogleTestGetCalled)
     TestPlugin plugin("dummy");
 
     TestRegistry* registry = TestRegistry::getCurrentRegistry();
-    UtestShell * shell = registry->findTestWithName("GTestEqual");
+    UtestShell* shell = registry->findTestWithName("GTestEqual");
     g_GTestEqual_has_been_called = false;
     shell->runOneTest(&plugin, result);
 
@@ -166,7 +166,7 @@ TEST_GROUP(gtestMacros)
         delete fixture;
     }
 
-    void testFailureWith(void(*method)())
+    void testFailureWith(void (*method)())
     {
         fixture->setTestFunction(method);
         fixture->runAllTests();

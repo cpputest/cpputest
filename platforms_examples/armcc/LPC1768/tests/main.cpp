@@ -36,11 +36,10 @@ extern const std::uint32_t SystemCoreClock12;
 int main(int ac, char** av)
 {
     SystemCoreClock = SystemCoreClock12; /* if 12 MHz quartz is used; need to LPC_TIM3 measure */
-    _clock_init(); /* secondary call for new SystemCoreClock freq; previous call worked with unknown value */
+    _clock_init();                       /* secondary call for new SystemCoreClock freq; previous call worked with unknown value */
 
     std::cout << "Hello, World!\n";
     int result = RUN_ALL_TESTS(ac, av);
 
     return result;
 }
-

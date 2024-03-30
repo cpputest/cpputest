@@ -28,9 +28,7 @@
 #include "CppUTest/CppUTestConfig.h"
 #include "CppUTest/TestFilter.h"
 
-TestFilter::TestFilter() : strictMatching_(false), invertMatching_(false), next_(NULLPTR)
-{
-}
+TestFilter::TestFilter() : strictMatching_(false), invertMatching_(false), next_(NULLPTR) {}
 
 TestFilter::TestFilter(const SimpleString& filter) : strictMatching_(false), invertMatching_(false), next_(NULLPTR)
 {
@@ -67,7 +65,7 @@ bool TestFilter::match(const SimpleString& name) const
 {
     bool matches = false;
 
-    if(strictMatching_)
+    if (strictMatching_)
         matches = name == filter_;
     else
         matches = name.contains(filter_);
@@ -77,9 +75,7 @@ bool TestFilter::match(const SimpleString& name) const
 
 bool TestFilter::operator==(const TestFilter& filter) const
 {
-    return (filter_ == filter.filter_ &&
-            strictMatching_ == filter.strictMatching_ &&
-            invertMatching_ == filter.invertMatching_);
+    return (filter_ == filter.filter_ && strictMatching_ == filter.strictMatching_ && invertMatching_ == filter.invertMatching_);
 }
 
 bool TestFilter::operator!=(const TestFilter& filter) const
@@ -89,7 +85,7 @@ bool TestFilter::operator!=(const TestFilter& filter) const
 
 SimpleString TestFilter::asString() const
 {
-    SimpleString textFilter =  StringFromFormat("TestFilter: \"%s\"", filter_.asCharString());
+    SimpleString textFilter = StringFromFormat("TestFilter: \"%s\"", filter_.asCharString());
     if (strictMatching_ && invertMatching_)
         textFilter += " with strict, invert matching";
     else if (strictMatching_)
@@ -104,4 +100,3 @@ SimpleString StringFrom(const TestFilter& filter)
 {
     return filter.asString();
 }
-

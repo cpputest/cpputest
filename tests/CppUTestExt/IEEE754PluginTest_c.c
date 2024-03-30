@@ -38,14 +38,14 @@ void set_divisionbyzero_c(void)
 
 void set_overflow_c(void)
 {
-   f = 1e38f;
-   f *= f;
+    f = 1e38f;
+    f *= f;
 }
 
 void set_underflow_c(void)
 {
-   f = 1e-38f;
-   f *= f;
+    f = 1e-38f;
+    f *= f;
 }
 
 void set_inexact_c(void)
@@ -54,9 +54,7 @@ void set_inexact_c(void)
     f /= 3.0f;
 }
 
-void set_nothing_c(void)
-{
-}
+void set_nothing_c(void) {}
 
 void set_everything_c(void)
 {

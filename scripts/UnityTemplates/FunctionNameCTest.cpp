@@ -1,24 +1,18 @@
-extern "C"
-{
+extern "C" {
 #include "ClassName.h"
 }
 
-//CppUTest includes should be after your and system includes
+// CppUTest includes should be after your and system includes
 #include "CppUTest/TestHarness.h"
 
 TEST_GROUP(ClassName)
 {
-    void setup()
-    {
-    }
+    void setup() {}
 
-    void teardown()
-    {
-    }
+    void teardown() {}
 };
 
 TEST(ClassName, Create)
 {
-  FAIL("Start here");
+    FAIL("Start here");
 }
-

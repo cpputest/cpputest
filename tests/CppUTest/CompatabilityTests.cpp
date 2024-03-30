@@ -3,13 +3,13 @@
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
-#include <memory>
+    #include <memory>
 
 TEST_GROUP(StandardCppLibrary)
 {
 };
 
-#if defined(__cplusplus) && __cplusplus >= 201402L
+    #if defined(__cplusplus) && __cplusplus >= 201402L
 
 TEST(StandardCppLibrary, UniquePtrConversationToBool)
 {
@@ -20,7 +20,6 @@ TEST(StandardCppLibrary, UniquePtrConversationToBool)
     CHECK_TRUE(notNull);
 }
 
-#endif
+    #endif
 
 #endif
-

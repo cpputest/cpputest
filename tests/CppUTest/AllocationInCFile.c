@@ -6,7 +6,7 @@
 
 char* mallocAllocation(void)
 {
-    return (char*) malloc(10UL);
+    return (char*)malloc(10UL);
 }
 
 char* strdupAllocation(void)
@@ -17,7 +17,6 @@ char* strdupAllocation(void)
     return NULL;
 #endif
 }
-
 
 char* strndupAllocation(void)
 {
@@ -39,4 +38,3 @@ void freeAllocationWithoutMacro(void* memory)
 {
     free(memory);
 }
-

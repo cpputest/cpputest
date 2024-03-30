@@ -13,4 +13,4 @@ ClassName* ClassName_Create(void);
 void ClassName_Destroy(ClassName*);
 void ClassName_VirtualFunction_impl(ClassName*);
 
-#endif  /* D_FakeClassName_H */
+#endif /* D_FakeClassName_H */

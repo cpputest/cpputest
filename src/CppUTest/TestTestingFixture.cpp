@@ -46,9 +46,9 @@ TestTestingFixture::TestTestingFixture()
 
 void TestTestingFixture::flushOutputAndResetResult()
 {
-     output_->flush();
-     delete result_;
-     result_ = new TestResult(*output_);
+    output_->flush();
+    delete result_;
+    result_ = new TestResult(*output_);
 }
 
 TestTestingFixture::~TestTestingFixture()
@@ -67,12 +67,12 @@ void TestTestingFixture::clearExecFunction()
         delete genTest_->testFunction_;
 }
 
-void TestTestingFixture::addTest(UtestShell * test)
+void TestTestingFixture::addTest(UtestShell* test)
 {
     registry_->addTest(test);
 }
 
-void TestTestingFixture::setTestFunction(void(*testFunction)())
+void TestTestingFixture::setTestFunction(void (*testFunction)())
 {
     clearExecFunction();
 
@@ -89,12 +89,12 @@ void TestTestingFixture::setTestFunction(ExecFunction* testFunction)
     ownsExecFunction_ = false;
 }
 
-void TestTestingFixture::setSetup(void(*setupFunction)())
+void TestTestingFixture::setSetup(void (*setupFunction)())
 {
     genTest_->setup_ = setupFunction;
 }
 
-void TestTestingFixture::setTeardown(void(*teardownFunction)())
+void TestTestingFixture::setTeardown(void (*teardownFunction)())
 {
     genTest_->teardown_ = teardownFunction;
 }
@@ -114,7 +114,7 @@ void TestTestingFixture::setOutputVerbose()
     output_->verbose(TestOutput::level_verbose);
 }
 
-void TestTestingFixture::runTestWithMethod(void(*method)())
+void TestTestingFixture::runTestWithMethod(void (*method)())
 {
     setTestFunction(method);
     runAllTests();
@@ -162,9 +162,8 @@ void TestTestingFixture::assertPrintContains(const SimpleString& contains)
 
 void TestTestingFixture::assertPrintContainsNot(const SimpleString& contains)
 {
-    CHECK(! getOutput().contains(contains));
+    CHECK(!getOutput().contains(contains));
 }
-
 
 const SimpleString& TestTestingFixture::getOutput()
 {
@@ -173,7 +172,7 @@ const SimpleString& TestTestingFixture::getOutput()
 
 size_t TestTestingFixture::getRunCount()
 {
-  	return result_->getRunCount();
+    return result_->getRunCount();
 }
 
 void TestTestingFixture::lineExecutedAfterCheck()
@@ -184,11 +183,10 @@ void TestTestingFixture::lineExecutedAfterCheck()
 void TestTestingFixture::checkTestFailsWithProperTestLocation(const char* text, const char* file, size_t line)
 {
     if (getFailureCount() != 1)
-      FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", (int) getFailureCount()).asCharString(), file, line);
+        FAIL_LOCATION(StringFromFormat("Expected one test failure, but got %d amount of test failures", (int)getFailureCount()).asCharString(), file, line);
 
     STRCMP_CONTAINS_LOCATION(text, output_->getOutput().asCharString(), "", file, line);
 
     if (lineOfCodeExecutedAfterCheck)
-      FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
+        FAIL_LOCATION("The test should jump/throw on failure and not execute the next line. However, the next line was executed.", file, line);
 }
-

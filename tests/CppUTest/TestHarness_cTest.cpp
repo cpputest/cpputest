@@ -33,17 +33,12 @@
 #include "CppUTest/TestTestingFixture.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
-
 extern "C" int setup_teardown_was_called_in_test_group_in_C;
 extern "C" int test_was_called_in_test_group_in_C;
 int setup_teardown_was_called_in_test_group_in_C = 0;
 int test_was_called_in_test_group_in_C = 0;
 
-TEST_GROUP_C_WRAPPER(TestGroupInC)
-{
-    TEST_GROUP_C_SETUP_WRAPPER(TestGroupInC)
-    TEST_GROUP_C_TEARDOWN_WRAPPER(TestGroupInC)
-};
+TEST_GROUP_C_WRAPPER(TestGroupInC){TEST_GROUP_C_SETUP_WRAPPER(TestGroupInC) TEST_GROUP_C_TEARDOWN_WRAPPER(TestGroupInC)};
 
 TEST_C_WRAPPER(TestGroupInC, checkThatTheTestHasRun)
 IGNORE_TEST_C_WRAPPER(TestGroupInC, ignoreMacroForCFile)
@@ -66,7 +61,7 @@ static bool hasDestructorOfTheDestructorCheckedBeenCalled;
 class HasTheDestructorBeenCalledChecker
 {
 public:
-    HasTheDestructorBeenCalledChecker(){}
+    HasTheDestructorBeenCalledChecker() {}
     ~HasTheDestructorBeenCalledChecker() { hasDestructorOfTheDestructorCheckedBeenCalled = true; }
 };
 
@@ -551,7 +546,7 @@ TEST(TestHarness_c, checkStringText)
 static void failPointerMethod_()
 {
     HasTheDestructorBeenCalledChecker checker;
-    CHECK_EQUAL_C_POINTER(NULLPTR, (void *)0x1);
+    CHECK_EQUAL_C_POINTER(NULLPTR, (void*)0x1);
 }
 
 TEST(TestHarness_c, checkPointer)
@@ -567,7 +562,7 @@ TEST(TestHarness_c, checkPointer)
 static void failPointerTextMethod_()
 {
     HasTheDestructorBeenCalledChecker checker;
-    CHECK_EQUAL_C_POINTER_TEXT(NULLPTR, (void *)0x1, "PointerTestText");
+    CHECK_EQUAL_C_POINTER_TEXT(NULLPTR, (void*)0x1, "PointerTestText");
 }
 
 TEST(TestHarness_c, checkPointerText)
@@ -584,8 +579,8 @@ TEST(TestHarness_c, checkPointerText)
 static void failMemcmpMethod_()
 {
     HasTheDestructorBeenCalledChecker checker;
-    unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
-    unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
+    unsigned char expectedData[] = {0x00, 0x01, 0x02, 0x03};
+    unsigned char actualData[] = {0x00, 0x01, 0x03, 0x03};
 
     CHECK_EQUAL_C_MEMCMP(expectedData, actualData, sizeof(expectedData));
 }
@@ -603,8 +598,8 @@ TEST(TestHarness_c, checkMemcmp)
 static void failMemcmpTextMethod_()
 {
     HasTheDestructorBeenCalledChecker checker;
-    unsigned char expectedData[] = { 0x00, 0x01, 0x02, 0x03 };
-    unsigned char actualData[] = { 0x00, 0x01, 0x03, 0x03 };
+    unsigned char expectedData[] = {0x00, 0x01, 0x02, 0x03};
+    unsigned char actualData[] = {0x00, 0x01, 0x03, 0x03};
 
     CHECK_EQUAL_C_MEMCMP_TEXT(expectedData, actualData, sizeof(expectedData), "MemcmpTestText");
 }
@@ -760,7 +755,7 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory)
     CHECK(NULLPTR == cpputest_malloc(100));
 
     cpputest_malloc_set_not_out_of_memory();
-    void * mem = cpputest_malloc(100);
+    void* mem = cpputest_malloc(100);
     CHECK(NULLPTR != mem);
     cpputest_free(mem);
 }
@@ -768,9 +763,9 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory)
 TEST(TestHarness_c, cpputest_malloc_out_of_memory_after_n_mallocs)
 {
     cpputest_malloc_set_out_of_memory_countdown(3);
-    void * m1 = cpputest_malloc(10);
-    void * m2 = cpputest_malloc(11);
-    void * m3 = cpputest_malloc(12);
+    void* m1 = cpputest_malloc(10);
+    void* m2 = cpputest_malloc(11);
+    void* m3 = cpputest_malloc(12);
     CHECK(m1 != NULLPTR);
     CHECK(m2 != NULLPTR);
     CHECK(m3 == NULLPTR);
@@ -782,7 +777,7 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory_after_n_mallocs)
 TEST(TestHarness_c, cpputest_malloc_out_of_memory_after_0_mallocs)
 {
     cpputest_malloc_set_out_of_memory_countdown(0);
-    void * m1 = cpputest_malloc(10);
+    void* m1 = cpputest_malloc(10);
     CHECK(m1 == NULLPTR);
     cpputest_malloc_set_not_out_of_memory();
 }
@@ -790,20 +785,20 @@ TEST(TestHarness_c, cpputest_malloc_out_of_memory_after_0_mallocs)
 TEST(TestHarness_c, count_mallocs)
 {
     cpputest_malloc_count_reset();
-    void * m1 = cpputest_malloc(10);
-    void * m2 = cpputest_malloc(11);
-    void * m3 = cpputest_malloc(12);
+    void* m1 = cpputest_malloc(10);
+    void* m2 = cpputest_malloc(11);
+    void* m3 = cpputest_malloc(12);
     cpputest_free(m1);
     cpputest_free(m2);
     cpputest_free(m3);
     LONGS_EQUAL(3, cpputest_malloc_get_count());
 }
 
-#ifdef CPPUTEST_USE_STRDUP_MACROS
+    #ifdef CPPUTEST_USE_STRDUP_MACROS
 
 TEST(TestHarness_c, cpputest_strdup)
 {
-    char * mem = cpputest_strdup("0123456789");
+    char* mem = cpputest_strdup("0123456789");
     CHECK(NULLPTR != mem);
     STRCMP_EQUAL("0123456789", mem);
     cpputest_free(mem);
@@ -811,17 +806,17 @@ TEST(TestHarness_c, cpputest_strdup)
 
 TEST(TestHarness_c, cpputest_strndup)
 {
-    char * mem = cpputest_strndup("0123456789", 3);
+    char* mem = cpputest_strndup("0123456789", 3);
     CHECK(NULLPTR != mem);
     STRCMP_EQUAL("012", mem);
     cpputest_free(mem);
 }
 
-#endif
+    #endif
 
 TEST(TestHarness_c, cpputest_calloc)
 {
-    void * mem = cpputest_calloc(10, 10);
+    void* mem = cpputest_calloc(10, 10);
     CHECK(NULLPTR != mem);
     cpputest_free(mem);
 }
@@ -830,13 +825,13 @@ TEST(TestHarness_c, cpputest_realloc_larger)
 {
     const char* number_string = "123456789";
 
-    char* mem1 = (char*) cpputest_malloc(10);
+    char* mem1 = (char*)cpputest_malloc(10);
 
     SimpleString::StrNCpy(mem1, number_string, 10);
 
     CHECK(mem1 != NULLPTR);
 
-    char* mem2 = (char*) cpputest_realloc(mem1, 1000);
+    char* mem2 = (char*)cpputest_realloc(mem1, 1000);
 
     CHECK(mem2 != NULLPTR);
     STRCMP_EQUAL(number_string, mem2);
@@ -844,31 +839,30 @@ TEST(TestHarness_c, cpputest_realloc_larger)
     cpputest_free(mem2);
 }
 
-#include "CppUTest/MemoryLeakDetector.h"
+    #include "CppUTest/MemoryLeakDetector.h"
 
 TEST(TestHarness_c, macros)
 {
-#if CPPUTEST_USE_MALLOC_MACROS
+    #if CPPUTEST_USE_MALLOC_MACROS
     MemoryLeakDetector* memLeakDetector = MemoryLeakWarningPlugin::getGlobalDetector();
     size_t memLeaks = memLeakDetector->totalMemoryLeaks(mem_leak_period_checking);
-#endif
+    #endif
     void* mem1 = malloc(10);
     void* mem2 = calloc(10, 20);
     void* mem3 = realloc(mem2, 100);
-#if CPPUTEST_USE_MALLOC_MACROS
+    #if CPPUTEST_USE_MALLOC_MACROS
     LONGS_EQUAL(memLeaks + 2, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-#endif
+    #endif
     free(mem1);
     free(mem3);
-#if CPPUTEST_USE_MALLOC_MACROS
+    #if CPPUTEST_USE_MALLOC_MACROS
     LONGS_EQUAL(memLeaks, memLeakDetector->totalMemoryLeaks(mem_leak_period_checking));
-#endif
-
+    #endif
 }
 
 TEST(TestHarness_c, callocInitializedToZero)
 {
-    char* mem = (char*) calloc(20, sizeof(char));
+    char* mem = (char*)calloc(20, sizeof(char));
     for (int i = 0; i < 20; i++)
         CHECK(mem[i] == 0);
     free(mem);
@@ -877,7 +871,7 @@ TEST(TestHarness_c, callocInitializedToZero)
 TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMemory)
 {
     cpputest_malloc_set_out_of_memory_countdown(0);
-    void * m = cpputest_calloc(1, 1);
+    void* m = cpputest_calloc(1, 1);
     CHECK(m == NULLPTR);
     cpputest_malloc_set_not_out_of_memory();
 }

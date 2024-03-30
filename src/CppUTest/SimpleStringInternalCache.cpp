@@ -41,8 +41,7 @@ struct SimpleStringInternalCacheNode
     SimpleStringMemoryBlock* usedMemoryHead_;
 };
 
-SimpleStringInternalCache::SimpleStringInternalCache()
-    : allocator_(defaultMallocAllocator()), cache_(NULLPTR), nonCachedAllocations_(NULLPTR), hasWarnedAboutDeallocations(false)
+SimpleStringInternalCache::SimpleStringInternalCache() : allocator_(defaultMallocAllocator()), cache_(NULLPTR), nonCachedAllocations_(NULLPTR), hasWarnedAboutDeallocations(false)
 {
     cache_ = createInternalCacheNodes();
 }
@@ -60,7 +59,8 @@ void SimpleStringInternalCache::setAllocator(TestMemoryAllocator* allocator)
 
 SimpleStringInternalCacheNode* SimpleStringInternalCache::createInternalCacheNodes()
 {
-    SimpleStringInternalCacheNode* node = (SimpleStringInternalCacheNode*) (void*) allocator_->alloc_memory(sizeof(SimpleStringInternalCacheNode) * amountOfInternalCacheNodes, __FILE__, __LINE__);
+    SimpleStringInternalCacheNode* node =
+        (SimpleStringInternalCacheNode*)(void*)allocator_->alloc_memory(sizeof(SimpleStringInternalCacheNode) * amountOfInternalCacheNodes, __FILE__, __LINE__);
 
     for (int i = 0; i < amountOfInternalCacheNodes; i++) {
         node[i].freeMemoryHead_ = NULLPTR;
@@ -82,8 +82,8 @@ bool SimpleStringInternalCache::isCached(size_t size)
 size_t SimpleStringInternalCache::getIndexForCache(size_t size)
 {
     for (size_t i = 0; i < amountOfInternalCacheNodes; i++)
-      if (size <= cache_[i].size_)
-        return i;
+        if (size <= cache_[i].size_)
+            return i;
     return 0; // LCOV_EXCL_LINE
 }
 
@@ -93,26 +93,26 @@ SimpleStringInternalCacheNode* SimpleStringInternalCache::getCacheNodeFromSize(s
     return &cache_[index];
 }
 
-void SimpleStringInternalCache::destroyInternalCacheNode(SimpleStringInternalCacheNode * node)
+void SimpleStringInternalCache::destroyInternalCacheNode(SimpleStringInternalCacheNode* node)
 {
-    allocator_->free_memory((char*) node, sizeof(SimpleStringInternalCacheNode) * amountOfInternalCacheNodes, __FILE__, __LINE__);
+    allocator_->free_memory((char*)node, sizeof(SimpleStringInternalCacheNode) * amountOfInternalCacheNodes, __FILE__, __LINE__);
 }
 
 SimpleStringMemoryBlock* SimpleStringInternalCache::createSimpleStringMemoryBlock(size_t size, SimpleStringMemoryBlock* next)
 {
-    SimpleStringMemoryBlock* block = (SimpleStringMemoryBlock*) (void*) allocator_->alloc_memory(sizeof(SimpleStringMemoryBlock) , __FILE__, __LINE__);
-    block->memory_ = allocator_->alloc_memory(size , __FILE__, __LINE__);
+    SimpleStringMemoryBlock* block = (SimpleStringMemoryBlock*)(void*)allocator_->alloc_memory(sizeof(SimpleStringMemoryBlock), __FILE__, __LINE__);
+    block->memory_ = allocator_->alloc_memory(size, __FILE__, __LINE__);
     block->next_ = next;
     return block;
 }
 
-void SimpleStringInternalCache::destroySimpleStringMemoryBlock(SimpleStringMemoryBlock * block, size_t size)
+void SimpleStringInternalCache::destroySimpleStringMemoryBlock(SimpleStringMemoryBlock* block, size_t size)
 {
     allocator_->free_memory(block->memory_, size, __FILE__, __LINE__);
-    allocator_->free_memory((char*) block, sizeof(SimpleStringMemoryBlock), __FILE__, __LINE__);
+    allocator_->free_memory((char*)block, sizeof(SimpleStringMemoryBlock), __FILE__, __LINE__);
 }
 
-void SimpleStringInternalCache::destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock * block, size_t size)
+void SimpleStringInternalCache::destroySimpleStringMemoryBlockList(SimpleStringMemoryBlock* block, size_t size)
 {
     SimpleStringMemoryBlock* current = block;
     while (current) {
@@ -152,10 +152,17 @@ void SimpleStringInternalCache::printDeallocatingUnknownMemory(char* memory)
 {
     if (!hasWarnedAboutDeallocations) {
         hasWarnedAboutDeallocations = true;
-        UtestShell::getCurrent()->print(StringFromFormat("\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
-                                                         "This is likely due statics and will cause problems.\n"
-                                                          "Only warning once to avoid recursive warnings.\n"
-                                                          "String we are deallocating: \"%s\"\n", memory).asCharString(), __FILE__, __LINE__);
+        UtestShell::getCurrent()->print(
+            StringFromFormat(
+                "\nWARNING: Attempting to deallocate a String buffer that was allocated while not caching. Ignoring it!\n"
+                "This is likely due statics and will cause problems.\n"
+                "Only warning once to avoid recursive warnings.\n"
+                "String we are deallocating: \"%s\"\n",
+                memory
+            )
+                .asCharString(),
+            __FILE__, __LINE__
+        );
     }
 }
 
@@ -177,7 +184,6 @@ void SimpleStringInternalCache::releaseCachedBlockFrom(char* memory, SimpleStrin
         }
     }
     printDeallocatingUnknownMemory(memory);
-
 }
 
 void SimpleStringInternalCache::releaseNonCachedMemory(char* memory, size_t size)
@@ -264,8 +270,7 @@ TestMemoryAllocator* GlobalSimpleStringCache::getAllocator()
     return allocator_;
 }
 
-SimpleStringCacheAllocator::SimpleStringCacheAllocator(SimpleStringInternalCache& cache, TestMemoryAllocator* origAllocator)
-    : cache_(cache), originalAllocator_(origAllocator)
+SimpleStringCacheAllocator::SimpleStringCacheAllocator(SimpleStringInternalCache& cache, TestMemoryAllocator* origAllocator) : cache_(cache), originalAllocator_(origAllocator)
 {
     cache_.setAllocator(origAllocator);
 }
@@ -309,4 +314,3 @@ TestMemoryAllocator* SimpleStringCacheAllocator::originalAllocator()
 {
     return originalAllocator_;
 }
-

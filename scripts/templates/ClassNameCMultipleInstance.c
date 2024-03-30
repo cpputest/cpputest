@@ -9,13 +9,11 @@ typedef struct ClassNameStruct
 
 ClassName ClassName_Create(void)
 {
-     ClassName self = calloc(1, sizeof(ClassNameStruct));
-     return self;
+    ClassName self = calloc(1, sizeof(ClassNameStruct));
+    return self;
 }
 
 void ClassName_Destroy(ClassName self)
 {
     free(self);
 }
-
-

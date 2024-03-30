@@ -33,7 +33,7 @@
 
 TEST_GROUP(MockExpectedCallsList)
 {
-    MockExpectedCallsList * list;
+    MockExpectedCallsList* list;
     MockCheckedExpectedCall* call1;
     MockCheckedExpectedCall* call2;
     MockCheckedExpectedCall* call3;
@@ -63,8 +63,8 @@ TEST_GROUP(MockExpectedCallsList)
 
 TEST(MockExpectedCallsList, emptyList)
 {
-    CHECK(! list->hasUnfulfilledExpectations());
-    CHECK(! list->hasFinalizedMatchingExpectations());
+    CHECK(!list->hasUnfulfilledExpectations());
+    CHECK(!list->hasFinalizedMatchingExpectations());
     LONGS_EQUAL(0, list->size());
 }
 
@@ -81,7 +81,7 @@ TEST(MockExpectedCallsList, listWithFulfilledExpectationHasNoUnfulfilledOnes)
     call2->callWasMade(2);
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
-    CHECK(! list->hasUnfulfilledExpectations());
+    CHECK(!list->hasUnfulfilledExpectations());
 }
 
 TEST(MockExpectedCallsList, listWithFulfilledExpectationButOutOfOrder)
@@ -92,7 +92,7 @@ TEST(MockExpectedCallsList, listWithFulfilledExpectationButOutOfOrder)
     list->addExpectedCall(call2);
     call2->callWasMade(1);
     call1->callWasMade(2);
-    CHECK(! list->hasUnfulfilledExpectations());
+    CHECK(!list->hasUnfulfilledExpectations());
     CHECK(list->hasCallsOutOfOrder());
 }
 
@@ -117,7 +117,7 @@ TEST(MockExpectedCallsList, onlyKeepUnmatchingExpectations)
 {
     call1->withName("relate");
     call2->withName("unrelate");
-    call3->withName("relate").withParameter("param",1);
+    call3->withName("relate").withParameter("param", 1);
     list->addExpectedCall(call1);
     list->addExpectedCall(call2);
     list->addExpectedCall(call3);
@@ -263,11 +263,10 @@ TEST(MockExpectedCallsList, callsWithMissingParametersToString)
     list->addExpectedCall(call2);
 
     SimpleString expectedString;
-    expectedString = StringFromFormat("-%s\n-#%s\n-%s\n-#%s",
-                                      call1->callToString().asCharString(), 
-                                      call1->missingParametersToString().asCharString(),
-                                      call2->callToString().asCharString(), 
-                                      call2->missingParametersToString().asCharString());
+    expectedString = StringFromFormat(
+        "-%s\n-#%s\n-%s\n-#%s", call1->callToString().asCharString(), call1->missingParametersToString().asCharString(), call2->callToString().asCharString(),
+        call2->missingParametersToString().asCharString()
+    );
     STRCMP_EQUAL(expectedString.asCharString(), list->callsWithMissingParametersToString("-", "#").asCharString());
 }
 
@@ -304,7 +303,7 @@ TEST(MockExpectedCallsList, toStringOnEmptyList)
 
 TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_emptyList)
 {
-    CHECK(! list->hasFinalizedMatchingExpectations());
+    CHECK(!list->hasFinalizedMatchingExpectations());
 }
 
 TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasNonMatchingCalls)
@@ -316,7 +315,7 @@ TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasNonMatchingC
     list->addExpectedCall(call2);
     list->addExpectedCall(call3);
 
-    CHECK(! list->hasFinalizedMatchingExpectations());
+    CHECK(!list->hasFinalizedMatchingExpectations());
 }
 
 TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasMatchingButNotFinalizedCall)
@@ -326,7 +325,7 @@ TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasMatchingButN
     call1->ignoreOtherParameters();
     call2->withParameter("param", 0);
 
-    CHECK(! list->hasFinalizedMatchingExpectations());
+    CHECK(!list->hasFinalizedMatchingExpectations());
 }
 
 TEST(MockExpectedCallsList, hasFinalizedMatchingExpectations_listHasFinalizedCallThatIgnoresParameters)

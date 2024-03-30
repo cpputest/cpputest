@@ -2,13 +2,12 @@
 
 static int fakeRan = 0;
 
-extern "C"
-{
+extern "C" {
 #include "ClassName.h"
-    void virtualFunction_renameThis_fake(ClassName*)
-    {
-        fakeRan = 1;
-    }
+void virtualFunction_renameThis_fake(ClassName*)
+{
+    fakeRan = 1;
+}
 }
 
 TEST_GROUP(ClassName)
@@ -17,14 +16,14 @@ TEST_GROUP(ClassName)
 
     void setup()
     {
-      aClassName = ClassName_Create();
-      fakeRan = 0;
-      aClassName->virtualFunction_renameThis = virtualFunction_renameThis_fake;
+        aClassName = ClassName_Create();
+        fakeRan = 0;
+        aClassName->virtualFunction_renameThis = virtualFunction_renameThis_fake;
     }
-    
+
     void teardown()
     {
-       ClassName_Destroy(aClassName);
+        ClassName_Destroy(aClassName);
     }
 };
 
@@ -36,6 +35,5 @@ TEST(ClassName, Fake)
 
 TEST(ClassName, Create)
 {
-  FAIL("Start here");
+    FAIL("Start here");
 }
-

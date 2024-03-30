@@ -27,9 +27,10 @@
 
 #ifdef CPPUTEST_INCLUDE_GTEST_TESTS
 
-#include "CppUTestExt/GTestConvertor.h"
+    #include "CppUTestExt/GTestConvertor.h"
 
-class GTestTestingFixtureTest : public testing::Test {
+class GTestTestingFixtureTest : public testing::Test
+{
 protected:
     bool setup_was_called;
     char* freed_during_teardown;
@@ -40,10 +41,7 @@ protected:
         freed_during_teardown = NULL;
     }
 
-    void TearDown() _override
-    {
-        delete [] freed_during_teardown;
-    }
+    void TearDown() _override { delete[] freed_during_teardown; }
 };
 
 TEST_F(GTestTestingFixtureTest, setupBeenCalled)

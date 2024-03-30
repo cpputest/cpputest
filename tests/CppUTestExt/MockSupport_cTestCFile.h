@@ -39,4 +39,3 @@ extern void all_mock_support_c_calls(void);
 #endif
 
 #endif /* TESTMOCKSUPPORTC_CFILE_H */
-

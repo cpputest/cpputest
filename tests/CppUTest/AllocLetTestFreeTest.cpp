@@ -1,8 +1,7 @@
 
 #include "CppUTest/StandardCLibrary.h"
 
-extern "C"
-{
+extern "C" {
 #include "AllocLetTestFree.h"
 }
 

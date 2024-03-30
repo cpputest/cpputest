@@ -42,7 +42,7 @@ TEST_GROUP(NormalMemoryReportFormatter)
 
     void setup() _override
     {
-        memory01 = (char*) 0x01;
+        memory01 = (char*)0x01;
         testResult = new TestResult(testOutput);
     }
 
@@ -52,17 +52,16 @@ TEST_GROUP(NormalMemoryReportFormatter)
     }
 };
 
-
 TEST(NormalMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
     formatter.report_alloc_memory(testResult, defaultMallocAllocator(), 10, memory01, "file", 9);
-    TESTOUTPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", (void*) memory01).asCharString());
+    TESTOUTPUT_EQUAL(StringFromFormat("\tAllocation using malloc of size: 10 pointer: %p at file:9\n", (void*)memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, freeCreatesAnFreeCall)
 {
     formatter.report_free_memory(testResult, defaultMallocAllocator(), memory01, "boo", 6);
-    TESTOUTPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at boo:6\n", (void*) memory01).asCharString());
+    TESTOUTPUT_EQUAL(StringFromFormat("\tDeallocation using free of pointer: %p at boo:6\n", (void*)memory01).asCharString());
 }
 
 TEST(NormalMemoryReportFormatter, testStarts)

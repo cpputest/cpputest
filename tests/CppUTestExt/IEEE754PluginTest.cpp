@@ -33,7 +33,7 @@
 
 #if CPPUTEST_HAVE_FENV
 
-#include "IEEE754PluginTest_c.h"
+    #include "IEEE754PluginTest_c.h"
 
 TEST_GROUP(FE_with_Plugin)
 {

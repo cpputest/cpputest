@@ -49,9 +49,9 @@ TEST_GROUP(CodeMemoryReportFormatter)
     {
         cAllocator = defaultMallocAllocator();
         newAllocator = defaultNewAllocator();
-        newArrayAllocator= defaultNewArrayAllocator();
-        memory01 = (char*) 0x01;
-        memory02 = (char*) 0x02;
+        newArrayAllocator = defaultNewArrayAllocator();
+        memory01 = (char*)0x01;
+        memory02 = (char*)0x02;
 
         formatter = new CodeMemoryReportFormatter(cAllocator);
         testResult = new TestResult(testOutput);
@@ -63,7 +63,6 @@ TEST_GROUP(CodeMemoryReportFormatter)
         delete formatter;
     }
 };
-
 
 TEST(CodeMemoryReportFormatter, mallocCreatesAnMallocCall)
 {
@@ -184,8 +183,8 @@ TEST(CodeMemoryReportFormatter, TestGroupGeneratesTestGroupCode)
 
 TEST(CodeMemoryReportFormatter, VariableFromFileLineInfoAlreadyExists)
 {
-    for(int i = 1; i < 100; i++) {
-         formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
+    for (int i = 1; i < 100; i++) {
+        formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
     }
     formatter->report_alloc_memory(testResult, newArrayAllocator, 10, memory01, "file", 8);
     testOutput.flush();

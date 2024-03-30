@@ -1,5 +1,3 @@
 #include "ClassName.h"
 
-void ClassName()
-{
-}
+void ClassName() {}

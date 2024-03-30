@@ -34,8 +34,7 @@ TEST_GROUP(ComparatorsAndCopiersRepository)
 
 class MyComparator : public MockNamedValueComparator
 {
-  public:
-
+public:
     MyComparator() {}
     virtual ~MyComparator() _destructor_override {}
 
@@ -45,8 +44,7 @@ class MyComparator : public MockNamedValueComparator
 
 class MyCopier : public MockNamedValueCopier
 {
-  public:
-
+public:
     MyCopier() {}
     virtual ~MyCopier() _destructor_override {}
 
@@ -55,87 +53,86 @@ class MyCopier : public MockNamedValueCopier
 
 TEST(ComparatorsAndCopiersRepository, InstallCopierAndRetrieveIt)
 {
-  MyCopier copier;
-  MockNamedValueComparatorsAndCopiersRepository repository;
-  repository.installCopier("MyType", copier);
-  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
-  repository.clear();
+    MyCopier copier;
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    repository.installCopier("MyType", copier);
+    POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+    repository.clear();
 }
 
 TEST(ComparatorsAndCopiersRepository, ComparatorAndCopierByTheSameNameShouldBothBeFound)
 {
-  MyComparator comparator;
-  MyCopier copier;
-  MockNamedValueComparatorsAndCopiersRepository repository;
-  repository.installCopier("MyType", copier);
-  repository.installComparator("MyType", comparator);
-  POINTERS_EQUAL(&comparator, repository.getComparatorForType("MyType"));
-  POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
-  repository.clear();
+    MyComparator comparator;
+    MyCopier copier;
+    MockNamedValueComparatorsAndCopiersRepository repository;
+    repository.installCopier("MyType", copier);
+    repository.installComparator("MyType", comparator);
+    POINTERS_EQUAL(&comparator, repository.getComparatorForType("MyType"));
+    POINTERS_EQUAL(&copier, repository.getCopierForType("MyType"));
+    repository.clear();
 }
 
 TEST(ComparatorsAndCopiersRepository, InstallComparatorsAndCopiersFromRepository)
 {
-  MyComparator comparator;
-  MyCopier copier;
-  MockNamedValueComparatorsAndCopiersRepository source;
-  MockNamedValueComparatorsAndCopiersRepository target;
+    MyComparator comparator;
+    MyCopier copier;
+    MockNamedValueComparatorsAndCopiersRepository source;
+    MockNamedValueComparatorsAndCopiersRepository target;
 
-  source.installCopier("MyType", copier);
-  source.installComparator("MyType", comparator);
+    source.installCopier("MyType", copier);
+    source.installComparator("MyType", comparator);
 
-  target.installComparatorsAndCopiers(source);
+    target.installComparatorsAndCopiers(source);
 
-  POINTERS_EQUAL(&comparator, target.getComparatorForType("MyType"));
-  POINTERS_EQUAL(&copier, target.getCopierForType("MyType"));
+    POINTERS_EQUAL(&comparator, target.getComparatorForType("MyType"));
+    POINTERS_EQUAL(&copier, target.getCopierForType("MyType"));
 
-  source.clear();
-  target.clear();
+    source.clear();
+    target.clear();
 }
 
 TEST_GROUP(MockNamedValue)
 {
-  MockNamedValue * value;
-  void setup() _override
-  {
-    value = new MockNamedValue("param");
-  }
+    MockNamedValue* value;
+    void setup() _override
+    {
+        value = new MockNamedValue("param");
+    }
 
-  void teardown() _override
-  {
-    delete value;
-  }
+    void teardown() _override
+    {
+        delete value;
+    }
 };
 
 TEST(MockNamedValue, DefaultToleranceUsedWhenNoToleranceGiven)
 {
-  value->setValue(0.2);
-  DOUBLES_EQUAL(MockNamedValue::defaultDoubleTolerance, value->getDoubleTolerance(), 0.0);
+    value->setValue(0.2);
+    DOUBLES_EQUAL(MockNamedValue::defaultDoubleTolerance, value->getDoubleTolerance(), 0.0);
 }
 
 TEST(MockNamedValue, GivenToleranceUsed)
 {
-  value->setValue(0.2, 3.2);
-  STRCMP_EQUAL("double", value->getType().asCharString());
-  DOUBLES_EQUAL(0.2, value->getDoubleValue(), 0.0);
-  DOUBLES_EQUAL(3.2, value->getDoubleTolerance(), 0.0);
+    value->setValue(0.2, 3.2);
+    STRCMP_EQUAL("double", value->getType().asCharString());
+    DOUBLES_EQUAL(0.2, value->getDoubleValue(), 0.0);
+    DOUBLES_EQUAL(3.2, value->getDoubleTolerance(), 0.0);
 }
 
 TEST(MockNamedValue, DoublesEqualIfWithinTolerance)
 {
-  value->setValue(5.0, 0.4);
-  MockNamedValue other("param2");
-  other.setValue(5.3);
+    value->setValue(5.0, 0.4);
+    MockNamedValue other("param2");
+    other.setValue(5.3);
 
-  CHECK_TRUE(value->equals(other));
+    CHECK_TRUE(value->equals(other));
 }
-
 
 TEST(MockNamedValue, DoublesNotEqualIfOutsideTolerance)
 {
-  value->setValue(5.0, 0.4);
-  MockNamedValue other("param2");
-  other.setValue(5.5);
+    value->setValue(5.0, 0.4);
+    MockNamedValue other("param2");
+    other.setValue(5.5);
 
-  CHECK_FALSE(value->equals(other));
+    CHECK_FALSE(value->equals(other));
 }

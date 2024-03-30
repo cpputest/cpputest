@@ -11,4 +11,4 @@
 void ClassName_Create(void);
 void ClassName_Destroy(void);
 
-#endif  /* D_FakeClassName_H */
+#endif /* D_FakeClassName_H */

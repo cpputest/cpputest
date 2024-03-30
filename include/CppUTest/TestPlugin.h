@@ -36,26 +36,18 @@ class TestResult;
 class TestPlugin
 {
 public:
-
     TestPlugin(const SimpleString& name);
     virtual ~TestPlugin();
 
-    virtual void preTestAction(UtestShell&, TestResult&)
-    {
-    }
+    virtual void preTestAction(UtestShell&, TestResult&) {}
 
-    virtual void postTestAction(UtestShell&, TestResult&)
-    {
-    }
+    virtual void postTestAction(UtestShell&, TestResult&) {}
 
-    virtual bool parseArguments(int /* ac */, const char *const * /* av */, int /* index */ )
-    {
-        return false;
-    }
+    virtual bool parseArguments(int /* ac */, const char* const* /* av */, int /* index */) { return false; }
 
     virtual void runAllPreTestAction(UtestShell&, TestResult&);
     virtual void runAllPostTestAction(UtestShell&, TestResult&);
-    virtual bool parseAllArguments(int ac, const char *const *av, int index);
+    virtual bool parseAllArguments(int ac, const char* const* av, int index);
     virtual bool parseAllArguments(int ac, char** av, int index);
 
     virtual TestPlugin* addPlugin(TestPlugin*);
@@ -86,9 +78,9 @@ private:
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-extern void CppUTestStore(void **location);
+extern void CppUTestStore(void** location);
 
-class SetPointerPlugin: public TestPlugin
+class SetPointerPlugin : public TestPlugin
 {
 public:
     SetPointerPlugin(const SimpleString& name);
@@ -100,14 +92,17 @@ public:
     };
 };
 
-#define UT_PTR_SET(a, b) do { CppUTestStore( (void**)&a ); a = b; } while(0)
+#define UT_PTR_SET(a, b)                                                                                                                                                           \
+    do {                                                                                                                                                                           \
+        CppUTestStore((void**)&a);                                                                                                                                                 \
+        a = b;                                                                                                                                                                     \
+    } while (0)
 
 ///////////// Null Plugin
 
-class NullTestPlugin: public TestPlugin
+class NullTestPlugin : public TestPlugin
 {
 public:
-
     NullTestPlugin();
 
     virtual void runAllPreTestAction(UtestShell& test, TestResult& result) _override;

@@ -32,7 +32,6 @@ class TestInstallerTestUtestShell : public UtestShell
 {
 };
 
-
 // this is file scope because the test is installed
 // with all other tests, which also happen to be
 // created as static instances at file scope
@@ -57,6 +56,4 @@ TEST_GROUP(TestInstaller)
     }
 };
 
-TEST(TestInstaller, Create)
-{
-}
+TEST(TestInstaller, Create) {}

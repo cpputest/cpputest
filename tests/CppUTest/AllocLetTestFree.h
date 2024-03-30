@@ -6,8 +6,7 @@
 extern "C" {
 #endif
 
-
-typedef struct AllocLetTestFreeStruct * AllocLetTestFree;
+typedef struct AllocLetTestFreeStruct* AllocLetTestFree;
 
 AllocLetTestFree AllocLetTestFree_Create(void);
 void AllocLetTestFree_Destroy(AllocLetTestFree);
@@ -16,4 +15,4 @@ void AllocLetTestFree_Destroy(AllocLetTestFree);
 }
 #endif
 
-#endif  /* D_FakeAllocLetTestFree_H */
+#endif /* D_FakeAllocLetTestFree_H */

@@ -61,43 +61,22 @@ public:
     virtual void print(const char* text);
     virtual void printVeryVerbose(const char* text);
 
-    size_t getTestCount() const
-    {
-        return testCount_;
-    }
-    size_t getRunCount() const
-    {
-        return runCount_;
-    }
-    size_t getCheckCount() const
-    {
-        return checkCount_;
-    }
-    size_t getFilteredOutCount() const
-    {
-        return filteredOutCount_;
-    }
-    size_t getIgnoredCount() const
-    {
-        return ignoredCount_;
-    }
-    size_t getFailureCount() const
-    {
-        return failureCount_;
-    }
+    size_t getTestCount() const { return testCount_; }
+    size_t getRunCount() const { return runCount_; }
+    size_t getCheckCount() const { return checkCount_; }
+    size_t getFilteredOutCount() const { return filteredOutCount_; }
+    size_t getIgnoredCount() const { return ignoredCount_; }
+    size_t getFailureCount() const { return failureCount_; }
 
-    bool isFailure() const
-    {
-        return (getFailureCount() != 0) || (getRunCount() + getIgnoredCount() == 0);
-    }
+    bool isFailure() const { return (getFailureCount() != 0) || (getRunCount() + getIgnoredCount() == 0); }
 
     size_t getTotalExecutionTime() const;
     void setTotalExecutionTime(size_t exTime);
 
     size_t getCurrentTestTotalExecutionTime() const;
     size_t getCurrentGroupTotalExecutionTime() const;
-private:
 
+private:
     TestOutput& output_;
     size_t testCount_;
     size_t runCount_;

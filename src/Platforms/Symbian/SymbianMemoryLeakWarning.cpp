@@ -32,7 +32,8 @@
 MemoryLeakWarning* MemoryLeakWarning::_latest = NULL;
 
 // naming convention due to CppUTest generic class name
-class MemoryLeakWarningData : public CBase {
+class MemoryLeakWarningData : public CBase
+{
 public:
     TInt iInitialAllocCells;
     TInt iExpectedLeaks;
@@ -51,14 +52,12 @@ MemoryLeakWarning::~MemoryLeakWarning()
     DestroyData();
 }
 
-void MemoryLeakWarning::Enable()
-{
-}
+void MemoryLeakWarning::Enable() {}
 
 const char* MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
 {
     TInt cellDifference(User::CountAllocCells() - _impl->iInitialAllocCells);
-    if( cellDifference != toBeDeletedLeaks ) {
+    if (cellDifference != toBeDeletedLeaks) {
         return "Heap imbalance after test\n";
     }
 
@@ -66,8 +65,7 @@ const char* MemoryLeakWarning::FinalReport(int toBeDeletedLeaks)
     TInt threadHandles;
     RThread().HandleCount(processHandles, threadHandles);
 
-    if(_impl->iInitialProcessHandleCount != processHandles ||
-        _impl->iInitialThreadHandleCount != threadHandles) {
+    if (_impl->iInitialProcessHandleCount != processHandles || _impl->iInitialThreadHandleCount != threadHandles) {
         return "Handle count imbalance after test\n";
     }
 
@@ -83,7 +81,7 @@ void MemoryLeakWarning::CheckPointUsage()
 bool MemoryLeakWarning::UsageIsNotBalanced()
 {
     TInt allocatedCells(User::CountAllocCells());
-    if(_impl->iExpectedLeaks != 0) {
+    if (_impl->iExpectedLeaks != 0) {
         TInt difference(Abs(_impl->iInitialAllocCells - allocatedCells));
         return difference != _impl->iExpectedLeaks;
     }
@@ -103,7 +101,7 @@ void MemoryLeakWarning::ExpectLeaks(int n)
 // this method leaves (no naming convention followed due to CppUTest framework
 void MemoryLeakWarning::CreateData()
 {
-    _impl = new(ELeave) MemoryLeakWarningData();
+    _impl = new (ELeave) MemoryLeakWarningData();
 }
 
 void MemoryLeakWarning::DestroyData()

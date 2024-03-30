@@ -59,7 +59,7 @@ void (*PlatformSpecificFClose)(PlatformSpecificFile file) = NULLPTR;
 
 void (*PlatformSpecificFlush)(void) = NULLPTR;
 
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list va_args_list) = NULLPTR;
+int (*PlatformSpecificVSNprintf)(char* str, size_t size, const char* format, va_list va_args_list) = NULLPTR;
 
 /* Dynamic Memory operations */
 void* (*PlatformSpecificMalloc)(size_t) = NULLPTR;
@@ -71,7 +71,7 @@ void* (*PlatformSpecificMemset)(void*, int, size_t) = NULLPTR;
 double (*PlatformSpecificFabs)(double) = NULLPTR;
 int (*PlatformSpecificIsNan)(double) = NULLPTR;
 int (*PlatformSpecificIsInf)(double) = NULLPTR;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = NULLPTR;
+int (*PlatformSpecificAtExit)(void (*func)(void)) = NULLPTR;
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = NULLPTR;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex mtx) = NULLPTR;

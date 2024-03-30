@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #include <time.h>
 #include <stdio.h>
 #include <stdarg.h>
@@ -66,14 +65,13 @@ static int DummyPlatformSpecificWaitPid(int, int*, int)
     return 0;
 }
 
-void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) =
-        DummyPlatformSpecificRunTestInASeperateProcess;
+void (*PlatformSpecificRunTestInASeperateProcess)(UtestShell* shell, TestPlugin* plugin, TestResult* result) = DummyPlatformSpecificRunTestInASeperateProcess;
 int (*PlatformSpecificFork)(void) = DummyPlatformSpecificFork;
 int (*PlatformSpecificWaitPid)(int, int*, int) = DummyPlatformSpecificWaitPid;
 
 extern "C" {
 
-static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), void* data)
+static int PlatformSpecificSetJmpImplementation(void (*function)(void* data), void* data)
 {
     if (0 == setjmp(test_exit_jmp_buf[jmp_buf_index])) {
         jmp_buf_index++;
@@ -116,15 +114,16 @@ static const char* TimeStringImplementation()
 {
     time_t tm = time(NULL);
     char* pTimeStr = ctime(&tm);
-    char* newlineChar = strchr(pTimeStr, '\n');   // Find the terminating newline character.
-    if(newlineChar != NULL) *newlineChar = '\0';   //If newline is found replace it with the string terminator.
+    char* newlineChar = strchr(pTimeStr, '\n'); // Find the terminating newline character.
+    if (newlineChar != NULL)
+        *newlineChar = '\0'; // If newline is found replace it with the string terminator.
     return (pTimeStr);
 }
 
 unsigned long (*GetPlatformSpecificTimeInMillis)() = TimeInMillisImplementation;
 const char* (*GetPlatformSpecificTimeString)() = TimeStringImplementation;
 
-int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_list args) = vsnprintf;
+int (*PlatformSpecificVSNprintf)(char* str, size_t size, const char* format, va_list args) = vsnprintf;
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
@@ -139,7 +138,7 @@ static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecifi
 {
     (void)str;
     (void)file;
-    printf("FILE%d:%s",(int)file, str);
+    printf("FILE%d:%s", (int)file, str);
 }
 
 static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
@@ -147,9 +146,7 @@ static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
     (void)file;
 }
 
-static void PlatformSpecificFlushImplementation()
-{
-}
+static void PlatformSpecificFlushImplementation() {}
 
 PlatformSpecificFile PlatformSpecificStdOut = stdout;
 PlatformSpecificFile (*PlatformSpecificFOpen)(const char*, const char*) = PlatformSpecificFOpenImplementation;
@@ -177,24 +174,18 @@ static int IsInfImplementation(double d)
 double (*PlatformSpecificFabs)(double) = fabs;
 int (*PlatformSpecificIsNan)(double) = IsNanImplementation;
 int (*PlatformSpecificIsInf)(double) = IsInfImplementation;
-int (*PlatformSpecificAtExit)(void(*func)(void)) = atexit;  /// this was undefined before
+int (*PlatformSpecificAtExit)(void (*func)(void)) = atexit; /// this was undefined before
 
 static PlatformSpecificMutex DummyMutexCreate(void)
 {
     return 0;
 }
 
-static void DummyMutexLock(PlatformSpecificMutex)
-{
-}
+static void DummyMutexLock(PlatformSpecificMutex) {}
 
-static void DummyMutexUnlock(PlatformSpecificMutex)
-{
-}
+static void DummyMutexUnlock(PlatformSpecificMutex) {}
 
-static void DummyMutexDestroy(PlatformSpecificMutex)
-{
-}
+static void DummyMutexDestroy(PlatformSpecificMutex) {}
 
 PlatformSpecificMutex (*PlatformSpecificMutexCreate)(void) = DummyMutexCreate;
 void (*PlatformSpecificMutexLock)(PlatformSpecificMutex) = DummyMutexLock;

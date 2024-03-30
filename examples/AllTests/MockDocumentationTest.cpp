@@ -69,10 +69,7 @@ public:
 class ClassFromProductionCodeMock : public ClassFromProductionCode
 {
 public:
-    virtual void importantFunction() _override
-    {
-        mock().actualCall("importantFunction").onObject(this);
-    }
+    virtual void importantFunction() _override { mock().actualCall("importantFunction").onObject(this); }
 };
 
 TEST(MockDocumentation, SimpleScenarioObject)
@@ -102,14 +99,8 @@ TEST(MockDocumentation, parameters)
 class MyTypeComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2) _override
-    {
-        return object1 == object2;
-    }
-    virtual SimpleString valueToString(const void* object) _override
-    {
-        return StringFrom(object);
-    }
+    virtual bool isEqual(const void* object1, const void* object2) _override { return object1 == object2; }
+    virtual SimpleString valueToString(const void* object) _override { return StringFrom(object); }
 };
 
 TEST(MockDocumentation, ObjectParameters)
