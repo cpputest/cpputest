@@ -42,7 +42,7 @@ TEST_GROUP(MockFailureTest)
     MockCheckedExpectedCall* call4;
     MockCheckedExpectedCall* call5;
 
-    void setup () _override
+    void setup () CPPUTEST_OVERRIDE
     {
         list = new MockExpectedCallsList;
         call1 = new MockCheckedExpectedCall;
@@ -51,7 +51,7 @@ TEST_GROUP(MockFailureTest)
         call4 = new MockCheckedExpectedCall;
         call5 = new MockCheckedExpectedCall;
     }
-    void teardown () _override
+    void teardown () CPPUTEST_OVERRIDE
     {
         delete list;
         delete call1;

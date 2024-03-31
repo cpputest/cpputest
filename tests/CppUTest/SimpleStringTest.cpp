@@ -35,13 +35,13 @@
 class JustUseNewStringAllocator : public TestMemoryAllocator
 {
 public:
-    virtual ~JustUseNewStringAllocator() _destructor_override {}
+    virtual ~JustUseNewStringAllocator() CPPUTEST_DESTRUCTOR_OVERRIDE {}
 
-    char* alloc_memory(size_t size, const char* file, size_t line) _override
+    char* alloc_memory(size_t size, const char* file, size_t line) CPPUTEST_OVERRIDE
     {
         return MemoryLeakWarningPlugin::getGlobalDetector()->allocMemory(getCurrentNewArrayAllocator(), size, file, line);
     }
-    void free_memory(char* str, size_t, const char* file, size_t line) _override
+    void free_memory(char* str, size_t, const char* file, size_t line) CPPUTEST_OVERRIDE
     {
         MemoryLeakWarningPlugin::getGlobalDetector()->deallocMemory(getCurrentNewArrayAllocator(), str, file, line);
     }
@@ -54,7 +54,7 @@ public:
     void (*testFunction_)(GlobalSimpleStringMemoryAccountant*);
     GlobalSimpleStringMemoryAccountant* parameter_;
 
-    virtual void exec() _override
+    virtual void exec() CPPUTEST_OVERRIDE
     {
         testFunction_(parameter_);
     }
@@ -67,14 +67,14 @@ TEST_GROUP(GlobalSimpleStringMemoryAccountant)
     TestTestingFixture fixture;
     GlobalSimpleStringMemoryAccountant accountant;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         stash.save();
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         stash.restore();
     }
@@ -157,12 +157,12 @@ TEST_GROUP(SimpleString)
 {
   JustUseNewStringAllocator justNewForSimpleStringTestAllocator;
   GlobalSimpleStringAllocatorStash stash;
-  void setup() _override
+  void setup() CPPUTEST_OVERRIDE
   {
       stash.save();
       SimpleString::setStringAllocator(&justNewForSimpleStringTestAllocator);
   }
-  void teardown() _override
+  void teardown() CPPUTEST_OVERRIDE
   {
       stash.restore();
   }
@@ -178,10 +178,10 @@ class MyOwnStringAllocator : public TestMemoryAllocator
 {
 public:
     MyOwnStringAllocator() : memoryWasAllocated(false) {}
-    virtual ~MyOwnStringAllocator() _destructor_override {}
+    virtual ~MyOwnStringAllocator() CPPUTEST_DESTRUCTOR_OVERRIDE {}
 
     bool memoryWasAllocated;
-    char* alloc_memory(size_t size, const char* file, size_t line) _override
+    char* alloc_memory(size_t size, const char* file, size_t line) CPPUTEST_OVERRIDE
     {
         memoryWasAllocated = true;
         return TestMemoryAllocator::alloc_memory(size, file, line);

@@ -94,7 +94,7 @@
 /* Should be the only #include here. Standard C library wrappers */
 #include "StandardCLibrary.h"
 
-/* Create a _no_return_ macro, which is used to flag a function as not returning.
+/* Create a CPPUTEST_NORETURN macro, which is used to flag a function as not returning.
  * Used for functions that always throws for instance.
  *
  * This is needed for compiling with clang, without breaking other compilers.
@@ -104,11 +104,11 @@
 #endif
 
 #if defined (__cplusplus) && __cplusplus >= 201103L
-   #define _no_return_ [[noreturn]]
+   #define CPPUTEST_NORETURN [[noreturn]]
 #elif __has_attribute(noreturn)
-   #define _no_return_ __attribute__((noreturn))
+   #define CPPUTEST_NORETURN __attribute__((noreturn))
 #else
-   #define _no_return_
+   #define CPPUTEST_NORETURN
 #endif
 
 #if defined(__MINGW32__)
@@ -118,9 +118,9 @@
 #endif
 
 #if __has_attribute(format)
-  #define _check_format_(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
+  #define CPPUTEST_CHECK_FORMAT(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
 #else
-  #define _check_format_(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
+  #define CPPUTEST_CHECK_FORMAT(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
 #endif
 
 #if defined(__cplusplus) && __cplusplus >= 201103L
@@ -333,10 +333,10 @@ typedef struct
 #ifdef __cplusplus
   /* Visual C++ 10.0+ (2010+) supports the override keyword, but doesn't define the C++ version as C++11 */
   #if (__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600))
-    #define _override override
+    #define CPPUTEST_OVERRIDE override
     #define NULLPTR nullptr
   #else
-    #define _override
+    #define CPPUTEST_OVERRIDE
     #define NULLPTR NULL
   #endif
 #endif
@@ -344,9 +344,9 @@ typedef struct
 #ifdef __cplusplus
   /* Visual C++ 11.0+ (2012+) supports the override keyword on destructors */
   #if (__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1700))
-    #define _destructor_override override
+    #define CPPUTEST_DESTRUCTOR_OVERRIDE override
   #else
-    #define _destructor_override
+    #define CPPUTEST_DESTRUCTOR_OVERRIDE
   #endif
 #endif
 

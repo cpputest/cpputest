@@ -43,12 +43,12 @@ TEST_GROUP(HelloWorld)
         va_end(arguments);
         return 1;
     }
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         buffer = new SimpleString();
         UT_PTR_SET(PrintFormated, &output_method);
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete buffer;
     }

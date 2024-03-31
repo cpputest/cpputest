@@ -69,29 +69,29 @@ public:
 class NormalTestTerminator : public TestTerminator
 {
 public:
-    virtual void exitCurrentTest() const _override;
-    virtual ~NormalTestTerminator() _destructor_override;
+    virtual void exitCurrentTest() const CPPUTEST_OVERRIDE;
+    virtual ~NormalTestTerminator() CPPUTEST_DESTRUCTOR_OVERRIDE;
 };
 
 class TestTerminatorWithoutExceptions  : public TestTerminator
 {
 public:
-    virtual void exitCurrentTest() const _override;
-    virtual ~TestTerminatorWithoutExceptions() _destructor_override;
+    virtual void exitCurrentTest() const CPPUTEST_OVERRIDE;
+    virtual ~TestTerminatorWithoutExceptions() CPPUTEST_DESTRUCTOR_OVERRIDE;
 };
 
 class CrashingTestTerminator : public NormalTestTerminator
 {
 public:
-    virtual void exitCurrentTest() const _override;
-    virtual ~CrashingTestTerminator() _destructor_override;
+    virtual void exitCurrentTest() const CPPUTEST_OVERRIDE;
+    virtual ~CrashingTestTerminator() CPPUTEST_DESTRUCTOR_OVERRIDE;
 };
 
 class CrashingTestTerminatorWithoutExceptions : public TestTerminatorWithoutExceptions
 {
 public:
-    virtual void exitCurrentTest() const _override;
-    virtual ~CrashingTestTerminatorWithoutExceptions() _destructor_override;
+    virtual void exitCurrentTest() const CPPUTEST_OVERRIDE;
+    virtual ~CrashingTestTerminatorWithoutExceptions() CPPUTEST_DESTRUCTOR_OVERRIDE;
 };
 
 //////////////////// UtestShell
@@ -215,9 +215,9 @@ class ExecFunctionTest : public Utest
 {
 public:
     ExecFunctionTest(ExecFunctionTestShell* shell);
-    void testBody() _override;
-    virtual void setup() _override;
-    virtual void teardown() _override;
+    void testBody() CPPUTEST_OVERRIDE;
+    virtual void setup() CPPUTEST_OVERRIDE;
+    virtual void teardown() CPPUTEST_OVERRIDE;
 private:
     ExecFunctionTestShell* shell_;
 };
@@ -239,9 +239,9 @@ public:
     void (*testFunction_)();
 
     ExecFunctionWithoutParameters(void(*testFunction)());
-    virtual ~ExecFunctionWithoutParameters() _destructor_override;
+    virtual ~ExecFunctionWithoutParameters() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual void exec() _override;
+    virtual void exec() CPPUTEST_OVERRIDE;
 };
 
 //////////////////// ExecFunctionTestShell
@@ -258,8 +258,8 @@ public:
     {
     }
 
-    Utest* createTest() _override { return new ExecFunctionTest(this); }
-    virtual ~ExecFunctionTestShell() _destructor_override;
+    Utest* createTest() CPPUTEST_OVERRIDE { return new ExecFunctionTest(this); }
+    virtual ~ExecFunctionTestShell() CPPUTEST_DESTRUCTOR_OVERRIDE;
 };
 
 //////////////////// CppUTestFailedException
@@ -276,14 +276,14 @@ class IgnoredUtestShell : public UtestShell
 {
 public:
     IgnoredUtestShell();
-    virtual ~IgnoredUtestShell() _destructor_override;
+    virtual ~IgnoredUtestShell() CPPUTEST_DESTRUCTOR_OVERRIDE;
     explicit IgnoredUtestShell(const char* groupName, const char* testName,
             const char* fileName, size_t lineNumber);
-    virtual bool willRun() const _override;
-    virtual void setRunIgnored() _override;
+    virtual bool willRun() const CPPUTEST_OVERRIDE;
+    virtual void setRunIgnored() CPPUTEST_OVERRIDE;
 protected:
-    virtual SimpleString getMacroName() const _override;
-    virtual void runOneTest(TestPlugin* plugin, TestResult& result) _override;
+    virtual SimpleString getMacroName() const CPPUTEST_OVERRIDE;
+    virtual void runOneTest(TestPlugin* plugin, TestResult& result) CPPUTEST_OVERRIDE;
 private:
 
     IgnoredUtestShell(const IgnoredUtestShell&);

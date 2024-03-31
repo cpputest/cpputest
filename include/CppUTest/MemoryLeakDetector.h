@@ -58,7 +58,7 @@ struct SimpleStringBuffer
 
     SimpleStringBuffer();
     void clear();
-    void add(const char* format, ...) _check_format_(CPPUTEST_CHECK_FORMAT_TYPE, 2, 3);
+    void add(const char* format, ...) CPPUTEST_CHECK_FORMAT(CPPUTEST_CHECK_FORMAT_TYPE, 2, 3);
     void addMemoryDump(const void* memory, size_t memorySize);
 
     char* toString();

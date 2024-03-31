@@ -117,12 +117,12 @@ public:
     explicit ConsoleTestOutput()
     {
     }
-    virtual ~ConsoleTestOutput() _destructor_override
+    virtual ~ConsoleTestOutput() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 
-    virtual void printBuffer(const char* s) _override;
-    virtual void flush() _override;
+    virtual void printBuffer(const char* s) CPPUTEST_OVERRIDE;
+    virtual void flush() CPPUTEST_OVERRIDE;
 
 private:
     ConsoleTestOutput(const ConsoleTestOutput&);
@@ -145,14 +145,14 @@ public:
     {
     }
 
-    virtual ~StringBufferTestOutput() _destructor_override;
+    virtual ~StringBufferTestOutput() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    void printBuffer(const char* s) _override
+    void printBuffer(const char* s) CPPUTEST_OVERRIDE
     {
         output += s;
     }
 
-    void flush() _override
+    void flush() CPPUTEST_OVERRIDE
     {
         output = "";
     }
@@ -178,29 +178,29 @@ public:
     virtual void setOutputTwo(TestOutput* output);
 
     CompositeTestOutput();
-    virtual ~CompositeTestOutput() _destructor_override;
+    virtual ~CompositeTestOutput() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual void printTestsStarted() _override;
-    virtual void printTestsEnded(const TestResult& result) _override;
+    virtual void printTestsStarted() CPPUTEST_OVERRIDE;
+    virtual void printTestsEnded(const TestResult& result) CPPUTEST_OVERRIDE;
 
-    virtual void printCurrentTestStarted(const UtestShell& test) _override;
-    virtual void printCurrentTestEnded(const TestResult& res) _override;
-    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
-    virtual void printCurrentGroupEnded(const TestResult& res) _override;
+    virtual void printCurrentTestStarted(const UtestShell& test) CPPUTEST_OVERRIDE;
+    virtual void printCurrentTestEnded(const TestResult& res) CPPUTEST_OVERRIDE;
+    virtual void printCurrentGroupStarted(const UtestShell& test) CPPUTEST_OVERRIDE;
+    virtual void printCurrentGroupEnded(const TestResult& res) CPPUTEST_OVERRIDE;
 
-    virtual void verbose(VerbosityLevel level) _override;
-    virtual void color() _override;
-    virtual void printBuffer(const char*) _override;
-    virtual void print(const char*) _override;
-    virtual void print(long) _override;
-    virtual void print(size_t) _override;
-    virtual void printDouble(double) _override;
-    virtual void printFailure(const TestFailure& failure) _override;
-    virtual void setProgressIndicator(const char*) _override;
+    virtual void verbose(VerbosityLevel level) CPPUTEST_OVERRIDE;
+    virtual void color() CPPUTEST_OVERRIDE;
+    virtual void printBuffer(const char*) CPPUTEST_OVERRIDE;
+    virtual void print(const char*) CPPUTEST_OVERRIDE;
+    virtual void print(long) CPPUTEST_OVERRIDE;
+    virtual void print(size_t) CPPUTEST_OVERRIDE;
+    virtual void printDouble(double) CPPUTEST_OVERRIDE;
+    virtual void printFailure(const TestFailure& failure) CPPUTEST_OVERRIDE;
+    virtual void setProgressIndicator(const char*) CPPUTEST_OVERRIDE;
 
-    virtual void printVeryVerbose(const char*) _override;
+    virtual void printVeryVerbose(const char*) CPPUTEST_OVERRIDE;
 
-    virtual void flush() _override;
+    virtual void flush() CPPUTEST_OVERRIDE;
 
 protected:
     CompositeTestOutput(const TestOutput&);

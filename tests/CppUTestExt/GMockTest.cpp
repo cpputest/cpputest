@@ -37,12 +37,12 @@
 TEST_GROUP(GMock)
 {
     TestTestingFixture *fixture;
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         fixture = new TestTestingFixture;
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete fixture;
 

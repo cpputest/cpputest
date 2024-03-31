@@ -35,68 +35,68 @@ class MockCheckedActualCall : public MockActualCall
 {
 public:
     MockCheckedActualCall(unsigned int callOrder, MockFailureReporter* reporter, const MockExpectedCallsList& expectations);
-    virtual ~MockCheckedActualCall() _destructor_override;
+    virtual ~MockCheckedActualCall() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual MockActualCall& withName(const SimpleString& name) _override;
-    virtual MockActualCall& withCallOrder(unsigned int) _override;
-    virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
-    virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
-    virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
-    virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value) _override;
-    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) _override;
-    virtual MockActualCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) _override;
-    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) _override;
-    virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value) _override;
-    virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
-    virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
-    virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) _override;
-    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
-    virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) _override;
-    virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
-    virtual MockActualCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withName(const SimpleString& name) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withCallOrder(unsigned int) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withIntParameter(const SimpleString& name, int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withParameterOfType(const SimpleString& type, const SimpleString& name, const void* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& type, const SimpleString& name, void* output) CPPUTEST_OVERRIDE;
 
-    virtual bool hasReturnValue() _override;
-    virtual MockNamedValue returnValue() _override;
+    virtual bool hasReturnValue() CPPUTEST_OVERRIDE;
+    virtual MockNamedValue returnValue() CPPUTEST_OVERRIDE;
 
-    virtual bool returnBoolValueOrDefault(bool default_value) _override;
-    virtual bool returnBoolValue() _override;
+    virtual bool returnBoolValueOrDefault(bool default_value) CPPUTEST_OVERRIDE;
+    virtual bool returnBoolValue() CPPUTEST_OVERRIDE;
 
-    virtual int returnIntValueOrDefault(int default_value) _override;
-    virtual int returnIntValue() _override;
+    virtual int returnIntValueOrDefault(int default_value) CPPUTEST_OVERRIDE;
+    virtual int returnIntValue() CPPUTEST_OVERRIDE;
 
-    virtual unsigned long int returnUnsignedLongIntValue() _override;
-    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) _override;
+    virtual unsigned long int returnUnsignedLongIntValue() CPPUTEST_OVERRIDE;
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) CPPUTEST_OVERRIDE;
 
-    virtual long int returnLongIntValue() _override;
-    virtual long int returnLongIntValueOrDefault(long int default_value) _override;
+    virtual long int returnLongIntValue() CPPUTEST_OVERRIDE;
+    virtual long int returnLongIntValueOrDefault(long int default_value) CPPUTEST_OVERRIDE;
 
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override;
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong default_value) _override;
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() CPPUTEST_OVERRIDE;
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong default_value) CPPUTEST_OVERRIDE;
 
-    virtual cpputest_longlong returnLongLongIntValue() _override;
-    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong default_value) _override;
+    virtual cpputest_longlong returnLongLongIntValue() CPPUTEST_OVERRIDE;
+    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong default_value) CPPUTEST_OVERRIDE;
 
-    virtual unsigned int returnUnsignedIntValue() _override;
-    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
+    virtual unsigned int returnUnsignedIntValue() CPPUTEST_OVERRIDE;
+    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) CPPUTEST_OVERRIDE;
 
-    virtual const char * returnStringValueOrDefault(const char * default_value) _override;
-    virtual const char * returnStringValue() _override;
+    virtual const char * returnStringValueOrDefault(const char * default_value) CPPUTEST_OVERRIDE;
+    virtual const char * returnStringValue() CPPUTEST_OVERRIDE;
 
-    virtual double returnDoubleValue() _override;
-    virtual double returnDoubleValueOrDefault(double default_value) _override;
+    virtual double returnDoubleValue() CPPUTEST_OVERRIDE;
+    virtual double returnDoubleValueOrDefault(double default_value) CPPUTEST_OVERRIDE;
 
-    virtual const void * returnConstPointerValue() _override;
-    virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
+    virtual const void * returnConstPointerValue() CPPUTEST_OVERRIDE;
+    virtual const void * returnConstPointerValueOrDefault(const void * default_value) CPPUTEST_OVERRIDE;
 
-    virtual void * returnPointerValue() _override;
-    virtual void * returnPointerValueOrDefault(void *) _override;
+    virtual void * returnPointerValue() CPPUTEST_OVERRIDE;
+    virtual void * returnPointerValueOrDefault(void *) CPPUTEST_OVERRIDE;
 
     typedef void (*FunctionPointerReturnValue)();
-    virtual FunctionPointerReturnValue returnFunctionPointerValue() _override;
-    virtual FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*)()) _override;
+    virtual FunctionPointerReturnValue returnFunctionPointerValue() CPPUTEST_OVERRIDE;
+    virtual FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*)()) CPPUTEST_OVERRIDE;
 
-    virtual MockActualCall& onObject(const void* objectPtr) _override;
+    virtual MockActualCall& onObject(const void* objectPtr) CPPUTEST_OVERRIDE;
 
     virtual bool isFulfilled() const;
     virtual bool hasFailed() const;
@@ -157,67 +157,67 @@ class MockActualCallTrace : public MockActualCall
 {
 public:
     MockActualCallTrace();
-    virtual ~MockActualCallTrace() _destructor_override;
+    virtual ~MockActualCallTrace() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual MockActualCall& withName(const SimpleString& name) _override;
-    virtual MockActualCall& withCallOrder(unsigned int) _override;
-    virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) _override;
-    virtual MockActualCall& withIntParameter(const SimpleString& name, int value) _override;
-    virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) _override;
-    virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value) _override;
-    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) _override;
-    virtual MockActualCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) _override;
-    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) _override;
-    virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value) _override;
-    virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) _override;
-    virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) _override;
-    virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) _override;
-    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) _override;
-    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) _override;
-    virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) _override;
-    virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) _override;
-    virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output) _override;
+    virtual MockActualCall& withName(const SimpleString& name) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withCallOrder(unsigned int) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withBoolParameter(const SimpleString& name, bool value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withIntParameter(const SimpleString& name, int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withUnsignedIntParameter(const SimpleString& name, unsigned int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withLongIntParameter(const SimpleString& name, long int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString& name, unsigned long int value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withLongLongIntParameter(const SimpleString& name, cpputest_longlong value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString& name, cpputest_ulonglong value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withDoubleParameter(const SimpleString& name, double value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withStringParameter(const SimpleString& name, const char* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withPointerParameter(const SimpleString& name, void* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withConstPointerParameter(const SimpleString& name, const void* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& name, void (*value)()) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString& name, const unsigned char* value, size_t size) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withParameterOfType(const SimpleString& typeName, const SimpleString& name, const void* value) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withOutputParameter(const SimpleString& name, void* output) CPPUTEST_OVERRIDE;
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString& typeName, const SimpleString& name, void* output) CPPUTEST_OVERRIDE;
 
-    virtual bool hasReturnValue() _override;
-    virtual MockNamedValue returnValue() _override;
+    virtual bool hasReturnValue() CPPUTEST_OVERRIDE;
+    virtual MockNamedValue returnValue() CPPUTEST_OVERRIDE;
 
-    virtual bool returnBoolValueOrDefault(bool default_value) _override;
-    virtual bool returnBoolValue() _override;
+    virtual bool returnBoolValueOrDefault(bool default_value) CPPUTEST_OVERRIDE;
+    virtual bool returnBoolValue() CPPUTEST_OVERRIDE;
 
-    virtual int returnIntValueOrDefault(int default_value) _override;
-    virtual int returnIntValue() _override;
+    virtual int returnIntValueOrDefault(int default_value) CPPUTEST_OVERRIDE;
+    virtual int returnIntValue() CPPUTEST_OVERRIDE;
 
-    virtual unsigned long int returnUnsignedLongIntValue() _override;
-    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) _override;
+    virtual unsigned long int returnUnsignedLongIntValue() CPPUTEST_OVERRIDE;
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int) CPPUTEST_OVERRIDE;
 
-    virtual long int returnLongIntValue() _override;
-    virtual long int returnLongIntValueOrDefault(long int default_value) _override;
+    virtual long int returnLongIntValue() CPPUTEST_OVERRIDE;
+    virtual long int returnLongIntValueOrDefault(long int default_value) CPPUTEST_OVERRIDE;
 
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override;
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong default_value) _override;
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() CPPUTEST_OVERRIDE;
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong default_value) CPPUTEST_OVERRIDE;
 
-    virtual cpputest_longlong returnLongLongIntValue() _override;
-    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong default_value) _override;
+    virtual cpputest_longlong returnLongLongIntValue() CPPUTEST_OVERRIDE;
+    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong default_value) CPPUTEST_OVERRIDE;
 
-    virtual unsigned int returnUnsignedIntValue() _override;
-    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) _override;
+    virtual unsigned int returnUnsignedIntValue() CPPUTEST_OVERRIDE;
+    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int default_value) CPPUTEST_OVERRIDE;
 
-    virtual const char * returnStringValueOrDefault(const char * default_value) _override;
-    virtual const char * returnStringValue() _override;
+    virtual const char * returnStringValueOrDefault(const char * default_value) CPPUTEST_OVERRIDE;
+    virtual const char * returnStringValue() CPPUTEST_OVERRIDE;
 
-    virtual double returnDoubleValue() _override;
-    virtual double returnDoubleValueOrDefault(double default_value) _override;
+    virtual double returnDoubleValue() CPPUTEST_OVERRIDE;
+    virtual double returnDoubleValueOrDefault(double default_value) CPPUTEST_OVERRIDE;
 
-    virtual void * returnPointerValue() _override;
-    virtual void * returnPointerValueOrDefault(void *) _override;
+    virtual void * returnPointerValue() CPPUTEST_OVERRIDE;
+    virtual void * returnPointerValueOrDefault(void *) CPPUTEST_OVERRIDE;
 
-    virtual const void * returnConstPointerValue() _override;
-    virtual const void * returnConstPointerValueOrDefault(const void * default_value) _override;
+    virtual const void * returnConstPointerValue() CPPUTEST_OVERRIDE;
+    virtual const void * returnConstPointerValueOrDefault(const void * default_value) CPPUTEST_OVERRIDE;
 
-    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValue() _override;
-    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*)()) _override;
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValue() CPPUTEST_OVERRIDE;
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*)()) CPPUTEST_OVERRIDE;
 
-    virtual MockActualCall& onObject(const void* objectPtr) _override;
+    virtual MockActualCall& onObject(const void* objectPtr) CPPUTEST_OVERRIDE;
 
     const char* getTraceOutput();
     void clear();
@@ -235,41 +235,41 @@ private:
 class MockIgnoredActualCall: public MockActualCall
 {
 public:
-    virtual MockActualCall& withName(const SimpleString&) _override { return *this;}
-    virtual MockActualCall& withCallOrder(unsigned int) _override { return *this; }
-    virtual MockActualCall& withBoolParameter(const SimpleString&, bool) _override { return *this; }
-    virtual MockActualCall& withIntParameter(const SimpleString&, int) _override { return *this; }
-    virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) _override { return *this; }
-    virtual MockActualCall& withLongIntParameter(const SimpleString&, long int) _override { return *this; }
-    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString&, unsigned long int) _override { return *this; }
-    virtual MockActualCall& withLongLongIntParameter(const SimpleString&, cpputest_longlong) _override { return *this; }
-    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString&, cpputest_ulonglong) _override { return *this; }
-    virtual MockActualCall& withDoubleParameter(const SimpleString&, double) _override { return *this; }
-    virtual MockActualCall& withStringParameter(const SimpleString&, const char*) _override { return *this; }
-    virtual MockActualCall& withPointerParameter(const SimpleString& , void*) _override { return *this; }
-    virtual MockActualCall& withConstPointerParameter(const SimpleString& , const void*) _override { return *this; }
-    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& , void (*)()) _override { return *this; }
-    virtual MockActualCall& withMemoryBufferParameter(const SimpleString&, const unsigned char*, size_t) _override  { return *this; }
-    virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) _override { return *this; }
-    virtual MockActualCall& withOutputParameter(const SimpleString&, void*) _override { return *this; }
-    virtual MockActualCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, void*) _override { return *this; }
+    virtual MockActualCall& withName(const SimpleString&) CPPUTEST_OVERRIDE { return *this;}
+    virtual MockActualCall& withCallOrder(unsigned int) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withBoolParameter(const SimpleString&, bool) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withIntParameter(const SimpleString&, int) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withUnsignedIntParameter(const SimpleString&, unsigned int) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withLongIntParameter(const SimpleString&, long int) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withUnsignedLongIntParameter(const SimpleString&, unsigned long int) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withLongLongIntParameter(const SimpleString&, cpputest_longlong) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withUnsignedLongLongIntParameter(const SimpleString&, cpputest_ulonglong) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withDoubleParameter(const SimpleString&, double) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withStringParameter(const SimpleString&, const char*) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withPointerParameter(const SimpleString& , void*) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withConstPointerParameter(const SimpleString& , const void*) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withFunctionPointerParameter(const SimpleString& , void (*)()) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withMemoryBufferParameter(const SimpleString&, const unsigned char*, size_t) CPPUTEST_OVERRIDE  { return *this; }
+    virtual MockActualCall& withParameterOfType(const SimpleString&, const SimpleString&, const void*) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withOutputParameter(const SimpleString&, void*) CPPUTEST_OVERRIDE { return *this; }
+    virtual MockActualCall& withOutputParameterOfType(const SimpleString&, const SimpleString&, void*) CPPUTEST_OVERRIDE { return *this; }
 
-    virtual bool hasReturnValue() _override { return false; }
-    virtual MockNamedValue returnValue() _override { return MockNamedValue(""); }
+    virtual bool hasReturnValue() CPPUTEST_OVERRIDE { return false; }
+    virtual MockNamedValue returnValue() CPPUTEST_OVERRIDE { return MockNamedValue(""); }
 
-    virtual bool returnBoolValueOrDefault(bool value) _override { return value; }
-    virtual bool returnBoolValue() _override { return false; }
+    virtual bool returnBoolValueOrDefault(bool value) CPPUTEST_OVERRIDE { return value; }
+    virtual bool returnBoolValue() CPPUTEST_OVERRIDE { return false; }
 
-    virtual int returnIntValue() _override { return 0; }
-    virtual int returnIntValueOrDefault(int value) _override { return value; }
+    virtual int returnIntValue() CPPUTEST_OVERRIDE { return 0; }
+    virtual int returnIntValueOrDefault(int value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual unsigned long int returnUnsignedLongIntValue() _override { return 0; }
-    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int value) _override { return value; }
+    virtual unsigned long int returnUnsignedLongIntValue() CPPUTEST_OVERRIDE { return 0; }
+    virtual unsigned long int returnUnsignedLongIntValueOrDefault(unsigned long int value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual long int returnLongIntValue() _override { return 0; }
-    virtual long int returnLongIntValueOrDefault(long int value) _override { return value; }
+    virtual long int returnLongIntValue() CPPUTEST_OVERRIDE { return 0; }
+    virtual long int returnLongIntValueOrDefault(long int value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() _override
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValue() CPPUTEST_OVERRIDE
     {
 #if CPPUTEST_USE_LONG_LONG
         return 0;
@@ -279,9 +279,9 @@ public:
 #endif
     }
 
-    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong value) _override { return value; }
+    virtual cpputest_ulonglong returnUnsignedLongLongIntValueOrDefault(cpputest_ulonglong value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual cpputest_longlong returnLongLongIntValue() _override
+    virtual cpputest_longlong returnLongLongIntValue() CPPUTEST_OVERRIDE
     {
 #if CPPUTEST_USE_LONG_LONG
         return 0;
@@ -291,27 +291,27 @@ public:
 #endif
     }
 
-    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong value) _override { return value; }
+    virtual cpputest_longlong returnLongLongIntValueOrDefault(cpputest_longlong value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual unsigned int returnUnsignedIntValue() _override { return 0; }
-    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int value) _override { return value; }
+    virtual unsigned int returnUnsignedIntValue() CPPUTEST_OVERRIDE { return 0; }
+    virtual unsigned int returnUnsignedIntValueOrDefault(unsigned int value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual double returnDoubleValue() _override { return 0.0; }
-    virtual double returnDoubleValueOrDefault(double value) _override { return value; }
+    virtual double returnDoubleValue() CPPUTEST_OVERRIDE { return 0.0; }
+    virtual double returnDoubleValueOrDefault(double value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual const char * returnStringValue() _override { return ""; }
-    virtual const char * returnStringValueOrDefault(const char * value) _override { return value; }
+    virtual const char * returnStringValue() CPPUTEST_OVERRIDE { return ""; }
+    virtual const char * returnStringValueOrDefault(const char * value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual void * returnPointerValue() _override { return NULLPTR; }
-    virtual void * returnPointerValueOrDefault(void * value) _override { return value; }
+    virtual void * returnPointerValue() CPPUTEST_OVERRIDE { return NULLPTR; }
+    virtual void * returnPointerValueOrDefault(void * value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual const void * returnConstPointerValue() _override { return NULLPTR; }
-    virtual const void * returnConstPointerValueOrDefault(const void * value) _override { return value; }
+    virtual const void * returnConstPointerValue() CPPUTEST_OVERRIDE { return NULLPTR; }
+    virtual const void * returnConstPointerValueOrDefault(const void * value) CPPUTEST_OVERRIDE { return value; }
 
-    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValue() _override { return NULLPTR; }
-    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*value)()) _override { return value; }
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValue() CPPUTEST_OVERRIDE { return NULLPTR; }
+    virtual MockCheckedActualCall::FunctionPointerReturnValue returnFunctionPointerValueOrDefault(void (*value)()) CPPUTEST_OVERRIDE { return value; }
 
-    virtual MockActualCall& onObject(const void* ) _override { return *this; }
+    virtual MockActualCall& onObject(const void* ) CPPUTEST_OVERRIDE { return *this; }
 
     static MockIgnoredActualCall& instance();
 };

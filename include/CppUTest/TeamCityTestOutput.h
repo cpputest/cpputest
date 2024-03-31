@@ -8,14 +8,14 @@ class TeamCityTestOutput: public ConsoleTestOutput
 {
 public:
     TeamCityTestOutput(void);
-    virtual ~TeamCityTestOutput(void) _destructor_override;
+    virtual ~TeamCityTestOutput(void) CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual void printCurrentTestStarted(const UtestShell& test) _override;
-    virtual void printCurrentTestEnded(const TestResult& res) _override;
-    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
-    virtual void printCurrentGroupEnded(const TestResult& res) _override;
+    virtual void printCurrentTestStarted(const UtestShell& test) CPPUTEST_OVERRIDE;
+    virtual void printCurrentTestEnded(const TestResult& res) CPPUTEST_OVERRIDE;
+    virtual void printCurrentGroupStarted(const UtestShell& test) CPPUTEST_OVERRIDE;
+    virtual void printCurrentGroupEnded(const TestResult& res) CPPUTEST_OVERRIDE;
 
-    virtual void printFailure(const TestFailure& failure) _override;
+    virtual void printFailure(const TestFailure& failure) CPPUTEST_OVERRIDE;
 
 protected:
 

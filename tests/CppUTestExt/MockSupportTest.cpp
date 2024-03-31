@@ -37,7 +37,7 @@ TEST_GROUP(MockSupportTest)
   MockExpectedCallsListForTest expectations;
   MockFailureReporterInstaller failureReporterInstaller;
 
-  void teardown() _override
+  void teardown() CPPUTEST_OVERRIDE
   {
       mock().checkExpectations();
       CHECK_NO_MOCK_FAILURE();
@@ -173,7 +173,7 @@ TEST_GROUP(MockSupportTestWithFixture)
 {
     TestTestingFixture fixture;
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         mock().clear();
         MockFailureReporterForTest::clearReporter();

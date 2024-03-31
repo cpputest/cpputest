@@ -40,13 +40,13 @@ TEST_GROUP(MockPlugin)
 
     MockSupportPlugin plugin;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         test = new UtestShell("group", "name", "file", 1);
         result = new TestResult(output);
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete test;
         delete result;
@@ -92,11 +92,11 @@ TEST(MockPlugin, checkExpectationsWorksAlsoWithHierachicalObjects)
 class DummyComparator : public MockNamedValueComparator
 {
 public:
-    bool isEqual(const void* object1, const void* object2) _override
+    bool isEqual(const void* object1, const void* object2) CPPUTEST_OVERRIDE
     {
         return object1 == object2;
     }
-    SimpleString valueToString(const void*) _override
+    SimpleString valueToString(const void*) CPPUTEST_OVERRIDE
     {
         return "string";
     }
@@ -120,7 +120,7 @@ TEST(MockPlugin, installComparatorRecordsTheComparatorButNotInstallsItYet)
 class DummyCopier : public MockNamedValueCopier
 {
 public:
-    void copy(void* dst, const void* src) _override
+    void copy(void* dst, const void* src) CPPUTEST_OVERRIDE
     {
         *(int*)dst = *(const int*)src;
     }

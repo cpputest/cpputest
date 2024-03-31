@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockStrictOrderTest)
 {
-  void teardown() _override
+  void teardown() CPPUTEST_OVERRIDE
   {
     mock().clear();
   }

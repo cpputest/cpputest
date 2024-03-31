@@ -39,12 +39,12 @@ public:
     {
     }
 
-    virtual void failTest(const MockFailure& failure) _override
+    virtual void failTest(const MockFailure& failure) CPPUTEST_OVERRIDE
     {
         result_.addFailure(failure);
     }
 
-    virtual UtestShell* getTestToFail() _override
+    virtual UtestShell* getTestToFail() CPPUTEST_OVERRIDE
     {
         return &test_;
     }

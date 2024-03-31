@@ -92,7 +92,7 @@ class SetPointerPlugin: public TestPlugin
 {
 public:
     SetPointerPlugin(const SimpleString& name);
-    virtual void postTestAction(UtestShell&, TestResult&) _override;
+    virtual void postTestAction(UtestShell&, TestResult&) CPPUTEST_OVERRIDE;
 
     enum
     {
@@ -100,7 +100,11 @@ public:
     };
 };
 
-#define UT_PTR_SET(a, b) do { CppUTestStore( (void**)&a ); a = b; } while(0)
+#define UT_PTR_SET(a, b)                                                                                               \
+    do {                                                                                                               \
+        CppUTestStore((void**)&(a));                                                                                   \
+        (a) = b;                                                                                                       \
+    } while (0)
 
 ///////////// Null Plugin
 
@@ -110,8 +114,8 @@ public:
 
     NullTestPlugin();
 
-    virtual void runAllPreTestAction(UtestShell& test, TestResult& result) _override;
-    virtual void runAllPostTestAction(UtestShell& test, TestResult& result) _override;
+    virtual void runAllPreTestAction(UtestShell& test, TestResult& result) CPPUTEST_OVERRIDE;
+    virtual void runAllPostTestAction(UtestShell& test, TestResult& result) CPPUTEST_OVERRIDE;
 
     static NullTestPlugin* instance();
 };

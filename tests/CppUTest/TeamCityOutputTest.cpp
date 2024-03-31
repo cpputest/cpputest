@@ -9,16 +9,16 @@ public:
     {
     }
 
-    virtual ~TeamCityOutputToBuffer() _destructor_override
+    virtual ~TeamCityOutputToBuffer() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 
-    void printBuffer(const char* s) _override
+    void printBuffer(const char* s) CPPUTEST_OVERRIDE
     {
         output += s;
     }
 
-    void flush() _override
+    void flush() CPPUTEST_OVERRIDE
     {
         output = "";
     }
@@ -51,7 +51,7 @@ TEST_GROUP(TeamCityOutputTest)
     TestFailure *f, *f2, *f3;
     TestResult* result;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         mock = new TeamCityOutputToBuffer();
         tcout = mock;
@@ -64,7 +64,7 @@ TEST_GROUP(TeamCityOutputTest)
         millisTime = 0;
         UT_PTR_SET(GetPlatformSpecificTimeInMillis, MockGetPlatformSpecificTimeInMillis);
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete tcout;
         delete tst;

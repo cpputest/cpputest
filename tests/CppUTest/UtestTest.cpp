@@ -430,7 +430,7 @@ TEST_GROUP(IgnoredUtestShell)
     IgnoredUtestShell ignoredTest;
     ExecFunctionTestShell normalUtestShell;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         fixture.addTest(&ignoredTest);
         fixture.addTest(&normalUtestShell);
@@ -509,12 +509,12 @@ TEST_BASE(MyOwnTest)
     }
     bool inTest;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         CHECK(!inTest);
         inTest = true;
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         CHECK(inTest);
         inTest = false;
@@ -589,7 +589,7 @@ TEST_GROUP(UtestShellPointerArrayTest)
     UtestShell* test1;
     UtestShell* test2;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         test0 = new IgnoredUtestShell();
         test1 = new IgnoredUtestShell();
@@ -599,7 +599,7 @@ TEST_GROUP(UtestShellPointerArrayTest)
         test1->addTest(test2);
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete test0;
         delete test1;
