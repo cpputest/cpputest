@@ -2,3 +2,5 @@
 Checks: "clang-diagnostic-*,clang-analyzer-*,bugprone-*,-bugprone-easily-swappable-parameters"
 WarningsAsErrors: "*"
 FormatStyle: file
+UseColor: true
+HeaderFilterRegex: .*
