@@ -29,7 +29,7 @@ TARGET		  cpputest.exe
 TARGETTYPE	  exe
 UID			 0x00000000 0x03A6305A
 
-USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian ..\tests
+USERINCLUDE	 ..\include ..\include\CppUTest ..\tests
 SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
 
 STATICLIBRARY libcrt0.lib 

@@ -29,7 +29,6 @@ COMPONENT_NAME := CppUTest
 
 INCLUDE_DIRS :=\
   $(CPPUTEST_HOME)/include \
-  $(CPPUTEST_HOME)/include/Platforms/armcc \
 
 # armcc system include path
 SYS_INCLUDE_DIRS:=$(KEIL_DIR)/include 

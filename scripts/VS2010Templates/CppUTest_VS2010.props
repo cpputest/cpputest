@@ -2,9 +2,9 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
-    <CPPUTEST_INCLUDE_PATHS>$(CPPUTEST_HOME)\include;$(CPPUTEST_HOME)\include\CppUTestExt\CppUTestGTest;$(CPPUTEST_HOME)\include\CppUTestExt\CppUTestGMock;$(CPPUTEST_HOME)\include\Platforms\VisualCpp</CPPUTEST_INCLUDE_PATHS>
+    <CPPUTEST_INCLUDE_PATHS>$(CPPUTEST_HOME)\include;$(CPPUTEST_HOME)\include\CppUTestExt\CppUTestGTest;$(CPPUTEST_HOME)\include\CppUTestExt\CppUTestGMock</CPPUTEST_INCLUDE_PATHS>
     <CPPUTEST_LIB_PATHS>$(CPPUTEST_HOME)\lib</CPPUTEST_LIB_PATHS>
-    <CPPUTEST_FORCED_INCLUDES>$(CPPUTEST_HOME)\include\Platforms\VisualCpp\Platform.h;$(CPPUTEST_HOME)\include\CppUTest\MemoryLeakDetectorMallocMacros.h;</CPPUTEST_FORCED_INCLUDES>
+    <CPPUTEST_FORCED_INCLUDES>$(CPPUTEST_HOME)\include\CppUTest\MemoryLeakDetectorMallocMacros.h;</CPPUTEST_FORCED_INCLUDES>
     <CPPUTEST_LIB_DEPENDENCIES>CppUTest.lib</CPPUTEST_LIB_DEPENDENCIES>
   </PropertyGroup>
   <PropertyGroup />

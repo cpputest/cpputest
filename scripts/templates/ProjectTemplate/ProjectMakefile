@@ -32,7 +32,6 @@ INCLUDE_DIRS =\
   include \
   include/* \
   $(CPPUTEST_HOME)/include/ \
-  $(CPPUTEST_HOME)/include/Platforms/Gcc\
   mocks
 
 CPPUTEST_WARNINGFLAGS = -Wall -Werror -Wswitch-default 
