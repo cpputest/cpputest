@@ -29,7 +29,7 @@ TARGET		  cpputest.lib
 TARGETTYPE	  LIB
 UID			 0x00000000 0x03A6305A
 
-USERINCLUDE	 ..\include ..\include\CppUTest ..\include\Platforms\Symbian
+USERINCLUDE	 ..\include ..\include\CppUTest
 SYSTEMINCLUDE   \epoc32\include \epoc32\include\stdapis
 
 SOURCEPATH ..\src\CppUTest

@@ -78,7 +78,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@main
-      - run: brew install automake
+      - run: brew install automake libtool
         if: ${{ startswith(matrix.os, 'macos') }}
       - if: ${{ matrix.cxx }}
         run: echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV

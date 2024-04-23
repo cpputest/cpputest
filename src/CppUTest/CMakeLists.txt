@@ -53,9 +53,12 @@ if(CPPUTEST_PLATFORM)
         PRIVATE
             ${CMAKE_CURRENT_LIST_DIR}/../Platforms/${CPPUTEST_PLATFORM}/UtestPlatform.cpp
     )
+endif()
+
+if(CPPUTEST_PLATFORM STREQUAL "c2000")
     target_include_directories(CppUTest
         PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../../include/Platforms/${CPPUTEST_PLATFORM}>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../../include/Platforms/c2000>
     )
 endif()
 

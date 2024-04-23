@@ -16,6 +16,7 @@ if(
         -Wswitch-enum
         -Wconversion
         -Wsign-conversion
+        -Wmissing-include-dirs
         -Wno-padded
         -Wno-disabled-macro-expansion
         -Wno-reserved-id-macro

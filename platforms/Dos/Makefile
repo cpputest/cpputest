@@ -18,7 +18,6 @@ COMMONFLAGS := \
   -q -c -os -oc -d0 -we -w=3 -ml -zm \
   -dCPPUTEST_MEM_LEAK_DETECTION_DISABLED=1 -dCPPUTEST_STD_CPP_LIB_DISABLED=1 \
   -i$(call convert_paths,$(CPPUTEST_HOME)/include) \
-  -i$(call convert_paths,$(CPPUTEST_HOME)/include/Platforms/Dos) \
   -i$(call convert_paths,$(WATCOM)/h) -i$(call convert_paths,$(WATCOM)/h/nt) \
 
 # Disable W303 unreferenced parameter - PUNUSED is GNU-specific
