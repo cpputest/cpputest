@@ -44,11 +44,11 @@ class MemoryReporterPlugin : public TestPlugin
     SimpleString currentTestGroup_;
 public:
     MemoryReporterPlugin();
-    virtual ~MemoryReporterPlugin() _destructor_override;
+    virtual ~MemoryReporterPlugin() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual void preTestAction(UtestShell & test, TestResult & result) _override;
-    virtual void postTestAction(UtestShell & test, TestResult & result) _override;
-    virtual bool parseArguments(int, const char *const *, int) _override;
+    virtual void preTestAction(UtestShell & test, TestResult & result) CPPUTEST_OVERRIDE;
+    virtual void postTestAction(UtestShell & test, TestResult & result) CPPUTEST_OVERRIDE;
+    virtual bool parseArguments(int, const char *const *, int) CPPUTEST_OVERRIDE;
 
     MemoryReportAllocator* getMallocAllocator();
     MemoryReportAllocator* getNewAllocator();

@@ -38,22 +38,22 @@ class JUnitTestOutput: public TestOutput
 {
 public:
     JUnitTestOutput();
-    virtual ~JUnitTestOutput() _destructor_override;
+    virtual ~JUnitTestOutput() CPPUTEST_DESTRUCTOR_OVERRIDE;
 
-    virtual void printTestsStarted() _override;
-    virtual void printTestsEnded(const TestResult& result) _override;
-    virtual void printCurrentTestStarted(const UtestShell& test) _override;
-    virtual void printCurrentTestEnded(const TestResult& res) _override;
-    virtual void printCurrentGroupStarted(const UtestShell& test) _override;
-    virtual void printCurrentGroupEnded(const TestResult& res) _override;
+    virtual void printTestsStarted() CPPUTEST_OVERRIDE;
+    virtual void printTestsEnded(const TestResult& result) CPPUTEST_OVERRIDE;
+    virtual void printCurrentTestStarted(const UtestShell& test) CPPUTEST_OVERRIDE;
+    virtual void printCurrentTestEnded(const TestResult& res) CPPUTEST_OVERRIDE;
+    virtual void printCurrentGroupStarted(const UtestShell& test) CPPUTEST_OVERRIDE;
+    virtual void printCurrentGroupEnded(const TestResult& res) CPPUTEST_OVERRIDE;
 
-    virtual void printBuffer(const char*) _override;
-    virtual void print(const char*) _override;
-    virtual void print(long) _override;
-    virtual void print(size_t) _override;
-    virtual void printFailure(const TestFailure& failure) _override;
+    virtual void printBuffer(const char*) CPPUTEST_OVERRIDE;
+    virtual void print(const char*) CPPUTEST_OVERRIDE;
+    virtual void print(long) CPPUTEST_OVERRIDE;
+    virtual void print(size_t) CPPUTEST_OVERRIDE;
+    virtual void printFailure(const TestFailure& failure) CPPUTEST_OVERRIDE;
 
-    virtual void flush() _override;
+    virtual void flush() CPPUTEST_OVERRIDE;
 
     virtual SimpleString createFileName(const SimpleString& group);
     void setPackageName(const SimpleString &package);

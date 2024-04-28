@@ -54,7 +54,7 @@ class MockFailure : public TestFailure
 {
 public:
     MockFailure(UtestShell* test);
-    virtual ~MockFailure() _destructor_override {}
+    virtual ~MockFailure() CPPUTEST_DESTRUCTOR_OVERRIDE {}
 protected:
     void addExpectationsAndCallHistory(const MockExpectedCallsList& expectations);
     void addExpectationsAndCallHistoryRelatedTo(const SimpleString& function, const MockExpectedCallsList& expectations);

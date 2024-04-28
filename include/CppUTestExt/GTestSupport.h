@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GTESTSUPPORT__H_
-#define GTESTSUPPORT__H_
+#ifndef GTESTSUPPORT_H_
+#define GTESTSUPPORT_H_
 
 extern void CppuTestGTestIgnoreLeaksInTest();
 

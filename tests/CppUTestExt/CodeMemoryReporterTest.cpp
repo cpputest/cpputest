@@ -45,7 +45,7 @@ TEST_GROUP(CodeMemoryReportFormatter)
     TestResult* testResult;
     CodeMemoryReportFormatter* formatter;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         cAllocator = defaultMallocAllocator();
         newAllocator = defaultNewAllocator();
@@ -57,7 +57,7 @@ TEST_GROUP(CodeMemoryReportFormatter)
         testResult = new TestResult(testOutput);
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete testResult;
         delete formatter;

@@ -36,13 +36,13 @@ TEST_GROUP(TestMemoryAllocatorTest)
     TestMemoryAllocator* allocator;
     GlobalMemoryAllocatorStash memoryAllocatorStash;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         allocator = NULLPTR;
         memoryAllocatorStash.save();
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         memoryAllocatorStash.restore();
         delete allocator;
@@ -149,12 +149,12 @@ TEST_GROUP(MemoryLeakAllocator)
 {
     MemoryLeakAllocator* allocator;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         allocator = new MemoryLeakAllocator(defaultMallocAllocator());
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete allocator;
     }
@@ -198,13 +198,13 @@ public:
     FailableMemoryAllocator* allocator_;
     void (*testFunction_)(FailableMemoryAllocator*);
 
-    void exec() _override
+    void exec() CPPUTEST_OVERRIDE
     {
         testFunction_(allocator_);
     }
 
     FailableMemoryAllocatorExecFunction() : allocator_(NULLPTR), testFunction_(NULLPTR) {}
-    virtual ~FailableMemoryAllocatorExecFunction() _destructor_override {}
+    virtual ~FailableMemoryAllocatorExecFunction() CPPUTEST_DESTRUCTOR_OVERRIDE {}
 };
 
 TEST_GROUP(FailableMemoryAllocator)
@@ -214,14 +214,14 @@ TEST_GROUP(FailableMemoryAllocator)
     TestTestingFixture fixture;
     GlobalMemoryAllocatorStash stash;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         stash.save();
         testFunction.allocator_ = failableMallocAllocator = new FailableMemoryAllocator("Failable Malloc Allocator", "malloc", "free");
         fixture.setTestFunction(&testFunction);
         setCurrentMallocAllocator(failableMallocAllocator);
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         failableMallocAllocator->checkAllFailedAllocsWereDone();
         failableMallocAllocator->clearFailedAllocs();
@@ -332,14 +332,14 @@ class MemoryAccountantExecFunction
     : public ExecFunction
 {
 public:
-    virtual ~MemoryAccountantExecFunction() _destructor_override
+    virtual ~MemoryAccountantExecFunction() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 
     void (*testFunction_)(MemoryAccountant*);
     MemoryAccountant* parameter_;
 
-    virtual void exec() _override
+    virtual void exec() CPPUTEST_OVERRIDE
     {
         testFunction_(parameter_);
     }
@@ -351,13 +351,13 @@ TEST_GROUP(TestMemoryAccountant)
     TestTestingFixture fixture;
     MemoryAccountantExecFunction testFunction;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         accountant.clear();
     }
@@ -545,12 +545,12 @@ TEST_GROUP(AccountingTestMemoryAllocator)
     MemoryAccountant accountant;
     AccountingTestMemoryAllocator *allocator;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         allocator = new AccountingTestMemoryAllocator(accountant, getCurrentMallocAllocator());
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         accountant.clear();
         delete allocator;
@@ -615,7 +615,7 @@ public:
     void (*testFunction_)(GlobalMemoryAccountant*);
     GlobalMemoryAccountant* parameter_;
 
-    virtual void exec() _override
+    virtual void exec() CPPUTEST_OVERRIDE
     {
         testFunction_(parameter_);
     }
@@ -628,14 +628,14 @@ TEST_GROUP(GlobalMemoryAccountant)
     GlobalMemoryAccountantExecFunction testFunction;
     GlobalMemoryAllocatorStash stash;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         testFunction.parameter_ = &accountant;
         fixture.setTestFunction(&testFunction);
         stash.save();
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         stash.restore();
     }

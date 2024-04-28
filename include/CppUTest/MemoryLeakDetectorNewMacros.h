@@ -40,13 +40,13 @@
                 #undef strdup
                 #undef strndup
                 #undef CPPUTEST_USE_STRDUP_MACROS
-                #define __CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
+                #define CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
             #endif
         #endif
         #include <new>
         #include <memory>
         #include <string>
-        #ifdef __CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
+        #ifdef CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
             #include "MemoryLeakDetectorMallocMacros.h"
         #endif
     #endif

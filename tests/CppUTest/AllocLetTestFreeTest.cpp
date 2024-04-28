@@ -16,12 +16,12 @@ TEST_GROUP(AllocLetTestFree)
 {
     AllocLetTestFree allocLetTestFree;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         allocLetTestFree = AllocLetTestFree_Create();
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         AllocLetTestFree_Destroy(allocLetTestFree);
     }

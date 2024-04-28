@@ -41,7 +41,7 @@ public:
     {
     }
 
-    virtual void exitCurrentTest() const _override
+    virtual void exitCurrentTest() const CPPUTEST_OVERRIDE
     {
         if (crashOnFailure_)
             UT_CRASH();
@@ -49,7 +49,7 @@ public:
         UtestShell::getCurrentTestTerminatorWithoutExceptions().exitCurrentTest();
     } // LCOV_EXCL_LINE
     // LCOV_EXCL_START
-    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode() _destructor_override
+    virtual ~MockFailureReporterTestTerminatorForInCOnlyCode() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
     // LCOV_EXCL_STOP
@@ -61,7 +61,7 @@ private:
 class MockFailureReporterForInCOnlyCode : public MockFailureReporter
 {
 public:
-    void failTest(const MockFailure& failure) _override
+    void failTest(const MockFailure& failure) CPPUTEST_OVERRIDE
     {
         if (!getTestToFail()->hasFailed())
             getTestToFail()->failWith(failure, MockFailureReporterTestTerminatorForInCOnlyCode(crashOnFailure_));
@@ -79,13 +79,13 @@ class MockCFunctionComparatorNode : public MockNamedValueComparator
 public:
     MockCFunctionComparatorNode(MockCFunctionComparatorNode* next, MockTypeEqualFunction_c equal, MockTypeValueToStringFunction_c toString)
         : next_(next), equal_(equal), toString_(toString) {}
-    virtual ~MockCFunctionComparatorNode() _destructor_override {}
+    virtual ~MockCFunctionComparatorNode() CPPUTEST_DESTRUCTOR_OVERRIDE {}
 
-    virtual bool isEqual(const void* object1, const void* object2) _override
+    virtual bool isEqual(const void* object1, const void* object2) CPPUTEST_OVERRIDE
     {
         return equal_(object1, object2) != 0;
     }
-    virtual SimpleString valueToString(const void* object) _override
+    virtual SimpleString valueToString(const void* object) CPPUTEST_OVERRIDE
     {
         return SimpleString(toString_(object));
     }
@@ -102,9 +102,9 @@ class MockCFunctionCopierNode : public MockNamedValueCopier
 public:
     MockCFunctionCopierNode(MockCFunctionCopierNode* next, MockTypeCopyFunction_c copier)
         : next_(next), copier_(copier) {}
-    virtual ~MockCFunctionCopierNode() _destructor_override {}
+    virtual ~MockCFunctionCopierNode() CPPUTEST_DESTRUCTOR_OVERRIDE {}
 
-    virtual void copy(void* dst, const void* src) _override
+    virtual void copy(void* dst, const void* src) CPPUTEST_OVERRIDE
     {
         copier_(dst, src);
     }

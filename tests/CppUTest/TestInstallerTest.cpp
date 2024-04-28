@@ -42,13 +42,13 @@ TEST_GROUP(TestInstaller)
     TestInstaller* testInstaller;
     TestRegistry* myRegistry;
     TestInstallerTestUtestShell shell;
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         myRegistry = new TestRegistry();
         myRegistry->setCurrentRegistry(myRegistry);
         testInstaller = new TestInstaller(shell, "TestInstaller", "test", __FILE__, __LINE__);
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         myRegistry->setCurrentRegistry(NULLPTR);
         testInstaller->unDo();

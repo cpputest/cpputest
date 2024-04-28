@@ -38,14 +38,14 @@ TEST_GROUP(MockCheckedActualCall)
     MockExpectedCallsList* list;
     MockFailureReporter* reporter;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         emptyList = new MockExpectedCallsList;
         list = new MockExpectedCallsList;
         reporter = MockFailureReporterForTest::getReporter();
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         CHECK_NO_MOCK_FAILURE();
 

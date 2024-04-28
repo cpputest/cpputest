@@ -45,7 +45,7 @@ static int VisualCppSetJmp(void (*function) (void* data), void* data)
     return 0;
 }
 
-_no_return_ static void VisualCppLongJmp()
+CPPUTEST_NORETURN static void VisualCppLongJmp()
 {
     jmp_buf_index--;
     longjmp(test_exit_jmp_buf[jmp_buf_index], 1);

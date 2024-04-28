@@ -46,7 +46,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int, const char *const *, int) _override
+    virtual bool parseArguments(int, const char *const *, int) CPPUTEST_OVERRIDE
     {
         /* Remove ourselves from the count */
         amountOfPlugins = registry_->countPlugins() - 1;
@@ -68,19 +68,19 @@ public:
     fakeConsoleOutputWhichIsReallyABuffer(NULLPTR), fakeTCOutputWhichIsReallyABuffer(NULLPTR)
   {}
 
-  TestOutput* createConsoleOutput() _override
+  TestOutput* createConsoleOutput() CPPUTEST_OVERRIDE
   {
     fakeConsoleOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeConsoleOutputWhichIsReallyABuffer;
   }
 
-  TestOutput* createJUnitOutput(const SimpleString&) _override
+  TestOutput* createJUnitOutput(const SimpleString&) CPPUTEST_OVERRIDE
   {
     fakeJUnitOutputWhichIsReallyABuffer_ = new StringBufferTestOutput;
     return fakeJUnitOutputWhichIsReallyABuffer_;
   }
 
-  TestOutput* createTeamCityOutput() _override
+  TestOutput* createTeamCityOutput() CPPUTEST_OVERRIDE
   {
     fakeTCOutputWhichIsReallyABuffer = new StringBufferTestOutput;
     return fakeTCOutputWhichIsReallyABuffer;
@@ -94,14 +94,14 @@ TEST_GROUP(CommandLineTestRunner)
     UtestShell *test2;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
       test1 = new UtestShell("group1", "test1", "file1", 1);
       test2 = new UtestShell("group2", "test2", "file2", 2);
       registry.addTest(test1);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
       delete pluginCountingPlugin;
       delete test2;
@@ -402,7 +402,7 @@ class RunIgnoredUtest : public Utest
 {
 public:
     static bool Checker;
-    void testBody() _override
+    void testBody() CPPUTEST_OVERRIDE
     {
         Checker = true;
     }
@@ -415,7 +415,7 @@ class RunIgnoredUtestShell : public IgnoredUtestShell
 public:
     RunIgnoredUtestShell(const char* groupName, const char* testName, const char* fileName, size_t lineNumber)
         : IgnoredUtestShell(groupName, testName, fileName, lineNumber) {}
-    virtual Utest* createTest() _override { return new RunIgnoredUtest; }
+    virtual Utest* createTest() CPPUTEST_OVERRIDE { return new RunIgnoredUtest; }
 };
 
 TEST_GROUP(RunIgnoredTest)
@@ -424,13 +424,13 @@ TEST_GROUP(RunIgnoredTest)
     RunIgnoredUtestShell *runIgnoredTest;
     DummyPluginWhichCountsThePlugins* pluginCountingPlugin;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
       runIgnoredTest = new RunIgnoredUtestShell("group", "test", "file", 1);
       registry.addTest(runIgnoredTest);
       pluginCountingPlugin = new DummyPluginWhichCountsThePlugins("PluginCountingPlugin", &registry);
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
       delete pluginCountingPlugin;
       delete runIgnoredTest;

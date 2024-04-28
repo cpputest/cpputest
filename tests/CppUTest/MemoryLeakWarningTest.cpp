@@ -74,7 +74,7 @@ TEST_GROUP(MemoryLeakWarningTest)
     DummyMemoryLeakFailure dummy;
     TestTestingFixture* fixture;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         fixture = new TestTestingFixture();
         detector = new MemoryLeakDetector(&dummy);
@@ -87,7 +87,7 @@ TEST_GROUP(MemoryLeakWarningTest)
         leak2 = NULLPTR;
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         detector->deallocMemory(allocator, leak1);
         detector->deallocMemory(allocator, leak2);
@@ -195,7 +195,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         cpputestHasCrashed = true;
     }
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         memoryAllocatorStash.save();
         detector = MemoryLeakWarningPlugin::getGlobalDetector();
@@ -210,7 +210,7 @@ TEST_GROUP(MemoryLeakWarningGlobalDetectorTest)
         cpputestHasCrashed = false;
 }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         MemoryLeakWarningPlugin::restoreNewDeleteOverloads();
 
@@ -407,7 +407,7 @@ static void StubMutexUnlock(PlatformSpecificMutex)
 
 TEST_GROUP(MemoryLeakWarningThreadSafe)
 {
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         UT_PTR_SET(PlatformSpecificMutexLock, StubMutexLock);
         UT_PTR_SET(PlatformSpecificMutexUnlock, StubMutexUnlock);
@@ -416,7 +416,7 @@ TEST_GROUP(MemoryLeakWarningThreadSafe)
         mutexUnlockCount = 0;
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
     }
 };

@@ -50,10 +50,10 @@
   TEST_GROUP_BASE(testGroup, Utest)
 
 #define TEST_SETUP() \
-  virtual void setup() _override
+  virtual void setup() CPPUTEST_OVERRIDE
 
 #define TEST_TEARDOWN() \
-  virtual void teardown() _override
+  virtual void teardown() CPPUTEST_OVERRIDE
 
 #define TEST(testGroup, testName) \
   /* External declarations for strict compilers */ \
@@ -62,9 +62,9 @@
   \
   class TEST_##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: TEST_##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-       void testBody() _override; }; \
+       void testBody() CPPUTEST_OVERRIDE; }; \
   class TEST_##testGroup##_##testName##_TestShell : public UtestShell { \
-      virtual Utest* createTest() _override { return new TEST_##testGroup##_##testName##_Test; } \
+      virtual Utest* createTest() CPPUTEST_OVERRIDE { return new TEST_##testGroup##_##testName##_Test; } \
   } TEST_##testGroup##_##testName##_TestShell_instance; \
   static TestInstaller TEST_##testGroup##_##testName##_Installer(TEST_##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
     void TEST_##testGroup##_##testName##_Test::testBody()
@@ -76,9 +76,9 @@
   \
   class IGNORE##testGroup##_##testName##_Test : public TEST_GROUP_##CppUTestGroup##testGroup \
 { public: IGNORE##testGroup##_##testName##_Test () : TEST_GROUP_##CppUTestGroup##testGroup () {} \
-  public: void testBody() _override; }; \
+  public: void testBody() CPPUTEST_OVERRIDE; }; \
   class IGNORE##testGroup##_##testName##_TestShell : public IgnoredUtestShell { \
-      virtual Utest* createTest() _override { return new IGNORE##testGroup##_##testName##_Test; } \
+      virtual Utest* createTest() CPPUTEST_OVERRIDE { return new IGNORE##testGroup##_##testName##_Test; } \
   } IGNORE##testGroup##_##testName##_TestShell_instance; \
    static TestInstaller TEST_##testGroup##testName##_Installer(IGNORE##testGroup##_##testName##_TestShell_instance, #testGroup, #testName, __FILE__,__LINE__); \
     void IGNORE##testGroup##_##testName##_Test::testBody ()
@@ -225,10 +225,10 @@
   UNSIGNED_LONGS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  do { UtestShell::getCurrent()->assertLongsEqual((long)expected, (long)actual, text, file, line); } while(0)
+  do { UtestShell::getCurrent()->assertLongsEqual((long)(expected), (long)(actual), text, file, line); } while(0)
 
 #define UNSIGNED_LONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  do { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)expected, (unsigned long)actual, text, file, line); } while(0)
+  do { UtestShell::getCurrent()->assertUnsignedLongsEqual((unsigned long)(expected), (unsigned long)(actual), text, file, line); } while(0)
 
 #if CPPUTEST_USE_LONG_LONG
 #define LONGLONGS_EQUAL(expected, actual)\
@@ -244,10 +244,10 @@
   UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
 
 #define LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        do { UtestShell::getCurrent()->assertLongLongsEqual((cpputest_longlong)expected, (cpputest_longlong)actual, text, file, line); } while(0)
+        do { UtestShell::getCurrent()->assertLongLongsEqual((cpputest_longlong)(expected), (cpputest_longlong)(actual), text, file, line); } while(0)
 
 #define UNSIGNED_LONGLONGS_EQUAL_LOCATION(expected, actual, text, file, line)\
-        do { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((cpputest_ulonglong)expected, (cpputest_ulonglong)actual, text, file, line); } while(0)
+        do { UtestShell::getCurrent()->assertUnsignedLongLongsEqual((cpputest_ulonglong)(expected), (cpputest_ulonglong)(actual), text, file, line); } while(0)
 #endif // CPPUTEST_USE_LONG_LONG
 
 #define BYTES_EQUAL(expected, actual)\
@@ -275,7 +275,7 @@
     POINTERS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define POINTERS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  do { UtestShell::getCurrent()->assertPointersEqual((const void *)expected, (const void *)actual, text, file, line); } while(0)
+  do { UtestShell::getCurrent()->assertPointersEqual((const void *)(expected), (const void *)(actual), text, file, line); } while(0)
 
 #define FUNCTIONPOINTERS_EQUAL(expected, actual)\
     FUNCTIONPOINTERS_EQUAL_LOCATION((expected), (actual), NULLPTR, __FILE__, __LINE__)
@@ -284,7 +284,7 @@
     FUNCTIONPOINTERS_EQUAL_LOCATION((expected), (actual), text, __FILE__, __LINE__)
 
 #define FUNCTIONPOINTERS_EQUAL_LOCATION(expected, actual, text, file, line)\
-  do { UtestShell::getCurrent()->assertFunctionPointersEqual((void (*)())expected, (void (*)())actual, text, file, line); } while(0)
+  do { UtestShell::getCurrent()->assertFunctionPointersEqual((void (*)())(expected), (void (*)())(actual), text, file, line); } while(0)
 
 //Check two doubles for equality within a tolerance threshold
 #define DOUBLES_EQUAL(expected, actual, threshold)\

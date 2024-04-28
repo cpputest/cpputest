@@ -59,7 +59,7 @@ public:
     {
         return defaultTestResult;
     }
-    virtual ~OutsideTestRunnerUTest() _destructor_override
+    virtual ~OutsideTestRunnerUTest() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 private:

@@ -30,8 +30,8 @@
 
 #include "CppUTest/Utest.h"
 
-#ifdef GTEST__H_
-#error "Please include this file before you include any other GTest files"
+#ifdef GTEST_H_
+    #error "Please include this file before you include any other GTest files"
 #endif
 
 /*
@@ -63,10 +63,11 @@ class GTestShell : public UtestShell
     ::testing::TestInfo* testinfo_;
     GTestShell* next_;
     GTestFlagsThatAllocateMemory* flags_;
+
 public:
     GTestShell(::testing::TestInfo* testinfo, GTestShell* next, GTestFlagsThatAllocateMemory* flags);
 
-    virtual Utest* createTest() _override;
+    virtual Utest* createTest() CPPUTEST_OVERRIDE;
 
     GTestShell* nextGTest()
     {

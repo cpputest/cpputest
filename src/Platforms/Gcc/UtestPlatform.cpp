@@ -173,12 +173,12 @@ static int PlatformSpecificSetJmpImplementation(void (*function) (void* data), v
 }
 
 /*
- * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about _no_return_.
+ * MacOSX clang 3.0 doesn't seem to recognize longjmp and thus complains about CPPUTEST_NORETURN.
  * The later clang compilers complain when it isn't there. So only way is to check the clang compiler here :(
  */
 #ifdef __clang__
  #if !((__clang_major__ == 3) && (__clang_minor__ == 0))
- _no_return_
+ CPPUTEST_NORETURN
  #endif
 #endif
 static void PlatformSpecificLongJmpImplementation()

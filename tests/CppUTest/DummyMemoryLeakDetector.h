@@ -32,7 +32,7 @@ class DummyMemoryLeakDetector : public MemoryLeakDetector
 {
 public:
     DummyMemoryLeakDetector(MemoryLeakFailure* reporter);
-    virtual ~DummyMemoryLeakDetector() _destructor_override;
+    virtual ~DummyMemoryLeakDetector() CPPUTEST_DESTRUCTOR_OVERRIDE;
     static bool wasDeleted();
 
 private:
@@ -44,9 +44,9 @@ class DummyMemoryLeakFailure : public MemoryLeakFailure
 public:
     DummyMemoryLeakFailure();
 
-    virtual ~DummyMemoryLeakFailure() _destructor_override;
+    virtual ~DummyMemoryLeakFailure() CPPUTEST_DESTRUCTOR_OVERRIDE;
     static bool wasDeleted();
-    virtual void fail(char*) _override;
+    virtual void fail(char*) CPPUTEST_OVERRIDE;
 
 private:
     static bool memoryLeakFailureWasDelete;

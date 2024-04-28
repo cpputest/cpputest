@@ -25,8 +25,8 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GTEST__H_
-#define GTEST__H_
+#ifndef GTEST_H_
+#define GTEST_H_
 
 #undef new
 #undef strdup

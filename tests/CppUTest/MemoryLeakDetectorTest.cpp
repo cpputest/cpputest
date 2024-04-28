@@ -33,11 +33,11 @@
 class MemoryLeakFailureForTest: public MemoryLeakFailure
 {
 public:
-    virtual ~MemoryLeakFailureForTest() _destructor_override
+    virtual ~MemoryLeakFailureForTest() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 
-    virtual void fail(char* fail_string) _override
+    virtual void fail(char* fail_string) CPPUTEST_OVERRIDE
     {
         *message = fail_string;
     }
@@ -56,12 +56,12 @@ public:
 
     int alloc_called;
     int free_called;
-    char* alloc_memory(size_t size, const char*, size_t) _override
+    char* alloc_memory(size_t size, const char*, size_t) CPPUTEST_OVERRIDE
     {
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, "file", 1);
     }
-    void free_memory(char* memory, size_t size, const char* file, size_t line) _override
+    void free_memory(char* memory, size_t size, const char* file, size_t line) CPPUTEST_OVERRIDE
     {
         free_called++;
         TestMemoryAllocator::free_memory(memory, size, file, line);
@@ -81,24 +81,24 @@ public:
     int allocMemoryLeakNodeCalled;
     int freeMemoryLeakNodeCalled;
 
-    char* alloc_memory(size_t size, const char* file, size_t line) _override
+    char* alloc_memory(size_t size, const char* file, size_t line) CPPUTEST_OVERRIDE
     {
         alloc_called++;
         return TestMemoryAllocator::alloc_memory(size, file, line);
     }
-    void free_memory(char* memory, size_t size, const char* file, size_t line) _override
+    void free_memory(char* memory, size_t size, const char* file, size_t line) CPPUTEST_OVERRIDE
     {
         free_called++;
         TestMemoryAllocator::free_memory(memory, size, file, line);
     }
 
-    char* allocMemoryLeakNode(size_t size) _override
+    char* allocMemoryLeakNode(size_t size) CPPUTEST_OVERRIDE
     {
         allocMemoryLeakNodeCalled++;
         return TestMemoryAllocator::alloc_memory(size, __FILE__, __LINE__);
     }
 
-    void freeMemoryLeakNode(char* memory) _override
+    void freeMemoryLeakNode(char* memory) CPPUTEST_OVERRIDE
     {
         freeMemoryLeakNodeCalled++;
         TestMemoryAllocator::free_memory(memory, 0,  __FILE__, __LINE__);
@@ -111,7 +111,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
     MemoryLeakFailureForTest *reporter;
     AllocatorForMemoryLeakDetectionTest* testAllocator;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         reporter = new MemoryLeakFailureForTest;
         detector = new MemoryLeakDetector(reporter);
@@ -120,7 +120,7 @@ TEST_GROUP(MemoryLeakDetectorTest)
         detector->startChecking();
         reporter->message = new SimpleString();
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete reporter->message;
         delete detector;

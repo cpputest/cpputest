@@ -47,13 +47,13 @@ public:
 class TypeForTestingExpectedFunctionCallComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2) _override
+    virtual bool isEqual(const void* object1, const void* object2) CPPUTEST_OVERRIDE
     {
         const TypeForTestingExpectedFunctionCall* obj1 = (const TypeForTestingExpectedFunctionCall*) object1;
         const TypeForTestingExpectedFunctionCall* obj2 = (const TypeForTestingExpectedFunctionCall*) object2;
         return *(obj1->value) == *(obj2->value);
     }
-    virtual SimpleString valueToString(const void* object) _override
+    virtual SimpleString valueToString(const void* object) CPPUTEST_OVERRIDE
     {
         const TypeForTestingExpectedFunctionCall* obj = (const TypeForTestingExpectedFunctionCall*) object;
         return StringFrom(*(obj->value));
@@ -63,7 +63,7 @@ public:
 class TypeForTestingExpectedFunctionCallCopier : public MockNamedValueCopier
 {
 public:
-    virtual void copy(void* dst_, const void* src_) _override
+    virtual void copy(void* dst_, const void* src_) CPPUTEST_OVERRIDE
     {
         TypeForTestingExpectedFunctionCall* dst = (TypeForTestingExpectedFunctionCall*) dst_;
         const TypeForTestingExpectedFunctionCall* src = (const TypeForTestingExpectedFunctionCall*) src_;
@@ -73,7 +73,7 @@ public:
 
 TEST_GROUP(MockNamedValueHandlerRepository)
 {
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         CHECK_NO_MOCK_FAILURE();
         MockFailureReporterForTest::clearReporter();
@@ -155,13 +155,13 @@ TEST_GROUP(MockExpectedCall)
 {
     MockCheckedExpectedCall* call;
     MockNamedValueComparatorsAndCopiersRepository* originalComparatorRepository;
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         originalComparatorRepository = MockNamedValue::getDefaultComparatorsAndCopiersRepository();
         call = new MockCheckedExpectedCall(1);
         call->withName("funcName");
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         MockNamedValue::setDefaultComparatorsAndCopiersRepository(originalComparatorRepository);
         delete call;

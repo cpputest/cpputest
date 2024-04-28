@@ -42,7 +42,7 @@ public:
         UtestShell(group, "Name", "File", testLineNumber), hasRun_(false)
     {
     }
-    virtual void runOneTest(TestPlugin*, TestResult&) _override
+    virtual void runOneTest(TestPlugin*, TestResult&) CPPUTEST_OVERRIDE
     {
         hasRun_ = true;
     }
@@ -67,7 +67,7 @@ public:
         resetCount();
     }
 
-    virtual ~MockTestResult() _destructor_override
+    virtual ~MockTestResult() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 
@@ -81,27 +81,27 @@ public:
         countCurrentGroupEnded = 0;
     }
 
-    virtual void testsStarted() _override
+    virtual void testsStarted() CPPUTEST_OVERRIDE
     {
         countTestsStarted++;
     }
-    virtual void testsEnded() _override
+    virtual void testsEnded() CPPUTEST_OVERRIDE
     {
         countTestsEnded++;
     }
-    virtual void currentTestStarted(UtestShell* /*test*/) _override
+    virtual void currentTestStarted(UtestShell* /*test*/) CPPUTEST_OVERRIDE
     {
         countCurrentTestStarted++;
     }
-    virtual void currentTestEnded(UtestShell* /*test*/) _override
+    virtual void currentTestEnded(UtestShell* /*test*/) CPPUTEST_OVERRIDE
     {
         countCurrentTestEnded++;
     }
-    virtual void currentGroupStarted(UtestShell* /*test*/) _override
+    virtual void currentGroupStarted(UtestShell* /*test*/) CPPUTEST_OVERRIDE
     {
         countCurrentGroupStarted++;
     }
-    virtual void currentGroupEnded(UtestShell* /*test*/) _override
+    virtual void currentGroupEnded(UtestShell* /*test*/) CPPUTEST_OVERRIDE
     {
         countCurrentGroupEnded++;
     }
@@ -118,7 +118,7 @@ TEST_GROUP(TestRegistry)
     MockTest* test4;
     TestResult *result;
     MockTestResult *mockResult;
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         output = new StringBufferTestOutput();
         mockResult = new MockTestResult(*output);
@@ -131,7 +131,7 @@ TEST_GROUP(TestRegistry)
         myRegistry->setCurrentRegistry(myRegistry);
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         myRegistry->setCurrentRegistry(NULLPTR);
         delete myRegistry;
@@ -312,9 +312,9 @@ class MyTestPluginDummy: public TestPlugin
 {
 public:
     MyTestPluginDummy(const SimpleString& name) : TestPlugin(name) {}
-    virtual ~MyTestPluginDummy() _destructor_override {}
-    virtual void runAllPreTestAction(UtestShell&, TestResult&) _override {}
-    virtual void runAllPostTestAction(UtestShell&, TestResult&) _override {}
+    virtual ~MyTestPluginDummy() CPPUTEST_DESTRUCTOR_OVERRIDE {}
+    virtual void runAllPreTestAction(UtestShell&, TestResult&) CPPUTEST_OVERRIDE {}
+    virtual void runAllPostTestAction(UtestShell&, TestResult&) CPPUTEST_OVERRIDE {}
 };
 
 TEST(TestRegistry, ResetPluginsWorks)

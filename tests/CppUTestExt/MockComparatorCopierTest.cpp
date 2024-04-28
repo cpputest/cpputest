@@ -30,7 +30,7 @@
 
 TEST_GROUP(MockComparatorCopierTest)
 {
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         mock().checkExpectations();
         mock().clear();
@@ -55,13 +55,13 @@ public:
 class MyTypeForTestingComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void* object1, const void* object2) _override
+    virtual bool isEqual(const void* object1, const void* object2) CPPUTEST_OVERRIDE
     {
         const MyTypeForTesting* obj1 = (const MyTypeForTesting*) object1;
         const MyTypeForTesting* obj2 = (const MyTypeForTesting*) object2;
         return *(obj1->value) == *(obj2->value);
     }
-    virtual SimpleString valueToString(const void* object) _override
+    virtual SimpleString valueToString(const void* object) CPPUTEST_OVERRIDE
     {
         const MyTypeForTesting* obj = (const MyTypeForTesting*) object;
         return StringFrom(*(obj->value));
@@ -71,7 +71,7 @@ public:
 class MyTypeForTestingCopier : public MockNamedValueCopier
 {
 public:
-    virtual void copy(void* dst_, const void* src_) _override
+    virtual void copy(void* dst_, const void* src_) CPPUTEST_OVERRIDE
     {
         MyTypeForTesting* dst = (MyTypeForTesting*) dst_;
         const MyTypeForTesting* src = (const MyTypeForTesting*) src_;
@@ -567,11 +567,11 @@ TEST(MockComparatorCopierTest, installCopiersWorksHierarchically)
 class StubComparator : public MockNamedValueComparator
 {
 public:
-    virtual bool isEqual(const void*, const void*) _override
+    virtual bool isEqual(const void*, const void*) CPPUTEST_OVERRIDE
     {
         return true;
     }
-    virtual SimpleString valueToString(const void*) _override
+    virtual SimpleString valueToString(const void*) CPPUTEST_OVERRIDE
     {
         return "";
     }

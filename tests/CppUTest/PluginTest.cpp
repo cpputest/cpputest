@@ -44,13 +44,13 @@ public:
     {
     }
 
-    virtual void preTestAction(UtestShell&, TestResult&) _override
+    virtual void preTestAction(UtestShell&, TestResult&) CPPUTEST_OVERRIDE
     {
         preAction++;
         preActionSequence = sequenceNumber++;
     }
 
-    virtual void postTestAction(UtestShell&, TestResult&) _override
+    virtual void postTestAction(UtestShell&, TestResult&) CPPUTEST_OVERRIDE
     {
         postAction++;
         postActionSequence = sequenceNumber++;
@@ -70,7 +70,7 @@ public:
     {
     }
 
-    virtual bool parseArguments(int ac, const char *const *av, int index) _override
+    virtual bool parseArguments(int ac, const char *const *av, int index) CPPUTEST_OVERRIDE
     {
         SimpleString argument (av[index]);
         if (argument == "-paccept")
@@ -88,7 +88,7 @@ TEST_GROUP(PluginTest)
     TestTestingFixture *genFixture;
     TestRegistry* registry;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         firstPlugin = new DummyPlugin(GENERIC_PLUGIN);
         secondPlugin = new DummyPluginWhichAcceptsParameters(GENERIC_PLUGIN2);
@@ -99,7 +99,7 @@ TEST_GROUP(PluginTest)
         sequenceNumber = 1;
     }
 
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete firstPlugin;
         delete secondPlugin;

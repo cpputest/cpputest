@@ -31,7 +31,7 @@
 
 TEST_GROUP(MockCallTest)
 {
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         mock().checkExpectations();
         mock().clear();

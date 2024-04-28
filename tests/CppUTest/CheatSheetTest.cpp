@@ -9,14 +9,14 @@ static void stub(){}
 TEST_GROUP(CheatSheet)
 {
 /* declare a setup method for the test group. Optional. */
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
 /* Set method real_one to stub. Automatically restore in teardown */
         UT_PTR_SET(real_one, stub);
     }
 
 /* Declare a teardown method for the test group. Optional */
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
     }
 }; /* Do not forget semicolumn */

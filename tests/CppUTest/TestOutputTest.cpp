@@ -51,7 +51,7 @@ TEST_GROUP(TestOutput)
     TestFailure *f3;
     TestResult* result;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         mock = new StringBufferTestOutput();
         printer = mock;
@@ -66,7 +66,7 @@ TEST_GROUP(TestOutput)
         TestOutput::setWorkingEnvironment(TestOutput::eclipse);
 
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         TestOutput::setWorkingEnvironment(TestOutput::detectEnvironment);
         delete printer;
@@ -285,32 +285,32 @@ TEST(TestOutput, printTestsEndedWithNoTestsRunOrIgnored)
 class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOutput
 {
   public:
-    virtual void printTestsStarted() _override
+    virtual void printTestsStarted() CPPUTEST_OVERRIDE
     {
       output += "Test Start\n";
     }
 
-    virtual void printTestsEnded(const TestResult& result) _override
+    virtual void printTestsEnded(const TestResult& result) CPPUTEST_OVERRIDE
     {
       output += StringFromFormat("Test End %d\n", (int) result.getTestCount());
     }
 
-    void printCurrentGroupStarted(const UtestShell& test) _override
+    void printCurrentGroupStarted(const UtestShell& test) CPPUTEST_OVERRIDE
     {
       output += StringFromFormat("Group %s Start\n", test.getGroup().asCharString());
     }
 
-    void printCurrentGroupEnded(const TestResult& res) _override
+    void printCurrentGroupEnded(const TestResult& res) CPPUTEST_OVERRIDE
     {
       output += StringFromFormat("Group End %d\n", (int) res.getTestCount());
     }
 
-    virtual void printCurrentTestStarted(const UtestShell&) _override
+    virtual void printCurrentTestStarted(const UtestShell&) CPPUTEST_OVERRIDE
     {
       output += "s";
     }
 
-    void flush() _override
+    void flush() CPPUTEST_OVERRIDE
     {
       output += "flush";
     }
@@ -339,7 +339,7 @@ TEST_GROUP(CompositeTestOutput)
   TestResult* result;
   UtestShell* test;
 
-  void setup() _override
+  void setup() CPPUTEST_OVERRIDE
   {
     output1 = new CompositeTestOutputTestStringBufferTestOutput;
     output2 = new CompositeTestOutputTestStringBufferTestOutput;
@@ -349,7 +349,7 @@ TEST_GROUP(CompositeTestOutput)
     test = new UtestShell("Group", "Name", "file", 10);
   }
 
-  void teardown() _override
+  void teardown() CPPUTEST_OVERRIDE
   {
     delete test;
     delete result;

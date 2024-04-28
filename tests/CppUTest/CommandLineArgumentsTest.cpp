@@ -36,10 +36,10 @@ public:
         TestPlugin(name)
     {
     }
-    ~OptionsPlugin() _destructor_override
+    ~OptionsPlugin() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
-    bool parseArguments(int /*ac*/, const char *const * /*av*/, int /*index*/) _override
+    bool parseArguments(int /*ac*/, const char *const * /*av*/, int /*index*/) CPPUTEST_OVERRIDE
     {
         return true;
     }
@@ -50,12 +50,12 @@ TEST_GROUP(CommandLineArguments)
     CommandLineArguments* args;
     OptionsPlugin* plugin;
 
-    void setup() _override
+    void setup() CPPUTEST_OVERRIDE
     {
         plugin = new OptionsPlugin("options");
         args = NULLPTR;
     }
-    void teardown() _override
+    void teardown() CPPUTEST_OVERRIDE
     {
         delete args;
         delete plugin;

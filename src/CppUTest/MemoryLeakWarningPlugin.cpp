@@ -538,11 +538,11 @@ void crash_on_allocation_number(unsigned alloc_number)
 class MemoryLeakWarningReporter: public MemoryLeakFailure
 {
 public:
-    virtual ~MemoryLeakWarningReporter() _destructor_override
+    virtual ~MemoryLeakWarningReporter() CPPUTEST_DESTRUCTOR_OVERRIDE
     {
     }
 
-    virtual void fail(char* fail_string) _override
+    virtual void fail(char* fail_string) CPPUTEST_OVERRIDE
     {
         UtestShell* currentTest = UtestShell::getCurrent();
         currentTest->failWith(FailFailure(currentTest, currentTest->getName().asCharString(), currentTest->getLineNumber(), fail_string), UtestShell::getCurrentTestTerminatorWithoutExceptions());
