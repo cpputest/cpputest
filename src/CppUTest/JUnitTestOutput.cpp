@@ -209,7 +209,8 @@ SimpleString JUnitTestOutput::encodeXmlText(const SimpleString& textbody)
     buf.replace("\"", "&quot;");
     buf.replace("<", "&lt;");
     buf.replace(">", "&gt;");
-    buf.replace("\n", "{newline}");
+    buf.replace("\r", "&#13;");
+    buf.replace("\n", "&#10;");
     return buf;
 }
 
