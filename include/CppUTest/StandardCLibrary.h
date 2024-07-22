@@ -45,7 +45,7 @@
 #include <limits.h>
 
 /* Needed to ensure that string.h is included prior to strdup redefinition */
-#ifdef CPPUTEST_HAVE_STRING_H
+#ifdef CPPUTEST_HAVE_STRDUP
 #include <string.h>
 #endif
 
