@@ -232,6 +232,12 @@ AC_MSG_CHECKING([whether CC support -Wreserved-id-macro])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wreserved-id-macro"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
+# Flag -Wno-keyword-macro.
+CFLAGS="-Werror -Wkeyword-macro"
+AC_MSG_CHECKING([whether CC supports -Wkeyword-macro])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wkeyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
+CFLAGS="$saved_cflags"
+
 ##### C++ Warnings
 # Flag -Wsign-conversion (for CXX)
 AC_LANG_PUSH([C++])
@@ -270,12 +276,6 @@ CFLAGS="$saved_cflags"
 CFLAGS="-Werror -Wno-padded"
 AC_MSG_CHECKING([whether CC and CXX supports -Wno-padded])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-padded"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-padded" ], [AC_MSG_RESULT([no])])
-CFLAGS="$saved_cflags"
-
-# Flag -Wno-keyword-macro.
-CFLAGS="-Werror -Wno-keyword-macro"
-AC_MSG_CHECKING([whether CC and CXX supports -Wno-keyword-macro])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wno-keyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 AC_LANG_PUSH([C++])

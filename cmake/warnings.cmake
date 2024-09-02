@@ -20,7 +20,7 @@ if(
         -Wno-padded
         -Wno-disabled-macro-expansion
         -Wreserved-id-macro
-        -Wno-keyword-macro
+        -Wkeyword-macro
         -Wno-long-long
         -Wno-unsafe-buffer-usage
     )
