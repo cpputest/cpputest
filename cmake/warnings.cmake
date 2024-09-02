@@ -19,7 +19,7 @@ if(
         -Wmissing-include-dirs
         -Wno-padded
         -Wno-disabled-macro-expansion
-        -Wno-reserved-id-macro
+        -Wreserved-id-macro
         -Wno-keyword-macro
         -Wno-long-long
         -Wno-unsafe-buffer-usage
