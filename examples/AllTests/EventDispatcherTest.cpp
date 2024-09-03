@@ -25,7 +25,6 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
 #if CPPUTEST_USE_NEW_MACROS
     #undef realloc
 #endif
@@ -36,10 +35,8 @@
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 
-
 #include "CppUTest/TestHarness.h"
 #include "CppUTestExt/MockSupport.h"
-
 
 class ObserverMock : public EventObserver
 {
