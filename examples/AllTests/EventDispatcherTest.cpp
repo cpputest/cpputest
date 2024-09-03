@@ -27,13 +27,13 @@
 
 
 #if CPPUTEST_USE_NEW_MACROS
-  #undef realloc
+    #undef realloc
 #endif
 
 #include "EventDispatcher.h"
 
 #if CPPUTEST_USE_NEW_MACROS
-   #include "CppUTest/MemoryLeakDetectorNewMacros.h"
+    #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 
 
