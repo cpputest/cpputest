@@ -27,6 +27,7 @@
 
 #if CPPUTEST_USE_NEW_MACROS
     #undef realloc
+    #undef new
 #endif
 
 #include "EventDispatcher.h"
