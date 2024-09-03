@@ -100,12 +100,14 @@
  * This is needed for compiling with clang, without breaking other compilers.
  */
 #ifndef __has_attribute
-  #define __has_attribute(x) 0
+  #define CPPUTEST_HAS_ATTRIBUTE(x) 0
+#else
+  #define CPPUTEST_HAS_ATTRIBUTE(x) __has_attribute(x)
 #endif
 
 #if defined (__cplusplus) && __cplusplus >= 201103L
    #define CPPUTEST_NORETURN [[noreturn]]
-#elif __has_attribute(noreturn)
+#elif CPPUTEST_HAS_ATTRIBUTE(noreturn)
    #define CPPUTEST_NORETURN __attribute__((noreturn))
 #else
    #define CPPUTEST_NORETURN
@@ -117,7 +119,7 @@
 #define CPPUTEST_CHECK_FORMAT_TYPE printf
 #endif
 
-#if __has_attribute(format)
+#if CPPUTEST_HAS_ATTRIBUTE(format)
   #define CPPUTEST_CHECK_FORMAT(type, format_parameter, other_parameters) __attribute__ ((format (type, format_parameter, other_parameters)))
 #else
   #define CPPUTEST_CHECK_FORMAT(type, format_parameter, other_parameters) /* type, format_parameter, other_parameters */
