@@ -204,23 +204,21 @@ jobs:
             os: macos-latest
             preset: defaults
             install: true
-            # Undefined-behavior in leak detection breaks #include<list> on Mac
-            cmake_args: -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED=YES
           - name: Apple Clang 14
             os: macos-latest
-            cmake_args: -DCMAKE_CXX_STANDARD=14 -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED=YES
+            cmake_args: -DCMAKE_CXX_STANDARD=14
             preset: Clang
           - name: Apple Clang 17
             os: macos-latest
-            cmake_args: -DCMAKE_CXX_STANDARD=17 -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED=YES
+            cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: Clang
           - name: Apple Clang 20
             os: macos-latest
-            cmake_args: -DCMAKE_CXX_STANDARD=20 -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED=YES
+            cmake_args: -DCMAKE_CXX_STANDARD=20
             preset: Clang
           - name: Mac GNU 14
             os: macos-latest
-            cmake_args: -DCMAKE_CXX_STANDARD=14 -DCPPUTEST_MEM_LEAK_DETECTION_DISABLED=YES
+            cmake_args: -DCMAKE_CXX_STANDARD=14
             preset: GNU
           - name: OpenWatcom DOS
             os: ubuntu-latest
