@@ -232,10 +232,10 @@ AC_MSG_CHECKING([whether CC support -Wreserved-id-macro])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wreserved-id-macro"], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
-# Flag -Wno-keyword-macro.
-CFLAGS="-Werror -Wkeyword-macro"
-AC_MSG_CHECKING([whether CC supports -Wkeyword-macro])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wkeyword-macro"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-keyword-macro" ], [AC_MSG_RESULT([no])])
+# Flag -Wreserved-identifier
+CFLAGS="-Werror -Wreserved-identifier"
+AC_MSG_CHECKING([whether CC supports -Wreserved-identifier])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CWARNINGFLAGS="${CPPUTEST_CWARNINGFLAGS} -Wreserved-identifier"; CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wreserved-identifier" ], [AC_MSG_RESULT([no])])
 CFLAGS="$saved_cflags"
 
 ##### C++ Warnings
