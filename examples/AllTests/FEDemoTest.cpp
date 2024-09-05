@@ -52,13 +52,13 @@ TEST_GROUP(FE_Demo)
     }
 };
 
-IGNORE_TEST(FE_Demo, should_fail_when__FE_DIVBYZERO__is_set)
+IGNORE_TEST(FE_Demo, should_fail_when_FE_DIVBYZERO_is_set)
 {
     float f = 1.0f;
     CHECK((f /= 0.0f) >= std::numeric_limits<float>::infinity());
 }
 
-IGNORE_TEST(FE_Demo, should_fail_when__FE_UNDERFLOW__is_set)
+IGNORE_TEST(FE_Demo, should_fail_when_FE_UNDERFLOW_is_set)
 {
     volatile float f = 0.01f;
     while (f > 0.0f)
@@ -66,7 +66,7 @@ IGNORE_TEST(FE_Demo, should_fail_when__FE_UNDERFLOW__is_set)
     CHECK(f == 0.0f);
 }
 
-IGNORE_TEST(FE_Demo, should_fail_when__FE_OVERFLOW__is_set)
+IGNORE_TEST(FE_Demo, should_fail_when_FE_OVERFLOW_is_set)
 {
     volatile float f = 1000.0f;
     while (f < std::numeric_limits<float>::infinity())
@@ -74,7 +74,7 @@ IGNORE_TEST(FE_Demo, should_fail_when__FE_OVERFLOW__is_set)
     CHECK(f >= std::numeric_limits<float>::infinity());
 }
 
-IGNORE_TEST(FE_Demo, should_fail_when__FE_INEXACT____is_set)
+IGNORE_TEST(FE_Demo, should_fail_when_FE_INEXACT_is_set)
 {
     IEEE754ExceptionsPlugin::enableInexact();
     float f = 10.0f;
