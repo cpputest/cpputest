@@ -544,7 +544,7 @@ TEST(JUnitOutputTest, testFailureWithNewlineInIt)
 
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &#10;    failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+    STRCMP_EQUAL("<failure message=\"thisfile:10: Test {newline}failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
@@ -755,5 +755,5 @@ TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutputWithSpecials)
             .end();
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
-    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;&#10;    Goes \\mainly\\ down the Dr&amp;in&#10; </system-out>\n", outputFile->lineFromTheBack(3));
+    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;{newline}Goes \\mainly\\ down the Dr&amp;in{newline}</system-out>\n", outputFile->lineFromTheBack(3));
 }
