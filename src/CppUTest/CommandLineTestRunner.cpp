@@ -29,7 +29,6 @@
 #include "CppUTest/CommandLineTestRunner.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/JUnitTestOutput.h"
-#include "CppUTest/PlatformSpecificFunctions.h"
 #include "CppUTest/TeamCityTestOutput.h"
 #include "CppUTest/TestRegistry.h"
 
