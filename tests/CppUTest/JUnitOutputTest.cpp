@@ -312,19 +312,28 @@ public:
 
 extern "C" {
     static FileSystemForJUnitTestOutputTests fileSystem;
+    static FileForJUnitOutputTests* currentFile = NULLPTR;
 
     static PlatformSpecificFile mockFOpen(const char* filename, const char*)
     {
-        return fileSystem.openFile(filename);
+        currentFile = fileSystem.openFile(filename);
+        return currentFile;
     }
 
+    static void (*originalFPuts)(const char* str, PlatformSpecificFile file);
     static void mockFPuts(const char* str, PlatformSpecificFile file)
     {
-        ((FileForJUnitOutputTests*)file)->write(str);
+        if (file == currentFile) {
+            ((FileForJUnitOutputTests*)file)->write(str);
+        }
+        else {
+            originalFPuts(str, file);
+        }
     }
 
     static void mockFClose(PlatformSpecificFile file)
     {
+        currentFile = NULLPTR;
         ((FileForJUnitOutputTests*)file)->close();
     }
 }
@@ -339,6 +348,7 @@ TEST_GROUP(JUnitOutputTest)
     void setup() CPPUTEST_OVERRIDE
     {
         UT_PTR_SET(PlatformSpecificFOpen, mockFOpen);
+        originalFPuts = PlatformSpecificFPuts;
         UT_PTR_SET(PlatformSpecificFPuts, mockFPuts);
         UT_PTR_SET(PlatformSpecificFClose, mockFClose);
         junitOutput = new JUnitTestOutput();
@@ -544,7 +554,7 @@ TEST(JUnitOutputTest, testFailureWithNewlineInIt)
 
     outputFile = fileSystem.file("cpputest_testGroupWithFailingTest.xml");
 
-    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &#10;    failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
+    STRCMP_EQUAL("<failure message=\"thisfile:10: Test &#10;failed\" type=\"AssertionFailedError\">\n", outputFile->line(6));
 }
 
 TEST(JUnitOutputTest, testFailureWithDifferentFileAndLine)
@@ -755,5 +765,5 @@ TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutputWithSpecials)
             .end();
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
-    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;&#10;    Goes \\mainly\\ down the Dr&amp;in&#10; </system-out>\n", outputFile->lineFromTheBack(3));
+    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;&#10;Goes \\mainly\\ down the Dr&amp;in&#10;</system-out>\n", outputFile->lineFromTheBack(3));
 }
