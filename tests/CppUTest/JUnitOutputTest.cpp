@@ -761,9 +761,9 @@ TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutputWithSpecials)
 {
     testCaseRunner->start()
             .withGroup("groupname")
-            .withTest("testname").thatPrints("The <rain> in \"Spain\"\nGoes \\mainly\\ down the Dr&in\n")
+            .withTest("testname").thatPrints("The <rain> in \"Spain\"\nGoes\r \\mainly\\ down the Dr&in\n")
             .end();
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
-    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;&#10;Goes \\mainly\\ down the Dr&amp;in&#10;</system-out>\n", outputFile->lineFromTheBack(3));
+    STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;&#10;Goes&#13; \\mainly\\ down the Dr&amp;in&#10;</system-out>\n", outputFile->lineFromTheBack(3));
 }
