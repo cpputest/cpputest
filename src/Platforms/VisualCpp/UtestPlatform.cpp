@@ -22,13 +22,13 @@
 #include <setjmp.h>
 
 #ifdef STDC_WANT_SECURE_LIB
-    #define FOPEN(fp, filename, flag) fopen_s((fp), (filename), (flag))
-    #define _VSNPRINTF(str, size, trunc, format, args) _vsnprintf_s((str), (size), (trunc), (format), (args))
-    #define LOCALTIME(_tm, timer) localtime_s((_tm), (timer))
+    #define MAYBE_SECURE_FOPEN(fp, filename, flag) fopen_s((fp), (filename), (flag))
+    #define MAYBE_SECURE_VSNPRINTF(str, size, trunc, format, args) _vsnprintf_s((str), (size), (trunc), (format), (args))
+    #define MAYBE_SECURE_LOCALTIME(_tm, timer) localtime_s((_tm), (timer))
 #else
-    #define FOPEN(fp, filename, flag) *(fp) = fopen((filename), (flag))
-    #define _VSNPRINTF(str, size, trunc, format, args) _vsnprintf((str), (size), (format), (args))
-    #define LOCALTIME(_tm, timer) memcpy(_tm, localtime(timer), sizeof(tm));
+    #define MAYBE_SECURE_FOPEN(fp, filename, flag) *(fp) = fopen((filename), (flag))
+    #define MAYBE_SECURE_VSNPRINTF(str, size, trunc, format, args) _vsnprintf((str), (size), (format), (args))
+    #define MAYBE_SECURE_LOCALTIME(_tm, timer) memcpy(_tm, localtime(timer), sizeof(tm));
 #endif
 
 static jmp_buf test_exit_jmp_buf[10];
@@ -108,7 +108,7 @@ static const char* VisualCppTimeString()
     time_t the_time = time(NULLPTR);
     struct tm the_local_time;
     static char dateTime[80];
-    LOCALTIME(&the_local_time, &the_time);
+    MAYBE_SECURE_LOCALTIME(&the_local_time, &the_time);
     strftime(dateTime, 80, "%Y-%m-%dT%H:%M:%S", &the_local_time);
     return dateTime;
 }
@@ -122,7 +122,7 @@ static int VisualCppVSNprintf(char *str, size_t size, const char* format, va_lis
     char* buf = NULLPTR;
     size_t sizeGuess = size;
 
-    int result = _VSNPRINTF( str, size, _TRUNCATE, format, args);
+    int result = MAYBE_SECURE_VSNPRINTF( str, size, _TRUNCATE, format, args);
     str[size-1] = 0;
     while (result == -1)
     {
@@ -130,7 +130,7 @@ static int VisualCppVSNprintf(char *str, size_t size, const char* format, va_lis
             free(buf);
         sizeGuess += 10;
         buf = (char*)malloc(sizeGuess);
-        result = _VSNPRINTF( buf, sizeGuess, _TRUNCATE, format, args);
+        result = MAYBE_SECURE_VSNPRINTF( buf, sizeGuess, _TRUNCATE, format, args);
     }
 
     if (buf)
@@ -144,7 +144,7 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 static PlatformSpecificFile VisualCppFOpen(const char* filename, const char* flag)
 {
     FILE* file;
-    FOPEN(&file, filename, flag);
+    MAYBE_SECURE_FOPEN(&file, filename, flag);
     return file;
 }
 
