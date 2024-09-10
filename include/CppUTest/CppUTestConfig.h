@@ -29,7 +29,17 @@
 #define CPPUTESTCONFIG_H_
 
 #ifndef CPPUTEST_USE_OWN_CONFIGURATION
-#include "CppUTestGeneratedConfig.h"
+    // The autotools generated header uses reserved names in macros
+    #ifdef __clang__
+        #pragma clang diagnostic push
+        #if __clang_major__ >= 13
+            #pragma clang diagnostic ignored "-Wreserved-identifier"
+        #endif
+    #endif
+    #include "CppUTestGeneratedConfig.h"
+    #ifdef __clang__
+        #pragma clang diagnostic pop
+    #endif
 #endif
 
 /*
