@@ -60,6 +60,11 @@ if(CPPUTEST_PLATFORM STREQUAL "c2000")
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../../include/Platforms/c2000>
     )
+elseif(CPPUTEST_PLATFORM STREQUAL "Iar")
+    target_compile_options(CppUTest
+        PRIVATE
+            --dlib_config full
+    )
 endif()
 
 if (MINGW)
@@ -96,13 +101,15 @@ if(NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
     if(MSVC)
         set(force_include "/FI")
     elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-        set(force_include "--preinclude ")
+        set(force_include "--preinclude=")
     else()
         set(force_include "-include")
     endif()
     target_compile_options(CppUTest
         PUBLIC
-            "$<$<COMPILE_LANGUAGE:C,CXX>:${force_include}CppUTest/MemoryLeakDetectorMallocMacros.h>"
+            # Not all toolchains support multiple force includes (namely IAR),
+            # so C and C++ each get their own.
+            "$<$<COMPILE_LANGUAGE:C>:${force_include}CppUTest/MemoryLeakDetectorMallocMacros.h>"
             "$<$<COMPILE_LANGUAGE:CXX>:${force_include}CppUTest/MemoryLeakDetectorNewMacros.h>"
     )
 endif()
