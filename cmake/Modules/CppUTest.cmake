@@ -35,6 +35,17 @@ function(cpputest_discover_tests target)
         "which is not an executable."
         )
     endif()
+    
+    get_property(emulator
+        TARGET ${target}
+        PROPERTY CROSSCOMPILING_EMULATOR
+    )
+    if(CMAKE_CROSSCOMPILING)
+        if(NOT emulator)
+            message(WARNING "Cannot discover cross compiled tests without an emulator")
+            return()
+        endif()
+    endif()
 
     if(NOT DEFINED _EXTRA_ARGS)
         set(_EXTRA_ARGS -v)
@@ -72,7 +83,7 @@ function(cpputest_discover_tests target)
             "${CMAKE_COMMAND}"
             -D "TESTS_DETAILED:BOOL=${_DETAILED}"
             -D "EXECUTABLE=$<TARGET_FILE:${target}>"
-            -D "EMULATOR=$<TARGET_PROPERTY:${target},CROSSCOMPILING_EMULATOR>"
+            -D "EMULATOR=${emulator}"
             -D "ARGS=${_EXTRA_ARGS}"
             -D "CTEST_FILE=${CTEST_GENERATED_FILE}"
             -P "${_CPPUTEST_DISCOVERY_SCRIPT}"
