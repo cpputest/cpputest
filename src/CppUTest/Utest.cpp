@@ -137,8 +137,8 @@ extern "C" {
 
 static const NormalTestTerminator normalTestTerminator = NormalTestTerminator();
 static const CrashingTestTerminator crashingTestTerminator = CrashingTestTerminator();
-static const TestTerminatorWithoutExceptions normalTestTerminatorWithoutExceptions;
-static const CrashingTestTerminatorWithoutExceptions crashingTestTerminatorWithoutExceptions;
+static const TestTerminatorWithoutExceptions normalTestTerminatorWithoutExceptions = TestTerminatorWithoutExceptions();
+static const CrashingTestTerminatorWithoutExceptions crashingTestTerminatorWithoutExceptions = CrashingTestTerminatorWithoutExceptions();
 
 const TestTerminator *UtestShell::currentTestTerminator_ = &normalTestTerminator;
 const TestTerminator *UtestShell::currentTestTerminatorWithoutExceptions_ = &normalTestTerminatorWithoutExceptions;
