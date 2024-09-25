@@ -136,7 +136,7 @@
 				WarningLevel="3"
 				SuppressStartupBanner="true"
 				DebugInformationFormat="4"
-				ForcedIncludeFiles="CppUTest/MemoryLeakDetectorMallocMacros.h,CppUTest/MemoryLeakDetectorNewMacros.h"
+				ForcedIncludeFiles="CppUTest/MemoryLeakDetectorNewMacros.h,CppUTest/MemoryLeakDetectorMallocMacros.h"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
