@@ -23,7 +23,5 @@ target_link_libraries(ExampleTests
         CppUTest::CppUTestExt
 )
 
-if(CPPUTEST_TEST_DISCOVERY OR NOT DEFINED CPPUTEST_TEST_DISCOVERY)
-    include(CppUTest)
-    cpputest_discover_tests(ExampleTests)
-endif()
+include(CppUTest)
+cpputest_discover_tests(ExampleTests)

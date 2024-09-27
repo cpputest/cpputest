@@ -20,9 +20,7 @@ if(NOT CPPUTEST_SPLIT_TESTS)
 
     add_mapfile(CppUTestTests)
 
-    if(CPPUTEST_TEST_DISCOVERY)
-        cpputest_discover_tests(CppUTestTests)
-    endif()
+    cpputest_discover_tests(CppUTestTests)
 endif()
 
 function(add_cpputest_test number)
@@ -32,9 +30,7 @@ function(add_cpputest_test number)
         string(APPEND name ${number})
         add_executable(${name})
         add_mapfile(${name})
-        if(CPPUTEST_TEST_DISCOVERY)
-            cpputest_discover_tests(${name})
-        endif()
+        cpputest_discover_tests(${name})
     endif()
 
     target_sources(${name}
