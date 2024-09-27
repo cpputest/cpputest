@@ -44,12 +44,10 @@ if(NOT CPPUTEST_SPLIT_TESTS)
 
     add_mapfile(CppUTestExtTests)
 
-    if(CPPUTEST_TEST_DISCOVERY)
-        include(CppUTest)
-        cpputest_discover_tests(CppUTestExtTests
-            DETAILED FALSE
-        )
-    endif()
+    include(CppUTest)
+    cpputest_discover_tests(CppUTestExtTests
+        DETAILED FALSE
+    )
 endif()
 
 function(add_cpputestext_test number)
@@ -59,9 +57,7 @@ function(add_cpputestext_test number)
         string(APPEND name ${number})
         add_executable(${name})
         add_mapfile(${name})
-        if(CPPUTEST_TEST_DISCOVERY)
-            cpputest_discover_tests(${name})
-        endif()
+        cpputest_discover_tests(${name})
     endif()
 
     target_sources(${name}
