@@ -77,7 +77,6 @@ function(cpputest_discover_tests target)
             -D "CTEST_FILE=${CTEST_GENERATED_FILE}"
             -P "${_CPPUTEST_DISCOVERY_SCRIPT}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        DEPENDS "${_CPPUTEST_DISCOVERY_SCRIPT}"
         VERBATIM
     )
 
