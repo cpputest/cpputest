@@ -49,3 +49,5 @@ test_script:
 artifacts:
 - path: lib\CppUTest.lib
   name: CppUTest
+- path: '**\BuildLog.htm'
+  name: build logs
