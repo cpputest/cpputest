@@ -51,7 +51,7 @@ This is useful for managing a common
 CppUTest installation with the system's package manager.
 
 ```cmake
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(trying_CppUtest)
 
 find_package(CppUTest REQUIRED)
@@ -80,7 +80,7 @@ how an external project can refer to this CMakeLists.txt to build CppUTest as a
 library and include it as a target dependency.
 
 ```cmake
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 project(trying_CppUtest)
 
 SET(CppUTestRootDirectory /path/to/cpputest)
