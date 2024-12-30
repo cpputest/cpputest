@@ -332,14 +332,14 @@ FailableMemoryAllocator::FailableMemoryAllocator(const char* name_str, const cha
 
 void FailableMemoryAllocator::failAllocNumber(int number)
 {
-    LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) (void*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
+    LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
     newNode->failAtAllocNumber(number, head_);
     head_ = newNode;
 }
 
 void FailableMemoryAllocator::failNthAllocAt(int allocationNumber, const char* file, size_t line)
 {
-    LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) (void*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
+    LocationToFailAllocNode* newNode = (LocationToFailAllocNode*) allocMemoryLeakNode(sizeof(LocationToFailAllocNode));
     newNode->failNthAllocAt(allocationNumber, file, line, head_);
     head_ = newNode;
 }
@@ -406,7 +406,7 @@ struct MemoryAccountantAllocationNode
 
 MemoryAccountantAllocationNode* MemoryAccountant::createNewAccountantAllocationNode(size_t size, MemoryAccountantAllocationNode* next) const
 {
-    MemoryAccountantAllocationNode* node = (MemoryAccountantAllocationNode*) (void*) allocator_->alloc_memory(sizeof(MemoryAccountantAllocationNode), __FILE__, __LINE__);
+    MemoryAccountantAllocationNode* node = (MemoryAccountantAllocationNode*) allocator_->alloc_memory(sizeof(MemoryAccountantAllocationNode), __FILE__, __LINE__);
     node->size_ = size;
     node->allocations_ = 0;
     node->deallocations_ = 0;
@@ -632,7 +632,7 @@ struct AccountingTestMemoryAllocatorMemoryNode
 
 void AccountingTestMemoryAllocator::addMemoryToMemoryTrackingToKeepTrackOfSize(char* memory, size_t size)
 {
-    AccountingTestMemoryAllocatorMemoryNode* node = (AccountingTestMemoryAllocatorMemoryNode*) (void*) originalAllocator_->alloc_memory(sizeof(AccountingTestMemoryAllocatorMemoryNode), __FILE__, __LINE__);
+    AccountingTestMemoryAllocatorMemoryNode* node = (AccountingTestMemoryAllocatorMemoryNode*) originalAllocator_->alloc_memory(sizeof(AccountingTestMemoryAllocatorMemoryNode), __FILE__, __LINE__);
     node->memory_ = memory;
     node->size_ = size;
     node->next_ = head_;
