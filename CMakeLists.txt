@@ -1,7 +1,7 @@
 # 2.6.3 is needed for ctest support
 # 3.1 is needed for target_sources
 # 3.8 is needed for try_compile improvements (CMP0067)
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.8...3.31)
 
 project(CppUTest
   VERSION 4.0
