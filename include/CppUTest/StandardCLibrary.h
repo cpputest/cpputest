@@ -15,12 +15,13 @@
  #if CPPUTEST_USE_STD_CPP_LIB
   #include <cstdlib>
   #include <string>
+  #include <malloc.h>
  #endif
 #endif
 
 /* Needed for malloc */
 #include <stdlib.h>
-
+#include <malloc.h>
 /* Needed for std::nullptr */
 #ifdef __cplusplus
  #if CPPUTEST_USE_STD_CPP_LIB
