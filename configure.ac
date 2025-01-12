@@ -325,13 +325,16 @@ AC_LANG_PUSH([C++])
 # Can we use operator delete without exception handling specifier? (clang warns on this!)
 CXXFLAGS="-Werror"
 AC_MSG_CHECKING([whether CXX supports operator delete without exception handling specifier])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <new>\nvoid operator delete(void* mem);])], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no]); UT_DELETE_MUST_HAVE_EXCEPTION_SPECIFIER="yes"])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <new>
+void operator delete(void* mem);]])], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no]); UT_DELETE_MUST_HAVE_EXCEPTION_SPECIFIER="yes"])
 CXXFLAGS="$saved_cxxflags"
 
 # Can we use operator new with exception specifier (g++4.7 on MacOSX is broken here)
 CXXFLAGS="-Werror"
 AC_MSG_CHECKING([whether CXX supports operator new with exception handling specifier])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#include <new>\nvoid* operator new(size_t size) throw(std::bad_alloc);;])], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no]); UT_NEW_CANT_HAVE_EXCEPTION_SPECIFIER="yes"])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <cstdint>
+#include <new>
+void* operator new(std::size_t size) throw(std::bad_alloc);;]])], [AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no]); UT_NEW_CANT_HAVE_EXCEPTION_SPECIFIER="yes"])
 CXXFLAGS="$saved_cxxflags"
 
 # Flag -Wno-missing-exception-spec
