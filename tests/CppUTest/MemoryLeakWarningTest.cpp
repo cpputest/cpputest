@@ -102,7 +102,7 @@ TEST_GROUP(MemoryLeakWarningTest)
 static void testTwoLeaks_()
 {
     leak1 = detector->allocMemory(allocator, 10);
-    leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
+    leak2 = (long*) detector->allocMemory(allocator, 4);
 }
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
@@ -155,7 +155,7 @@ static void testIgnore2_()
 {
     memPlugin->expectLeaksInTest(2);
     leak1 = detector->allocMemory(allocator, 10);
-    leak2 = (long*) (void*) detector->allocMemory(allocator, 4);
+    leak2 = (long*) detector->allocMemory(allocator, 4);
 }
 
 TEST(MemoryLeakWarningTest, Ignore2)
