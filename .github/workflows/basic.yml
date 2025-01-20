@@ -300,7 +300,7 @@ jobs:
 
       - name: Coverage
         run: |
-          lcov --capture --directory . --no-external --output-file lcov.info
+          lcov --ignore-errors mismatch --capture --directory . --no-external --output-file lcov.info
           lcov --remove lcov.info --output-file lcov.info '*/tests/*'
         if: ${{ matrix.name == 'Coverage' }}
       - name: Coveralls
