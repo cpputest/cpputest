@@ -37,10 +37,11 @@
 #ifdef CPPUTEST_HAVE_GETTIMEOFDAY
 #include <sys/time.h>
 #endif
-#if defined(CPPUTEST_HAVE_FORK) && defined(CPPUTEST_HAVE_WAITPID)
+#if defined(CPPUTEST_HAVE_FORK) && defined(CPPUTEST_HAVE_WAITPID) && defined(CPPUTEST_HAVE_KILL)
 #include <unistd.h>
 #include <sys/wait.h>
 #include <errno.h>
+#include <signal.h>
 #endif
 
 #include <time.h>
@@ -51,7 +52,6 @@
 #include <math.h>
 #include <float.h>
 #include <ctype.h>
-#include <signal.h>
 
 #ifdef CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK
 #include <pthread.h>
@@ -66,7 +66,7 @@ static int jmp_buf_index = 0;
 
 // There is a possibility that a compiler provides fork but not waitpid.
 // TODO consider using spawn() and cwait()?
-#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID)
+#if !defined(CPPUTEST_HAVE_FORK) || !defined(CPPUTEST_HAVE_WAITPID) || !defined(CPPUTEST_HAVE_KILL)
 
 static void BorlandPlatformSpecificRunTestInASeperateProcess(UtestShell* shell, TestPlugin*, TestResult* result)
 {
