@@ -88,6 +88,7 @@ generated/
 *.deps/
 *.dirstamp
 *.trs
+lcov.info
 
 #IAR automatically generated files
 *.dep
