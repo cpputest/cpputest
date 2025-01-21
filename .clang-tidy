@@ -1,5 +1,10 @@
 ---
-Checks: "clang-diagnostic-*,clang-analyzer-*,bugprone-*,-bugprone-easily-swappable-parameters"
+Checks:
+  - clang-diagnostic-*
+  - clang-analyzer-*
+  - bugprone-*
+  - -bugprone-easily-swappable-parameters
+  - -bugprone-casting-through-void # No C++ casts allowed
 WarningsAsErrors: "*"
 FormatStyle: file
 UseColor: true
