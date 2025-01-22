@@ -107,9 +107,7 @@ if(NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
     endif()
     target_compile_options(CppUTest
         PUBLIC
-            # Not all toolchains support multiple force includes (namely IAR),
-            # so C and C++ each get their own.
-            "$<$<COMPILE_LANGUAGE:C>:${force_include}CppUTest/MemoryLeakDetectorMallocMacros.h>"
+            "$<$<COMPILE_LANGUAGE:C,CXX>:${force_include}CppUTest/MemoryLeakDetectorMallocMacros.h>"
             "$<$<COMPILE_LANGUAGE:CXX>:${force_include}CppUTest/MemoryLeakDetectorNewMacros.h>"
     )
 endif()
