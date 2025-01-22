@@ -262,8 +262,7 @@
         </option>
         <option>
           <name>IExtraOptions</name>
-          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorNewMacros.h</state>
-          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorMallocMacros.h</state>
+          <state>--preinclude $PROJ_DIR$\..\..\include\CppUTest\MemoryLeakDetectorForceInclude.h</state>
         </option>
         <option>
           <name>CCLangConformance</name>
