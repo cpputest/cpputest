@@ -40,11 +40,15 @@
                 #undef strdup
                 #undef strndup
                 #undef CPPUTEST_USE_STRDUP_MACROS
+                #define CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
             #endif
         #endif
         #include <new>
         #include <memory>
         #include <string>
+        #ifdef CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
+            #include "MemoryLeakDetectorMallocMacros.h"
+        #endif
     #endif
 
     /* Some toolkits, e.g. MFC, provide their own new overloads with signature (size_t, const char *, int).
@@ -89,5 +93,3 @@
 #define CPPUTEST_USE_NEW_MACROS 1
 
 #endif
-
-#include "MemoryLeakDetectorMallocMacros.h"

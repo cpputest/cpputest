@@ -948,6 +948,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\include\CppUTest\MemoryLeakDetectorForceInclude.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\CppUTest\MemoryLeakDetectorMallocMacros.h"
 				>
 			</File>

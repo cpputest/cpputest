@@ -39,6 +39,7 @@ add_library(CppUTest
         ${PROJECT_SOURCE_DIR}/include/CppUTest/TestFilter.h
         ${PROJECT_SOURCE_DIR}/include/CppUTest/TestTestingFixture.h
         ${PROJECT_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorNewMacros.h
+        ${PROJECT_SOURCE_DIR}/include/CppUTest/MemoryLeakDetectorForceInclude.h
         ${PROJECT_SOURCE_DIR}/include/CppUTest/TestHarness.h
         ${PROJECT_SOURCE_DIR}/include/CppUTest/Utest.h
         ${PROJECT_SOURCE_DIR}/include/CppUTest/MemoryLeakWarningPlugin.h
@@ -107,10 +108,7 @@ if(NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
     endif()
     target_compile_options(CppUTest
         PUBLIC
-            # Not all toolchains support multiple force includes (namely IAR),
-            # so C and C++ each get their own.
-            "$<$<COMPILE_LANGUAGE:C>:${force_include}CppUTest/MemoryLeakDetectorMallocMacros.h>"
-            "$<$<COMPILE_LANGUAGE:CXX>:${force_include}CppUTest/MemoryLeakDetectorNewMacros.h>"
+            ${force_include}CppUTest/MemoryLeakDetectorForceInclude.h
     )
 endif()
 
