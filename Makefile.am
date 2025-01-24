@@ -77,6 +77,7 @@ include_cpputest_HEADERS = \
 	include/CppUTest/CppUTestConfig.h \
 	include/CppUTest/JUnitTestOutput.h \
 	include/CppUTest/MemoryLeakDetector.h \
+	include/CppUTest/MemoryLeakDetectorForceInclude.h \
 	include/CppUTest/MemoryLeakDetectorMallocMacros.h \
 	include/CppUTest/MemoryLeakDetectorNewMacros.h \
 	include/CppUTest/MemoryLeakWarningPlugin.h \
