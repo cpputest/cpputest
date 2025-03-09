@@ -500,3 +500,14 @@ TEST(MockCallTest, mockExpectationShouldIncreaseNumberOfChecks)
     fixture.runAllTests();
     LONGS_EQUAL(3, fixture.getCheckCount());
 }
+
+TEST(MockCallTest, expectationsLeftBeforCheckExpectations)
+{
+    CHECK(!mock().expectedCallsLeft());
+    mock().expectOneCall("boo");
+    CHECK(mock().expectedCallsLeft());
+    mock().actualCall("boo");
+    CHECK(!mock().expectedCallsLeft());
+    mock().checkExpectations();
+    CHECK(!mock().expectedCallsLeft());
+}

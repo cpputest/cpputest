@@ -254,6 +254,7 @@ const char* MockSupport::getTraceOutput()
 
 bool MockSupport::expectedCallsLeft()
 {
+    checkExpectationsOfLastActualCall();
     int callsLeft = expectations_.hasUnfulfilledExpectations();
 
     for (MockNamedValueListNode* p = data_.begin(); p; p = p->next())
