@@ -423,7 +423,7 @@ SimpleString MockCheckedExpectedCall::callToString()
             str += ", other parameters are ignored";
     }
 
-    str += StringFromFormat(" (expected %d call%s, called %d time%s)",
+    str += StringFromFormat(" (expected %u call%s, called %u time%s)",
                             expectedCalls_, (expectedCalls_ == 1) ? "" : "s", actualCalls_, (actualCalls_ == 1) ? "" : "s" );
 
     return str;
