@@ -710,12 +710,12 @@ SimpleString StringFrom(void (*value)())
 
 SimpleString HexStringFrom(long value)
 {
-    return StringFromFormat("%lx", value);
+    return HexStringFrom((unsigned long)value);
 }
 
 SimpleString HexStringFrom(int value)
 {
-    return StringFromFormat("%x", value);
+    return HexStringFrom((unsigned int)value);
 }
 
 SimpleString HexStringFrom(signed char value)
@@ -795,7 +795,7 @@ SimpleString StringFrom(cpputest_ulonglong value)
 
 SimpleString HexStringFrom(cpputest_longlong value)
 {
-    return StringFromFormat("%llx", value);
+    return HexStringFrom((cpputest_ulonglong)value);
 }
 
 SimpleString HexStringFrom(cpputest_ulonglong value)
