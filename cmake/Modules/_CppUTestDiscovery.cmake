@@ -53,7 +53,16 @@ if(NOT ${result} EQUAL 0)
     )
 endif()
 
-set(LL_LINE_REGEX "^([^.]*)\\.([^.]*)\\.(.*)\\.([^.]*)\n")
+string(CONCAT LL_LINE_REGEX
+    "^([^.]*)" # test group
+    "\\."
+    "([^.]*)"  # test name
+    "\\."
+    "(.*)"     # file name (only this field is allowed to contain dots)
+    "\\."
+    "([^.]*)"  # line number
+    "\n"
+)
 string(REGEX MATCHALL "[^\n]+\n" discovered_test_lines "${discovered_tests}")
 if(TESTS_DETAILED)
     foreach(line IN LISTS discovered_test_lines)
