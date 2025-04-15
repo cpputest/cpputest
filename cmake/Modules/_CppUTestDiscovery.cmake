@@ -1,4 +1,4 @@
-set(script "" CACHE INTERNAL "")
+set(script)
 
 function(add_command NAME)
     set(_args "")
@@ -12,7 +12,7 @@ function(add_command NAME)
             set(_args "${_args} ${_arg}")
         endif()
     endforeach()
-    set(script "${script}${NAME}(${_args})\n" CACHE INTERNAL "")
+    set(script "${script}${NAME}(${_args})\n" PARENT_SCOPE)
 endfunction()
 
 if(NOT EXISTS "${EXECUTABLE}")
@@ -21,7 +21,7 @@ if(NOT EXISTS "${EXECUTABLE}")
     )
 endif()
 
-function (add_test_to_script TEST_NAME TEST_LOCATION SELECT_ARG)
+macro(add_test_to_script TEST_NAME TEST_LOCATION SELECT_ARG)
     add_command(
         add_test
         "${TEST_NAME}"
@@ -38,7 +38,7 @@ function (add_test_to_script TEST_NAME TEST_LOCATION SELECT_ARG)
         DEF_SOURCE_LINE
         "${TEST_LOCATION}"
     )
-endfunction()
+endmacro()
 
 execute_process(
     COMMAND ${EMULATOR} "${EXECUTABLE}" -ll
