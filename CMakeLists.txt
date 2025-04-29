@@ -91,6 +91,17 @@ if(NOT PROJECT_IS_TOP_LEVEL)
   set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 endif()
 
+
+if(
+  (NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
+  AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15.1")
+)
+  # Leak detection macros are not sane.
+  message(NOTICE "Disabling -fassume-sane-operators-new-delete which breaks leak detection")
+  add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-fno-assume-sane-operators-new-delete>)
+endif()
+
 if(PROJECT_IS_TOP_LEVEL)
   include(cmake/warnings.cmake)
 endif()
