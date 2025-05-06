@@ -303,6 +303,15 @@ AC_MSG_CHECKING([whether CXX supports -Wno-old-style-cast])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -Wno-old-style-cast" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
+if test "x${memory_leak_detection}" = xyes; then
+	# GCC's default optimization breaks leak detection:
+	# https://gcc.gnu.org/onlinedocs/gcc/C_002b_002b-Dialect-Options.html#index-fassume-sane-operators-new-delete
+	CXXFLAGS="-Werror -fno-assume-sane-operators-new-delete"
+	AC_MSG_CHECKING([whether CXX supports -fno-assume-sane-operators-new-delete])
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CXXWARNINGFLAGS="${CPPUTEST_CXXWARNINGFLAGS} -fno-assume-sane-operators-new-delete" ], [AC_MSG_RESULT([no])])
+	CXXFLAGS="$saved_cxxflags"
+fi
+
 AC_LANG_POP
 
 #####################################################
