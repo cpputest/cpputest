@@ -81,6 +81,8 @@ public:
     void setData(const SimpleString& name, bool value);
     void setData(const SimpleString& name, int value);
     void setData(const SimpleString& name, unsigned int value);
+    void setData(const SimpleString& name, long int value);
+    void setData(const SimpleString& name, unsigned long int value);
     void setData(const SimpleString& name, const char* value);
     void setData(const SimpleString& name, double value);
     void setData(const SimpleString& name, void* value);
