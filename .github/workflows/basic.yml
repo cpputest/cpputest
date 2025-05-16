@@ -350,7 +350,6 @@ jobs:
     name: Make OpenWatcom DOS
     runs-on: ubuntu-latest
     env:
-      WATCOM: "./watcom"
       TERM: linux
     steps:
       - name: Checkout
@@ -359,12 +358,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y dosbox
-          git clone https://github.com/cpputest/watcom-compiler.git $WATCOM
-          echo "$WATCOM/binl" >> $GITHUB_PATH
-      - name: Build
-        run: make -f platforms/Dos/Makefile
-      - name: Test
-        run: make -f platforms/Dos/Makefile test
+      - name: Build & Test
+        run: ./scripts/dos_build_test.sh
 
   cmake_msys:
     name: CMake MSYS
