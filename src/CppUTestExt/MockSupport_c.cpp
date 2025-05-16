@@ -128,6 +128,8 @@ void ignoreOtherCalls_c();
 void setBoolData_c(const char* name, int value);
 void setIntData_c(const char* name, int value);
 void setUnsignedIntData_c(const char* name, unsigned int value);
+void setLongIntData_c(const char* name, long int value);
+void setUnsignedLongIntData_c(const char* name, unsigned long int value);
 void setDoubleData_c(const char* name, double value);
 void setStringData_c(const char* name, const char* value);
 void setPointerData_c(const char* name, void* value);
@@ -358,6 +360,8 @@ static MockSupport_c gMockSupport = {
         setBoolData_c,
         setIntData_c,
         setUnsignedIntData_c,
+        setLongIntData_c,
+        setUnsignedLongIntData_c,
         setStringData_c,
         setDoubleData_c,
         setPointerData_c,
@@ -1027,6 +1031,16 @@ void setIntData_c(const char* name, int value)
 }
 
 void setUnsignedIntData_c(const char* name, unsigned int value)
+{
+    currentMockSupport->setData(name, value);
+}
+
+void setLongIntData_c(const char* name, long int value)
+{
+    currentMockSupport->setData(name, value);
+}
+
+void setUnsignedLongIntData_c(const char* name, unsigned long int value)
 {
     currentMockSupport->setData(name, value);
 }
