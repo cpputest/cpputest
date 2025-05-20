@@ -204,6 +204,8 @@ struct SMockSupport_c
     void (*setBoolData) (const char* name, int value);
     void (*setIntData) (const char* name, int value);
     void (*setUnsignedIntData) (const char* name, unsigned int value);
+    void (*setLongIntData) (const char* name, long int value);
+    void (*setUnsignedLongIntData) (const char* name, unsigned long int value);
     void (*setStringData) (const char* name, const char* value);
     void (*setDoubleData) (const char* name, double value);
     void (*setPointerData) (const char* name, void* value);
