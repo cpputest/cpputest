@@ -107,6 +107,20 @@ TEST(MockSupportTest, setDataDouble)
     DOUBLES_EQUAL(1.0, mock().getData("data").getDoubleValue(), 0.05);
 }
 
+TEST(MockSupportTest, setDataLongInt)
+{
+    long int i = 100;
+    mock().setData("data", i);
+    LONGS_EQUAL(i, mock().getData("data").getLongIntValue());
+}
+
+TEST(MockSupportTest, setDataUnsignedLongInt)
+{
+    unsigned long int i = 100;
+    mock().setData("data", i);
+    UNSIGNED_LONGS_EQUAL(i, mock().getData("data").getUnsignedLongIntValue());
+}
+
 TEST(MockSupportTest, setDataPointer)
 {
     void * ptr = (void*) 0x001;

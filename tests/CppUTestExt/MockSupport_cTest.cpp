@@ -567,6 +567,20 @@ TEST(MockSupport_c, MockSupportSetIntData)
     LONGS_EQUAL(10, mock_c()->getData("integer").value.intValue);
 }
 
+TEST(MockSupport_c, MockSupportSetLongIntData)
+{
+    long int i = 100;
+    mock_c()->setLongIntData("long integer", i);
+    LONGS_EQUAL(i, mock_c()->getData("long integer").value.longIntValue);
+}
+
+TEST(MockSupport_c, MockSupportSetUnsignedLongIntData)
+{
+    unsigned long int i = 100;
+    mock_c()->setUnsignedLongIntData("unsigned long integer", i);
+    UNSIGNED_LONGS_EQUAL(i, mock_c()->getData("unsigned long integer").value.unsignedLongIntValue);
+}
+
 TEST(MockSupport_c, MockSupportSetDoubleData)
 {
     mock_c()->setDoubleData("double", 1.0);
