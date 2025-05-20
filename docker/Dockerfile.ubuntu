@@ -5,4 +5,6 @@ RUN apt-get update && \
 
 WORKDIR /cpputest_build
 
-CMD autoreconf -i ../cpputest && ../cpputest/configure && make tdd
+COPY ../ /cpputest
+
+CMD ["bash", "-c", "autoreconf -i /cpputest && /cpputest/configure && make tdd"]

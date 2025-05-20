@@ -4,4 +4,6 @@ RUN apt-get -qq update && apt-get -qq install -y --no-install-recommends dosbox 
 
 WORKDIR /cpputest_build
 
+COPY ../ /cpputest
+
 CMD ["/cpputest/scripts/dos_build_test.sh"]
