@@ -254,7 +254,7 @@ FetchContent_MakeAvailable(CppUTest)
 It can be used then like so:
 
 ```cmake
-add_executable(run_tests UnitTest1.cpp UnitTest2.cpp)
+add_executable(example_test UnitTest1.cpp UnitTest2.cpp)
 
 target_link_libraries(example_test PRIVATE
     CppUTest::CppUTest
