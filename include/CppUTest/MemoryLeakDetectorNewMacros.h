@@ -25,8 +25,8 @@
 #if CPPUTEST_USE_MEM_LEAK_DETECTION && defined(__cplusplus)
 
 /* This #ifndef prevents <new> from being included twice and enables the file to be included anywhere */
-#ifndef CPPUTEST_USE_NEW_MACROS
-
+#ifndef CPPUTEST_HAVE_ALREADY_DECLARED_NEW_DELETE_OVERLOADS
+    #define CPPUTEST_HAVE_ALREADY_DECLARED_NEW_DELETE_OVERLOADS 1
     #if CPPUTEST_USE_STD_CPP_LIB
         #ifdef CPPUTEST_USE_STRDUP_MACROS
             #if CPPUTEST_USE_STRDUP_MACROS == 1
@@ -69,27 +69,33 @@
     void operator delete[](void* mem, const char* file, size_t line) UT_NOTHROW;
     void operator delete(void* mem) UT_NOTHROW;
     void operator delete[](void* mem) UT_NOTHROW;
-#if __cplusplus >= 201402L
-    void operator delete (void* mem, size_t size) UT_NOTHROW;
-    void operator delete[] (void* mem, size_t size) UT_NOTHROW;
-#endif
+
+    #if __cplusplus >= 201402L
+        void operator delete (void* mem, size_t size) UT_NOTHROW;
+        void operator delete[] (void* mem, size_t size) UT_NOTHROW;
+    #endif
 
 #endif
 
+#ifndef CPPUTEST_DISABLE_NEW_KEYWORD_MACRO
 
-#ifdef __clang__
- #pragma clang diagnostic push
- #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
-  #pragma clang diagnostic ignored "-Wkeyword-macro"
- #endif
+    #ifdef __clang__
+        #pragma clang diagnostic push
+        #if (__clang_major__ == 3 && __clang_minor__ >= 6) || __clang_major__ >= 4
+            #pragma clang diagnostic ignored "-Wkeyword-macro"
+        #endif
+    #endif
+
+    #undef new
+    #define new new(__FILE__, __LINE__)
+
+    #ifdef __clang__
+        #pragma clang diagnostic pop
+    #endif
+
+    #undef CPPUTEST_USE_NEW_MACROS
+    #define CPPUTEST_USE_NEW_MACROS 1
+
 #endif
-
-#define new new(__FILE__, __LINE__)
-
-#ifdef __clang__
- #pragma clang diagnostic pop
-#endif
-
-#define CPPUTEST_USE_NEW_MACROS 1
 
 #endif
