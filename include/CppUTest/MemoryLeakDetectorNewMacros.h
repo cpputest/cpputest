@@ -86,14 +86,12 @@
         #endif
     #endif
 
-    #undef new
     #define new new(__FILE__, __LINE__)
 
     #ifdef __clang__
         #pragma clang diagnostic pop
     #endif
 
-    #undef CPPUTEST_USE_NEW_MACROS
     #define CPPUTEST_USE_NEW_MACROS 1
 
 #endif
