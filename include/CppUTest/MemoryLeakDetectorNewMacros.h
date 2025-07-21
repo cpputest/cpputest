@@ -24,6 +24,11 @@
 /* Make sure that mem leak detection is on and that this is being included from a C++ file */
 #if CPPUTEST_USE_MEM_LEAK_DETECTION && defined(__cplusplus)
 
+/* Default to enabling macros (when memory leak detection is enabled), unless the user defines CPPUTEST_USE_NEW_MACROS as 0 */
+#ifndef CPPUTEST_USE_NEW_MACROS
+    #define CPPUTEST_USE_NEW_MACROS 1
+#endif
+
 /* This #ifndef prevents <new> from being included twice and enables the file to be included anywhere */
 #ifndef CPPUTEST_HAVE_ALREADY_DECLARED_NEW_DELETE_OVERLOADS
     #define CPPUTEST_HAVE_ALREADY_DECLARED_NEW_DELETE_OVERLOADS 1
@@ -43,13 +48,16 @@
                 #define CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
             #endif
         #endif
+
         #include <new>
         #include <memory>
         #include <string>
+
         #ifdef CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
+            #undef CPPUTEST_REINCLUDE_MALLOC_MEMORY_LEAK_DETECTOR
             #include "MemoryLeakDetectorMallocMacros.h"
         #endif
-    #endif
+    #endif /* CPPUTEST_USE_STD_CPP_LIB */
 
     /* Some toolkits, e.g. MFC, provide their own new overloads with signature (size_t, const char *, int).
      * If we don't provide them, in addition to the (size_t, const char *, size_t) version, we don't get to
@@ -75,9 +83,9 @@
         void operator delete[] (void* mem, size_t size) UT_NOTHROW;
     #endif
 
-#endif
+#endif /* CPPUTEST_HAVE_ALREADY_DECLARED_NEW_DELETE_OVERLOADS */
 
-#ifndef CPPUTEST_DISABLE_NEW_KEYWORD_MACRO
+#if CPPUTEST_USE_NEW_MACROS != 0
 
     #ifdef __clang__
         #pragma clang diagnostic push
@@ -92,8 +100,6 @@
         #pragma clang diagnostic pop
     #endif
 
-    #define CPPUTEST_USE_NEW_MACROS 1
+#endif /* CPPUTEST_USE_NEW_MACROS != 0 */
 
-#endif
-
-#endif
+#endif /* CPPUTEST_USE_MEM_LEAK_DETECTION && defined(__cplusplus) */
