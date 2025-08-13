@@ -108,7 +108,7 @@ if(NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
     endif()
     target_compile_options(CppUTest
         PUBLIC
-            ${force_include}CppUTest/MemoryLeakDetectorForceInclude.h
+            $<$<COMPILE_LANGUAGE:C,CXX>:${force_include}CppUTest/MemoryLeakDetectorForceInclude.h>
     )
 endif()
 
