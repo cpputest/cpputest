@@ -7,6 +7,11 @@ char* newArrayAllocation();
 char* newAllocationWithoutMacro();
 char* newArrayAllocationWithoutMacro();
 
+int* newIntAllocationWithoutMacro();
+int* newIntNoThowAllocationWithoutMacro();
+char* newCharArrayAllocationWithoutMacro();
+char* newCharArrayNoThrowAllocationWithoutMacro();
+
 #if CPPUTEST_HAVE_EXCEPTIONS
 
 class ClassThatThrowsAnExceptionInTheConstructor

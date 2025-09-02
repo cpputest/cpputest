@@ -27,6 +27,26 @@ char* newArrayAllocationWithoutMacro()
     return new char[100];
 }
 
+int* newIntAllocationWithoutMacro()
+{
+    return new int;
+}
+
+int* newIntNoThowAllocationWithoutMacro()
+{
+    return new (std::nothrow) int;
+}
+
+char* newCharArrayAllocationWithoutMacro()
+{
+    return new char[20];
+}
+
+char* newCharArrayNoThrowAllocationWithoutMacro()
+{
+    return new (std::nothrow) char[20];
+}
+
 #if CPPUTEST_HAVE_EXCEPTIONS
 
 ClassThatThrowsAnExceptionInTheConstructor::ClassThatThrowsAnExceptionInTheConstructor()

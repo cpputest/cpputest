@@ -35,6 +35,7 @@
 #include "CppUTest/TestHarness_c.h"
 #include "CppUTest/SimpleMutex.h"
 #include "DummyMemoryLeakDetector.h"
+#include "AllocationInCppFile.h"
 
 TEST_GROUP(MemoryLeakWarningLocalDetectorTest)
 {
@@ -471,17 +472,6 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloadsDebug)
     MemoryLeakWarningPlugin::turnOnDefaultNotThreadSafeNewDeleteOverloads();
 }
 
-#ifdef __clang__
-
-IGNORE_TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
-{
-    /*  Clang misbehaves with -O2 - it will not overload operator new or
-     *  operator new[] no matter what. Therefore, this test is must be ignored.
-     */
-}
-
-#else
-
 TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
 {
 #undef new
@@ -489,10 +479,10 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     size_t storedAmountOfLeaks = MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all);
     MemoryLeakWarningPlugin::turnOnThreadSafeNewDeleteOverloads();
 
-    int *n = new int;
-    int *n_nothrow = new (std::nothrow) int;
-    char *str = new char[20];
-    char *str_nothrow = new (std::nothrow) char[20];
+    int *n = newIntAllocationWithoutMacro();
+    int *n_nothrow = newIntNoThowAllocationWithoutMacro();
+    char *str = newCharArrayAllocationWithoutMacro();
+    char *str_nothrow = newCharArrayNoThrowAllocationWithoutMacro();
 
     LONGS_EQUAL(storedAmountOfLeaks + 4, MemoryLeakWarningPlugin::getGlobalDetector()->totalMemoryLeaks(mem_leak_period_all));
     CHECK_EQUAL(4, mutexLockCount);
@@ -512,8 +502,6 @@ TEST(MemoryLeakWarningThreadSafe, turnOnThreadSafeNewDeleteOverloads)
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
-
-#endif
 
 #endif
 
