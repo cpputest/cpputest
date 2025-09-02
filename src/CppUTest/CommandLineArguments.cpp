@@ -155,6 +155,7 @@ const char* CommandLineArguments::help() const
       "  -b                - run the tests backwards, reversing the normal way\n"
       "  -s [<seed>]       - shuffle tests randomly (randomization seed is optional, must be greater than 0)\n"
       "  -r[<#>]           - repeat the tests <#> times (or twice if <#> is not specified)\n"
+      "  -ri               - run ignored tests as if they are not ignored\n"
       "  -f                - Cause the tests to crash on failure (to allow the test to be debugged if necessary)\n"
       "  -e                - do not rethrow unexpected exceptions on failure\n"
       "  -ci               - continuous integration mode (equivalent to -e)\n";
