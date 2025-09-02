@@ -34,7 +34,11 @@ int* newIntAllocationWithoutMacro()
 
 int* newIntNoThowAllocationWithoutMacro()
 {
+#if CPPUTEST_USE_STD_CPP_LIB
     return new (std::nothrow) int;
+#else
+    return new int;
+#endif
 }
 
 char* newCharArrayAllocationWithoutMacro()
@@ -44,7 +48,11 @@ char* newCharArrayAllocationWithoutMacro()
 
 char* newCharArrayNoThrowAllocationWithoutMacro()
 {
+#if CPPUTEST_USE_STD_CPP_LIB
     return new (std::nothrow) char[20];
+#else
+    return new char[20];
+#endif
 }
 
 #if CPPUTEST_HAVE_EXCEPTIONS
