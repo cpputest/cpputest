@@ -1,0 +1,61 @@
+name: 'Latest Passing Release'
+# run this once basic build passes tests on master branch
+# it will update the latest-passing-build tag, and update the github release
+on:
+  workflow_run:
+    workflows: ['Basic builds']
+    types:
+      - completed
+    branches:
+      - master
+
+# https://docs.github.com/en/webhooks/webhook-events-and-payloads#workflow_run
+
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Info
+        env:
+          workflow: ${{ toJson(github.event.workflow_run) }}
+        run: |
+          echo "$workflow" | jq -r '"trying to release " + .head_branch + "(" + .head_commit.id + "): \"" + (.head_commit.message | split("\n")[0]) + "\" from " + .head_commit.author.name + " <" + .head_commit.author.email + ">, test builds started at " + .run_started_at + ", " + .html_url'
+
+      - name: Checkout
+        uses: actions/checkout@main
+      - name: Configure
+        run: |
+          autoreconf -i .
+          ./configure
+      - name: make dist zip
+        run: make dist-gzip VERSION=latest-$(git rev-parse --short HEAD)
+
+      - name: recreate latest-passing-build tag
+        env:
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git tag -f latest-passing-build   -F- <<EOF
+          Latest Passing Build
+
+          This is the automatic release from Github Actions.
+
+          Whenever a build passes, it gets released as Latest Passing Build.
+
+          Date: $(date --iso=s)
+          SHA: $(git rev-parse --short HEAD)
+          Log: $RUN_URL
+          EOF
+
+          git push origin --force latest-passing-build
+
+      - name: Update release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view latest-passing-build --json assets --jq '.assets[] | .name' | xargs --no-run-if-empty -n1 gh release delete-asset latest-passing-build
+          gh release edit latest-passing-build -n "$(git tag -l --format='%(body)' latest-passing-build)" -t "$(git tag -l --format='%(subject)' latest-passing-build)"
+          gh release upload latest-passing-build cpputest-latest-$(git rev-parse --short HEAD).tar.gz
