@@ -177,8 +177,8 @@ TEST(MockFailureTest, MockUnexpectedInputParameterFailure)
 
 TEST(MockFailureTest, MockUnexpectedOutputParameterFailure)
 {
-    int out1;
-    int out2;
+    int out1 = 0;
+    int out2 = 0;
     call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
     call2->withName("foo").withOutputParameterReturning("boo", &out2, sizeof(out2));
     call3->withName("unrelated");
@@ -200,7 +200,7 @@ TEST(MockFailureTest, MockUnexpectedOutputParameterFailure)
 
 TEST(MockFailureTest, MockUnexpectedUnmodifiedOutputParameterFailure)
 {
-    int out1;
+    int out1 = 0;
     call1->withName("foo").withOutputParameterReturning("boo", &out1, sizeof(out1));
     call2->withName("foo").withUnmodifiedOutputParameter("boo");
     call3->withName("unrelated");
