@@ -126,7 +126,7 @@ if(HAVE_SIZEOF_LONGLONG)
 endif()
 
 configure_file (
-    "${PROJECT_SOURCE_DIR}/config.h.cmake"
+    "${PROJECT_SOURCE_DIR}/cpputest_config.h.cmake"
     "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
 )
 
@@ -138,7 +138,7 @@ target_include_directories(CppUTest
 )
 target_compile_definitions(CppUTest
   PUBLIC
-    HAVE_CONFIG_H
+    HAVE_CPPUTEST_CONFIG_H
 )
 
 if (CPPUTEST_BUILD_TESTING)
