@@ -68,11 +68,6 @@ elseif(CPPUTEST_PLATFORM STREQUAL "Iar")
     )
 endif()
 
-if (MINGW)
-    include(CheckStructHasMember)
-    check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
-endif()
-
 #[[Arrange for the include directory to be added to the include paths of any CMake target depending on CppUTest.]]
 target_include_directories(CppUTest
     PUBLIC
@@ -86,17 +81,46 @@ target_compile_definitions(CppUTest
         CPPUTEST_USE_LONG_LONG=$<BOOL:${CPPUTEST_USE_LONG_LONG}>
         CPPUTEST_USE_STD_C_LIB=$<BOOL:${CPPUTEST_USE_STD_C_LIB}>
         CPPUTEST_USE_STD_CPP_LIB=$<BOOL:${CPPUTEST_USE_STD_CPP_LIB}>
-        $<$<BOOL:${CPPUTEST_HAVE_STRDUP}>:CPPUTEST_HAVE_STRDUP>
+    PRIVATE
+        $<$<BOOL:${CPPUTEST_USE_SECURE_STDLIB}>:STDC_WANT_SECURE_LIB>
+)
+
+# Check for symbols before setting a lot of stuff
+set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
+
+include(CheckCXXSymbolExists)
+check_cxx_symbol_exists(kill "signal.h" CPPUTEST_HAVE_KILL)
+check_cxx_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
+check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
+check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
+check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
+target_compile_definitions(CppUTest
+    PUBLIC
+        $<$<BOOL:${CPPUTEST_HAVE_KILL}>:CPPUTEST_HAVE_KILL>
         $<$<BOOL:${CPPUTEST_HAVE_FORK}>:CPPUTEST_HAVE_FORK>
         $<$<BOOL:${CPPUTEST_HAVE_WAITPID}>:CPPUTEST_HAVE_WAITPID>
-        $<$<BOOL:${CPPUTEST_HAVE_KILL}>:CPPUTEST_HAVE_KILL>
         $<$<BOOL:${CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK}>:CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK>
     PRIVATE
         $<$<BOOL:${CPPUTEST_HAVE_GETTIMEOFDAY}>:CPPUTEST_HAVE_GETTIMEOFDAY>
-        $<$<BOOL:${CPPUTEST_USE_SECURE_STDLIB}>:STDC_WANT_SECURE_LIB>
-        # Apply workaround for MinGW timespec redefinition (pthread.h / time.h).
-        $<$<BOOL:${HAVE_STRUCT_TIMESPEC}>:_TIMESPEC_DEFINED>
 )
+
+if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+    check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
+    target_compile_definitions(CppUTest
+        PUBLIC
+            $<$<BOOL:${CPPUTEST_HAVE_STRDUP}>:CPPUTEST_HAVE_STRDUP>
+    )
+endif()
+
+if (MINGW)
+    include(CheckStructHasMember)
+    check_struct_has_member("struct timespec" tv_sec time.h HAVE_STRUCT_TIMESPEC LANGUAGE CXX)
+    target_compile_definitions(CppUTest
+        PRIVATE
+            # Apply workaround for MinGW timespec redefinition (pthread.h / time.h).
+            $<$<BOOL:${HAVE_STRUCT_TIMESPEC}>:_TIMESPEC_DEFINED>
+    )
+endif()
 
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads)
