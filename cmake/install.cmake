@@ -15,11 +15,6 @@ install(
     DESTINATION ${LIB_INSTALL_DIR}/pkgconfig
 )
 
-install(
-    FILES "${CMAKE_CURRENT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
-    DESTINATION "${INCLUDE_INSTALL_DIR}/generated"
-)
-
 include(CMakePackageConfigHelpers)
 
 set(CPPUTEST_CONFIG_DEST "${LIB_INSTALL_DIR}/CppUTest/cmake")
