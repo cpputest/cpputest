@@ -27,12 +27,11 @@ endif()
 include(CTest)
 
 include(CMakeDependentOption)
-option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
-
-cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
-  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
-cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
-  OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
+option(CPPUTEST_USE_STD_C_LIB "Use the standard C library" ON)
+cmake_dependent_option(CPPUTEST_USE_STD_CPP_LIB  "Use the standard C++ library"
+  ON "CPPUTEST_USE_STD_C_LIB" OFF)
+cmake_dependent_option(CPPUTEST_USE_MEM_LEAK_DETECTION  "Enable memory leak detection"
+  ON "NOT BORLAND;CPPUTEST_USE_STD_C_LIB" OFF)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
 include(CheckTypeSize)
 check_type_size("long long" SIZEOF_LONGLONG)
@@ -46,31 +45,23 @@ cmake_dependent_option(CPPUTEST_SPLIT_TESTS "Split tests into small executables"
 cmake_dependent_option(CPPUTEST_TEST_GTEST "Test GoogleTest integration"
   OFF "CPPUTEST_BUILD_TESTING" OFF)
 cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
-  ${PROJECT_IS_TOP_LEVEL} "CPPUTEST_EXTENSIONS;NOT CPPUTEST_STD_CPP_LIB_DISABLED" OFF)
+  ${PROJECT_IS_TOP_LEVEL} "CPPUTEST_EXTENSIONS;CPPUTEST_USE_STD_CPP_LIB" OFF)
 
 if(NOT DEFINED CPPUTEST_PLATFORM)
-  if(DEFINED CPP_PLATFORM)
-    message(DEPRECATION
-      "The CPP_PLATFORM variable has been deprecated. "
-      "Use CPPUTEST_PLATFORM instead."
-    )
-    set(CPPUTEST_PLATFORM ${CPP_PLATFORM})
+  if(NOT CPPUTEST_USE_STD_C_LIB)
+    set(CPPUTEST_PLATFORM OFF)
+  elseif(MSVC)
+    set(CPPUTEST_PLATFORM VisualCpp)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
+    set(CPPUTEST_PLATFORM Iar)
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
+    set(CPPUTEST_PLATFORM armcc)
+  elseif(DOS)
+    set(CPPUTEST_PLATFORM Dos)
+  elseif(BORLAND)
+    set(CPPUTEST_PLATFORM Borland)
   else()
-    if(CPPUTEST_STD_C_LIB_DISABLED)
-      set(CPPUTEST_PLATFORM OFF)
-    elseif(MSVC)
-      set(CPPUTEST_PLATFORM VisualCpp)
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-      set(CPPUTEST_PLATFORM Iar)
-    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "ARMCC")
-      set(CPPUTEST_PLATFORM armcc)
-    elseif(DOS)
-      set(CPPUTEST_PLATFORM Dos)
-    elseif(BORLAND)
-      set(CPPUTEST_PLATFORM Borland)
-    else()
-      set(CPPUTEST_PLATFORM Gcc)
-    endif()
+    set(CPPUTEST_PLATFORM Gcc)
   endif()
   message(STATUS "Setting CPPUTEST_PLATFORM: ${CPPUTEST_PLATFORM}")
 endif()
@@ -93,7 +84,7 @@ endif()
 
 
 if(
-  (NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
+  CPPUTEST_USE_MEM_LEAK_DETECTION
   AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15.1")
 )
@@ -107,38 +98,11 @@ if(PROJECT_IS_TOP_LEVEL)
 endif()
 include(GNUInstallDirs)
 
-# Check for symbols before setting a lot of stuff
-include(CheckTypeSize)
-include(CheckStructHasMember)
-set(CMAKE_REQUIRED_FLAGS ${CMAKE_CXX_FLAGS})
-check_cxx_symbol_exists(kill "signal.h" CPPUTEST_HAVE_KILL)
-check_cxx_symbol_exists(fork "unistd.h" CPPUTEST_HAVE_FORK)
-check_cxx_symbol_exists(waitpid "sys/wait.h" CPPUTEST_HAVE_WAITPID)
-check_cxx_symbol_exists(gettimeofday "sys/time.h" CPPUTEST_HAVE_GETTIMEOFDAY)
-check_cxx_symbol_exists(pthread_mutex_lock "pthread.h" CPPUTEST_HAVE_PTHREAD_MUTEX_LOCK)
-
-if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
-  check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
-endif()
-check_type_size("long long" SIZEOF_LONGLONG LANGUAGE CXX)
-if(HAVE_SIZEOF_LONGLONG)
-    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
-endif()
-
-configure_file (
-    "${PROJECT_SOURCE_DIR}/config.h.cmake"
-    "${PROJECT_BINARY_DIR}/generated/CppUTestGeneratedConfig.h"
-)
-
 add_subdirectory(src)
 
 target_include_directories(CppUTest
     PUBLIC
         $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}>
-)
-target_compile_definitions(CppUTest
-  PUBLIC
-    HAVE_CONFIG_H
 )
 
 if (CPPUTEST_BUILD_TESTING)

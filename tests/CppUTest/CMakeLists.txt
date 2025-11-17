@@ -2,7 +2,7 @@ add_library(CppUTestTests_main OBJECT
     AllTests.cpp
 )
 
-if(CPPUTEST_STD_C_LIB_DISABLED)
+if(NOT CPPUTEST_USE_STD_C_LIB)
     target_sources(CppUTestTests_main
         PRIVATE
             ${CMAKE_CURRENT_SOURCE_DIR}/../DummyUTestPlatform/DummyUTestPlatform.cpp
