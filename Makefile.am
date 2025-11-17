@@ -11,7 +11,7 @@ lib_LIBRARIES = lib/libCppUTest.a
 check_PROGRAMS = $(CPPUTEST_TESTS)
 
 # Change autoconf's hard-coded (and collision susceptible) HAVE_CONFIG_H macro.
-DEFS = $(filter-out -DHAVE_CONFIG_H,@DEFS@) -DHAVE_CPPUTEST_CONFIG_H
+DEFS = $(filter-out -DHAVE_CONFIG_H,@DEFS@) -DCPPUTEST_HAVE_GENERATED_CONFIG_H
 
 if INCLUDE_CPPUTEST_EXT
 lib_LIBRARIES+= lib/libCppUTestExt.a

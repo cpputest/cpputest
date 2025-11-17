@@ -58,8 +58,8 @@ cpputest_build/tests
 CppUTestExtTests
 CppUTestTests
 /Makefile
-cpputest_config.h
-cpputest_config.h.in
+config.h
+config.h.in
 config.status
 cpputest.pc
 filename.map.txt
