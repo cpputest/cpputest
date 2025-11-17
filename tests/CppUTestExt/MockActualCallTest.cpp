@@ -85,7 +85,7 @@ TEST(MockCheckedActualCall, unExpectedCallWithAnOutputParameter)
 
 TEST(MockCheckedActualCall, unExpectedCallOnObject)
 {
-    int object;
+    int object = 0;
 
     MockCheckedActualCall actualCall(1, reporter, *emptyList);
     actualCall.withName("unexpected").onObject(&object);
@@ -186,7 +186,7 @@ TEST(MockCheckedActualCall, MockIgnoredActualCallWorksAsItShould)
 
 TEST(MockCheckedActualCall, remainderOfMockActualCallTraceWorksAsItShould)
 {
-    int value;
+    int value = 0;
     const int const_value = 1;
     const unsigned char mem_buffer[] = { 0xFE, 0x15 };
     void (*function_value)() = (void (*)())0xDEAD;

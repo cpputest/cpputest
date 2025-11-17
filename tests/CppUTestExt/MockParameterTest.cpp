@@ -650,7 +650,7 @@ TEST(MockParameterTest, noActualCallForOutputParameter)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
-    int output;
+    int output = 0;
     MockExpectedCallsListForTest expectations;
     mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
 
@@ -697,7 +697,7 @@ TEST(MockParameterTest, outputParameterMissing)
 {
     MockFailureReporterInstaller failureReporterInstaller;
 
-    int output;
+    int output = 0;
     MockExpectedCallsListForTest expectations;
     mock().expectOneCall("foo").withOutputParameterReturning("output", &output, sizeof(output));
     mock().actualCall("foo");
