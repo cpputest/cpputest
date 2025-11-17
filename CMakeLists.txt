@@ -27,12 +27,11 @@ endif()
 include(CTest)
 
 include(CMakeDependentOption)
-option(CPPUTEST_STD_C_LIB_DISABLED "Disable the standard C library")
-
-cmake_dependent_option(CPPUTEST_STD_CPP_LIB_DISABLED "Use the standard C++ library"
-  OFF "NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
-cmake_dependent_option(CPPUTEST_MEM_LEAK_DETECTION_DISABLED "Enable memory leak detection"
-  OFF "NOT BORLAND;NOT CPPUTEST_STD_C_LIB_DISABLED" ON)
+option(CPPUTEST_USE_STD_C_LIB "Use the standard C library" ON)
+cmake_dependent_option(CPPUTEST_USE_STD_CPP_LIB  "Use the standard C++ library"
+  ON "CPPUTEST_USE_STD_C_LIB" OFF)
+cmake_dependent_option(CPPUTEST_USE_MEM_LEAK_DETECTION  "Enable memory leak detection"
+  ON "NOT BORLAND;CPPUTEST_USE_STD_C_LIB" OFF)
 option(CPPUTEST_EXTENSIONS "Use the CppUTest extension library" ON)
 include(CheckTypeSize)
 check_type_size("long long" SIZEOF_LONGLONG)
@@ -46,7 +45,7 @@ cmake_dependent_option(CPPUTEST_SPLIT_TESTS "Split tests into small executables"
 cmake_dependent_option(CPPUTEST_TEST_GTEST "Test GoogleTest integration"
   OFF "CPPUTEST_BUILD_TESTING" OFF)
 cmake_dependent_option(CPPUTEST_EXAMPLES "Compile and make examples?"
-  ${PROJECT_IS_TOP_LEVEL} "CPPUTEST_EXTENSIONS;NOT CPPUTEST_STD_CPP_LIB_DISABLED" OFF)
+  ${PROJECT_IS_TOP_LEVEL} "CPPUTEST_EXTENSIONS;CPPUTEST_USE_STD_CPP_LIB" OFF)
 
 if(NOT DEFINED CPPUTEST_PLATFORM)
   if(DEFINED CPP_PLATFORM)
@@ -56,7 +55,7 @@ if(NOT DEFINED CPPUTEST_PLATFORM)
     )
     set(CPPUTEST_PLATFORM ${CPP_PLATFORM})
   else()
-    if(CPPUTEST_STD_C_LIB_DISABLED)
+    if(NOT CPPUTEST_USE_STD_C_LIB)
       set(CPPUTEST_PLATFORM OFF)
     elseif(MSVC)
       set(CPPUTEST_PLATFORM VisualCpp)
@@ -93,7 +92,7 @@ endif()
 
 
 if(
-  (NOT CPPUTEST_MEM_LEAK_DETECTION_DISABLED)
+  CPPUTEST_USE_MEM_LEAK_DETECTION
   AND (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL "15.1")
 )
