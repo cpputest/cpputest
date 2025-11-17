@@ -41,7 +41,7 @@
  *
  */
 
-#ifdef HAVE_CONFIG_H
+#ifdef CPPUTEST_HAVE_GENERATED_CONFIG_H
 #include "generated/CppUTestGeneratedConfig.h"
 #endif
 

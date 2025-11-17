@@ -138,7 +138,7 @@ target_include_directories(CppUTest
 )
 target_compile_definitions(CppUTest
   PUBLIC
-    HAVE_CONFIG_H
+    CPPUTEST_HAVE_GENERATED_CONFIG_H
 )
 
 if (CPPUTEST_BUILD_TESTING)
