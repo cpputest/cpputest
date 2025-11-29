@@ -115,12 +115,6 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "IAR")
   check_cxx_symbol_exists(strdup "string.h" CPPUTEST_HAVE_STRDUP)
 endif()
 
-include(CheckTypeSize)
-check_type_size("long long" SIZEOF_LONGLONG LANGUAGE CXX)
-if(HAVE_SIZEOF_LONGLONG)
-    set(CPPUTEST_HAVE_LONG_LONG_INT ON)
-endif()
-
 add_subdirectory(src)
 
 target_include_directories(CppUTest
