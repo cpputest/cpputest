@@ -29,6 +29,7 @@
 #define EVENTDISPATCHER_H
 
 #include <list>
+#include <utility>
 
 enum EventType
 {
