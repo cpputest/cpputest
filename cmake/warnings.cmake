@@ -48,6 +48,21 @@ if(
     endif()
 
     set(CMAKE_REQUIRED_FLAGS "-Wno-error")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "OpenWatcom")
+    set(WARNING_COMMON_FLAGS
+        -w3
+    )
+
+    set(WARNING_C_FLAGS
+        -wcd=303
+    )
+
+    set(WARNING_CXX_FLAGS
+        -wcd=13
+        -wcd=367
+        -wcd=368
+        -wcd=391
+    )
 endif()
 
 include(CheckCCompilerFlag)
