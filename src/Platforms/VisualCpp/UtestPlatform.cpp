@@ -21,7 +21,7 @@
 
 #include <setjmp.h>
 
-#ifdef STDC_WANT_SECURE_LIB
+#if defined(__STDC_LIB_EXT1__) || defined(__STDC_SECURE_LIB__)
     #define MAYBE_SECURE_FOPEN(fp, filename, flag) fopen_s((fp), (filename), (flag))
     #define MAYBE_SECURE_VSNPRINTF(str, size, trunc, format, args) _vsnprintf_s((str), (size), (trunc), (format), (args))
     #define MAYBE_SECURE_LOCALTIME(_tm, timer) localtime_s((_tm), (timer))

@@ -213,7 +213,7 @@ static const char* TimeStringImplementation()
 {
     time_t theTime = time(NULLPTR);
     static char dateTime[80];
-#ifdef STDC_WANT_SECURE_LIB
+#if defined(__STDC_LIB_EXT1__) || defined(__STDC_SECURE_LIB__)
     static struct tm lastlocaltime;
     localtime_s(&lastlocaltime, &theTime);
     struct tm *tmp = &lastlocaltime;
@@ -239,7 +239,7 @@ int (*PlatformSpecificVSNprintf)(char *str, size_t size, const char* format, va_
 
 static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* filename, const char* flag)
 {
-#ifdef STDC_WANT_SECURE_LIB
+#if defined(__STDC_LIB_EXT1__) || defined(__STDC_SECURE_LIB__)
   FILE* file;
    fopen_s(&file, filename, flag);
    return file;
