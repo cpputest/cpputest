@@ -220,9 +220,13 @@ jobs:
             os: macos-latest
             cmake_args: -DCMAKE_CXX_STANDARD=14
             preset: GNU
-          - name: OpenWatcom DOS
+          - name: OpenWatcom DOS (32-bit)
             os: ubuntu-latest
-            preset: DOS
+            preset: DOS32
+            apt_packages: dosbox
+          - name: OpenWatcom DOS (16-bit)
+            os: ubuntu-latest
+            preset: DOS16
             apt_packages: dosbox
           - name: Cygwin
             os: windows-latest
@@ -245,7 +249,7 @@ jobs:
         uses: open-watcom/setup-watcom@v0
         with:
           version: "2.0"
-        if: ${{ matrix.name == 'OpenWatcom DOS' }}
+        if: ${{ startswith(matrix.name, 'OpenWatcom DOS') }}
 
       - run: git config --global core.autocrlf input
         if: ${{ matrix.name == 'Cygwin' }}
