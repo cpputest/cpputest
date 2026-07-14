@@ -580,7 +580,7 @@ void SimpleString::padStringsToSameLength(SimpleString& str1, SimpleString& str2
 
 SimpleString SimpleString::subString(size_t beginPos, size_t amount) const
 {
-    if (beginPos > size()-1) return "";
+    if (beginPos >= size()) return "";
 
     SimpleString newString = getBuffer() + beginPos;
 
