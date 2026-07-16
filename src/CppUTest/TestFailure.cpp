@@ -188,11 +188,20 @@ CheckEqualFailure::CheckEqualFailure(UtestShell* test, const char* fileName, siz
 
     message_ += createButWasString(printableExpected, printableActual);
 
+    const size_t comparisonLength =
+        actual.size() < expected.size() ? actual.size() : expected.size();
     size_t failStart;
-    for (failStart = 0; actual.at(failStart) == expected.at(failStart); failStart++)
+    for (failStart = 0;
+         failStart < comparisonLength && actual.at(failStart) == expected.at(failStart);
+         failStart++)
         ;
+    const size_t printableComparisonLength = printableActual.size() < printableExpected.size()
+                                                 ? printableActual.size()
+                                                 : printableExpected.size();
     size_t failStartPrintable;
-    for (failStartPrintable = 0; printableActual.at(failStartPrintable) == printableExpected.at(failStartPrintable); failStartPrintable++)
+    for (failStartPrintable = 0;
+         failStartPrintable < printableComparisonLength && printableActual.at(failStartPrintable) == printableExpected.at(failStartPrintable);
+         failStartPrintable++)
         ;
     message_ += createDifferenceAtPosString(printableActual, failStartPrintable, failStart);
 }

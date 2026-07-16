@@ -107,6 +107,14 @@ TEST(TestFailure, CheckEqualFailure)
                   "\t                                               ^", f);
 }
 
+TEST(TestFailure, CheckEqualFailureStopsAtEndOfEqualRepresentations)
+{
+    const SimpleString representation = "1";
+    CheckEqualFailure f(test, failFileName, failLineNumber, representation, representation, "");
+
+    STRCMP_CONTAINS("difference starts at position 1", f.getMessage().asCharString());
+}
+
 TEST(TestFailure, CheckFailure)
 {
     CheckFailure f(test, failFileName, failLineNumber, "CHECK", "chk");
