@@ -137,9 +137,10 @@ static PlatformSpecificFile PlatformSpecificFOpenImplementation(const char* file
 
 static void PlatformSpecificFPutsImplementation(const char* str, PlatformSpecificFile file)
 {
-    (void)str;
-    (void)file;
-    printf("FILE%d:%s",(int)file, str);
+    if (file == PlatformSpecificStdOut)
+        printf("%s", str);
+    else
+        printf("FILE%d:%s", (int)file, str);
 }
 
 static void PlatformSpecificFCloseImplementation(PlatformSpecificFile file)
