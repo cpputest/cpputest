@@ -131,9 +131,9 @@
 
 #define CHECK_EQUAL_LOCATION(expected, actual, text, file, line)\
   do { if ((expected) != (actual)) { \
-      if ((actual) != (actual)) \
+      if (StringFrom(actual) != StringFrom(actual)) \
       	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
-      if ((expected) != (expected)) \
+      if (StringFrom(expected) != StringFrom(expected)) \
       	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
       UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), text, file, line); \
   } \

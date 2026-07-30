@@ -489,6 +489,13 @@ TEST(UnitTestMacros, failing_CHECK_EQUAL_withParamatersThatDontChangeWillNotGive
     fixture.assertPrintContainsNot("WARNING");
 }
 
+TEST(UnitTestMacros, CHECK_EQUAL_compilesWithArrayOperand)
+{
+    const char buf[] = "hello";
+    const char* actual = buf;
+    CHECK_EQUAL(buf, actual);
+}
+
 TEST(UnitTestMacros, CHECK_EQUALBehavesAsProperMacro)
 {
     if (false) CHECK_EQUAL(1, 2);
