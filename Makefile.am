@@ -412,6 +412,9 @@ check_basic:
 	@echo "Building with the Std C++ 20 turned on. Compiler acts differently then."
 	make distclean; $(srcdir)/configure --enable-std-cpp20; make
 
+	@echo "Building with the Std C++ 26 turned on. Compiler acts differently then."
+	make distclean; $(srcdir)/configure --enable-std-cpp26; make
+
 	@echo "Building without the Standard C library"
 	make distclean; $(srcdir)/configure --disable-std-c; make
 
