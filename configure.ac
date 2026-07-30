@@ -117,6 +117,12 @@ AC_MSG_CHECKING([whether CXX supports -std=c++20])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP20FLAG="-std=c++20" ], [AC_MSG_RESULT([no])])
 CXXFLAGS="$saved_cxxflags"
 
+# Flag std=c++26
+CXXFLAGS="-Werror -std=c++26"
+AC_MSG_CHECKING([whether CXX supports -std=c++26])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [AC_MSG_RESULT([yes]); CPPUTEST_CPP26FLAG="-std=c++26" ], [AC_MSG_RESULT([no])])
+CXXFLAGS="$saved_cxxflags"
+
 #####################################################################################
 ##### C++ version checks
 
@@ -402,6 +408,9 @@ AC_ARG_ENABLE([std-cpp17], [AC_HELP_STRING([--enable-std-cpp17], [enable the use
 AC_ARG_ENABLE([std-cpp20], [AC_HELP_STRING([--enable-std-cpp20], [enable the use of Standard C++ 20 (if the compiler supports that)])],
    [use_std_cpp20=${enableval}], [use_std_cpp20=no])
 
+AC_ARG_ENABLE([std-cpp26], [AC_HELP_STRING([--enable-std-cpp26], [enable the use of Standard C++ 26 (if the compiler supports that)])],
+   [use_std_cpp26=${enableval}], [use_std_cpp26=no])
+
 AC_ARG_ENABLE([cpputest-flags], [AC_HELP_STRING([--disable-cpputest-flags], [disable CFLAGS/CPPFLAGS/CXXFLAGS set by CppUTest])],
    [cpputest_flags=${enableval}], [cpputest_flags=yes])
 
@@ -480,6 +489,12 @@ fi
 if test "x${use_std_cpp20}" = xyes; then
 	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP20FLAG}"
   cpp_standard_used="C++20"
+fi
+
+# Using the C++26 standard?
+if test "x${use_std_cpp26}" = xyes; then
+	CPPUTEST_CXXFLAGS="${CPPUTEST_CXXFLAGS} ${CPPUTEST_CPP26FLAG}"
+  cpp_standard_used="C++26"
 fi
 
 # Dealing with memory leak detection
