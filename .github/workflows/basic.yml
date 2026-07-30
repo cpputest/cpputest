@@ -108,7 +108,7 @@ jobs:
             preset: MSVC
             ctest_args: -C Debug
           - name: ClangCL
-            os: windows-latest
+            os: windows-2022
             cmake_args: -DCMAKE_CXX_STANDARD=17
             preset: ClangCL
             ctest_args: -C Debug
