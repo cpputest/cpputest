@@ -129,20 +129,11 @@
 #define CHECK_EQUAL_TEXT(expected, actual, text)\
   CHECK_EQUAL_LOCATION(expected, actual, text, __FILE__, __LINE__)
 
-namespace CppUTestPrivate
-{
-    template <typename T>
-    bool checkEqualSelfNotEqual(T a, T b)
-    {
-        return a != b;
-    }
-}
-
 #define CHECK_EQUAL_LOCATION(expected, actual, text, file, line)\
   do { if ((expected) != (actual)) { \
-      if (::CppUTestPrivate::checkEqualSelfNotEqual((actual), (actual))) \
+      if (StringFrom(actual) != StringFrom(actual)) \
       	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Actual Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
-      if (::CppUTestPrivate::checkEqualSelfNotEqual((expected), (expected))) \
+      if (StringFrom(expected) != StringFrom(expected)) \
       	  UtestShell::getCurrent()->print("WARNING:\n\tThe \"Expected Parameter\" parameter is evaluated multiple times resulting in different values.\n\tThus the value in the error message is probably incorrect.", file, line); \
       UtestShell::getCurrent()->assertEquals(true, StringFrom(expected).asCharString(), StringFrom(actual).asCharString(), text, file, line); \
   } \
