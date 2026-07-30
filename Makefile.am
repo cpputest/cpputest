@@ -33,7 +33,9 @@ pkgconfig_DATA = cpputest.pc
 
 cmakemodulesdir = $(libdir)/CppUTest/cmake/Modules
 cmakemodules_DATA = \
-  cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake
+  cmake/Modules/CppUTest.cmake \
+  cmake/Modules/CppUTestBuildTimeDiscoverTests.cmake \
+  cmake/Modules/_CppUTestDiscovery.cmake
 
 cmakescriptsdir = $(libdir)/CppUTest/cmake/Scripts
 cmakescripts_DATA = \
@@ -41,13 +43,29 @@ cmakescripts_DATA = \
 
 cmakedir = $(libdir)/CppUTest/cmake
 cmake_DATA = \
-  build/cmake_package_files/CppUTestConfig.cmake \
-  build/cmake_package_files/CppUTestConfigVersion.cmake \
-  build/cmake_package_files/CppUTestTargets-relwithdebinfo.cmake \
-  build/cmake_package_files/CppUTestTargets.cmake
+  pkg/CppUTestConfigVersion.cmake
+
+# Generate cmake package files at install time. AC_CONFIG_FILES cannot be used
+# because @libdir@ expands to ${exec_prefix}/lib rather than an absolute path
+# (valid in pkg-config, not in cmake). $(prefix) and $(libdir) are make
+# variables fully resolved at install time. @memory_leak_detection@ is a
+# configure-time substitution baked into the Makefile as a literal value.
+install-data-hook:
+	sed -e "s|%%PREFIX%%|$(prefix)|g" \
+	    $(srcdir)/pkg/CppUTestConfig.cmake.autotools.in \
+	    > "$(DESTDIR)$(cmakedir)/CppUTestConfig.cmake"
+	sed -e "s|%%PREFIX%%|$(prefix)|g" \
+	    -e "s|%%LIBDIR%%|$(libdir)|g" \
+	    -e "s|%%MEMORY_LEAK_DETECTION%%|@memory_leak_detection@|g" \
+	    $(srcdir)/pkg/CppUTestTargets.cmake.autotools.in \
+	    > "$(DESTDIR)$(cmakedir)/CppUTestTargets.cmake"
+
+uninstall-local:
+	rm -f "$(DESTDIR)$(cmakedir)/CppUTestConfig.cmake"
+	rm -f "$(DESTDIR)$(cmakedir)/CppUTestTargets.cmake"
 
 EXTRA_DIST = \
-	cpputest.pc.in \
+	pkg/cpputest.pc.in \
 	$(ALL_FILES_IN_GIT)
 
 lib_libCppUTest_a_CPPFLAGS = $(AM_CPPFLAGS) $(CPPUTEST_CPPFLAGS) $(CPPUTEST_ADDITIONAL_CPPFLAGS)

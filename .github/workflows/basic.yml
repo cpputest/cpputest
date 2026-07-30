@@ -70,6 +70,10 @@ jobs:
           - name: Install
             os: ubuntu-latest
             make_args: DESTDIR=install_autotools install
+          - name: Custom prefix install
+            os: ubuntu-latest
+            make_args: install
+            install_prefix: /home/runner/cpputest_install
     runs-on: ${{ matrix.os }}
     name: Autotools ${{ matrix.name }}
     steps:
@@ -81,12 +85,29 @@ jobs:
         run: echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
       - if: ${{ matrix.cc }}
         run: echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
+      - name: Set install paths
+        if: ${{ matrix.install_prefix }}
+        run: |
+          echo "INSTALL_PREFIX=${{ matrix.install_prefix }}" >> $GITHUB_ENV
+          echo "INSTALL_LIBDIR=${{ matrix.install_prefix }}/lib/x86_64-linux-gnu" >> $GITHUB_ENV
       - name: Configure
         run: |
           autoreconf -i .
-          ./configure ${{ matrix.configure_args }}
+          ./configure \
+            ${INSTALL_PREFIX:+--prefix="$INSTALL_PREFIX"} \
+            ${INSTALL_LIBDIR:+--libdir="$INSTALL_LIBDIR"} \
+            ${{ matrix.configure_args }}
       - name: Build and test
         run: make ${{ matrix.make_args }}
+      - name: Consume with CMake
+        if: ${{ matrix.install_prefix }}
+        run: |
+          cmake \
+            -DCMAKE_PREFIX_PATH="$INSTALL_PREFIX" \
+            -B examples_build \
+            -S examples
+          cmake --build examples_build -j
+          ctest --test-dir examples_build --output-on-failure
 
   cmake:
     strategy:

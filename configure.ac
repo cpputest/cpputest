@@ -6,7 +6,7 @@ AM_INIT_AUTOMAKE([subdir-objects])
 AC_CONFIG_SRCDIR([src/CppUTest/Utest.cpp])
 AC_CONFIG_HEADERS([config.h])
 AX_PREFIX_CONFIG_H(generated/CppUTestGeneratedConfig.h)
-AC_CONFIG_FILES([cpputest.pc])
+AC_CONFIG_FILES([cpputest.pc:pkg/cpputest.pc.in])
 AC_CONFIG_MACRO_DIR([m4])
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
@@ -576,6 +576,7 @@ fi
 # Variables to substitute
 
 AC_SUBST([CPP_PLATFORM])
+AC_SUBST([memory_leak_detection])
 
 AC_SUBST([INCLUDE_CPPUTEST_EXT])
 
