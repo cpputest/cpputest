@@ -81,6 +81,7 @@
       },
       "cacheVariables": {
         "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_PROJECT_CppUTest_INCLUDE": "${sourceDir}/cmake/lcov.cmake",
         "CMAKE_CXX_STANDARD": "11",
         "CPPUTEST_EXAMPLES": false
       }

@@ -1,0 +1,6 @@
+set(CTEST_CUSTOM_POST_TEST
+    "@LCOV@ --capture --directory @CMAKE_BINARY_DIR@ --base-directory @CMAKE_SOURCE_DIR@ --no-external --ignore-errors mismatch,inconsistent --output-file @CMAKE_BINARY_DIR@/coverage.lcov"
+    "@LCOV@ --remove @CMAKE_BINARY_DIR@/coverage.lcov --output-file @CMAKE_BINARY_DIR@/coverage.lcov */tests/*"
+    "@CMAKE_COMMAND@ -E rm -rf @CMAKE_BINARY_DIR@/coverage"
+    "@GENHTML@ @CMAKE_BINARY_DIR@/coverage.lcov --output-directory @CMAKE_BINARY_DIR@/coverage"
+)
