@@ -31,7 +31,7 @@
     #define MAYBE_SECURE_LOCALTIME(_tm, timer) memcpy(_tm, localtime(timer), sizeof(tm));
 #endif
 
-static jmp_buf test_exit_jmp_buf[10];
+static jmp_buf test_exit_jmp_buf[2];
 static int jmp_buf_index = 0;
 
 static int VisualCppSetJmp(void (*function) (void* data), void* data)
