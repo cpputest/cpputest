@@ -387,4 +387,7 @@
 #define UT_CRASH() do { UtestShell::crash(); } while(0)
 #define RUN_ALL_TESTS(ac, av) CommandLineTestRunner::RunAllTests(ac, av)
 
+#define TEST_PROPERTY(name, value) \
+  do { UtestShell::getCurrent()->addTestProperty(name, value); } while(0)
+
 #endif /*D_UTestMacros_h*/

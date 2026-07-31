@@ -216,6 +216,7 @@ extern void CHECK_EQUAL_C_BITS_LOCATION(unsigned int expected, unsigned int actu
 extern void FAIL_TEXT_C_LOCATION(const char* text, const char* fileName, size_t lineNumber);
 extern void FAIL_C_LOCATION(const char* fileName, size_t lineNumber);
 extern void CHECK_C_LOCATION(int condition, const char* conditionString, const char* text, const char* fileName, size_t lineNumber);
+extern void TEST_PROPERTY_C(const char* name, const char* value);
 
 extern void* cpputest_malloc(size_t size);
 extern char* cpputest_strdup(const char* str);

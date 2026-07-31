@@ -31,10 +31,19 @@
 #include "CppUTest/TestFailure.h"
 #include "CppUTest/PlatformSpecificFunctions.h"
 
+struct TestPropertyResultNode
+{
+    TestPropertyResultNode() : next_(NULLPTR) {}
+    SimpleString name_;
+    SimpleString value_;
+    TestPropertyResultNode* next_;
+};
+
 struct JUnitTestCaseResultNode
 {
     JUnitTestCaseResultNode() :
-        execTime_(0), failure_(NULLPTR), ignored_(false), lineNumber_ (0), checkCount_ (0), next_(NULLPTR)
+        execTime_(0), failure_(NULLPTR), ignored_(false), lineNumber_ (0), checkCount_ (0),
+        properties_(NULLPTR), propertiesTail_(NULLPTR), next_(NULLPTR)
     {
     }
 
@@ -45,6 +54,8 @@ struct JUnitTestCaseResultNode
     SimpleString file_;
     size_t lineNumber_;
     size_t checkCount_;
+    TestPropertyResultNode* properties_;
+    TestPropertyResultNode* propertiesTail_;
     JUnitTestCaseResultNode* next_;
 };
 
@@ -93,6 +104,12 @@ void JUnitTestOutput::resetTestGroupResult()
     while (cur) {
         JUnitTestCaseResultNode* tmp = cur->next_;
         delete cur->failure_;
+        TestPropertyResultNode* prop = cur->properties_;
+        while (prop) {
+            TestPropertyResultNode* tmpProp = prop->next_;
+            delete prop;
+            prop = tmpProp;
+        }
         delete cur;
         cur = tmp;
     }
@@ -233,6 +250,20 @@ void JUnitTestOutput::writeTestCases()
 
         impl_->results_.totalCheckCount_ = cur->checkCount_;
 
+        if (cur->properties_) {
+            writeToFile("<properties>\n");
+            TestPropertyResultNode* prop = cur->properties_;
+            while (prop) {
+                SimpleString propBuf = StringFromFormat(
+                    "<property name=\"%s\" value=\"%s\"/>\n",
+                    encodeXmlText(prop->name_).asCharString(),
+                    encodeXmlText(prop->value_).asCharString());
+                writeToFile(propBuf.asCharString());
+                prop = prop->next_;
+            }
+            writeToFile("</properties>\n");
+        }
+
         if (cur->failure_) {
             writeFailure(cur);
         }
@@ -306,6 +337,22 @@ void JUnitTestOutput::printFailure(const TestFailure& failure)
     if (impl_->results_.tail_->failure_ == NULLPTR) {
         impl_->results_.failureCount_++;
         impl_->results_.tail_->failure_ = new TestFailure(failure);
+    }
+}
+
+void JUnitTestOutput::printTestProperty(const char* name, const char* value)
+{
+    TestPropertyResultNode* node = new TestPropertyResultNode;
+    node->name_ = name;
+    node->value_ = value;
+
+    if (impl_->results_.tail_->propertiesTail_ == NULLPTR) {
+        impl_->results_.tail_->properties_ = node;
+        impl_->results_.tail_->propertiesTail_ = node;
+    }
+    else {
+        impl_->results_.tail_->propertiesTail_->next_ = node;
+        impl_->results_.tail_->propertiesTail_ = node;
     }
 }
 

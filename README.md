@@ -89,6 +89,7 @@ $ vcpkg install cpputest (More information: https://github.com/microsoft/vcpkg)
 * `TEST_SETUP()` - Declare a void setup method in a `TEST_GROUP` - this is the same as declaring void `setup()`
 * `TEST_TEARDOWN()` - Declare a void setup method in a `TEST_GROUP`
 * `IMPORT_TEST_GROUP(group)` - Export the name of a test group so it can be linked in from a library. Needs to be done in `main`.
+* `TEST_PROPERTY(name, value)` - Attach a key-value string property to the current test. Properties appear as `<property>` elements inside the `<testcase>` block in JUnit XML output. For use in C files, use `TEST_PROPERTY_C(name, value)` instead.
 
 ## Set up and tear down support
 

@@ -282,6 +282,12 @@ TEST(TestOutput, printTestsEndedWithNoTestsRunOrIgnored)
         mock->getOutput().asCharString());
 }
 
+TEST(TestOutput, printTestPropertyIsNoOp)
+{
+    printer->printTestProperty("key", "value");
+    STRCMP_EQUAL("", mock->getOutput().asCharString());
+}
+
 class CompositeTestOutputTestStringBufferTestOutput : public StringBufferTestOutput
 {
   public:
@@ -477,4 +483,11 @@ TEST(CompositeTestOutput, printVeryVerbose)
   compositeOutput.printVeryVerbose("very-verbose");
   STRCMP_EQUAL("very-verbose", output1->getOutput().asCharString());
   STRCMP_EQUAL("very-verbose", output2->getOutput().asCharString());
+}
+
+TEST(CompositeTestOutput, printTestProperty)
+{
+  compositeOutput.printTestProperty("key", "value");
+  STRCMP_EQUAL("", output1->getOutput().asCharString());
+  STRCMP_EQUAL("", output2->getOutput().asCharString());
 }

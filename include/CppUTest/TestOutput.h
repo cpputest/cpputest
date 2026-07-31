@@ -71,6 +71,7 @@ public:
     virtual void setProgressIndicator(const char*);
 
     virtual void printVeryVerbose(const char*);
+    virtual void printTestProperty(const char* name, const char* value);
 
     virtual void flush()=0;
 
@@ -199,6 +200,7 @@ public:
     virtual void setProgressIndicator(const char*) CPPUTEST_OVERRIDE;
 
     virtual void printVeryVerbose(const char*) CPPUTEST_OVERRIDE;
+    virtual void printTestProperty(const char* name, const char* value) CPPUTEST_OVERRIDE;
 
     virtual void flush() CPPUTEST_OVERRIDE;
 

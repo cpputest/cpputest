@@ -576,6 +576,11 @@ void UtestShell::printVeryVerbose(const char* text)
     getTestResult()->printVeryVerbose(text);
 }
 
+void UtestShell::addTestProperty(const char* name, const char* value)
+{
+    getTestResult()->addProperty(name, value);
+}
+
 TestResult* UtestShell::testResult_ = NULLPTR;
 UtestShell* UtestShell::currentTest_ = NULLPTR;
 

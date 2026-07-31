@@ -149,6 +149,14 @@ extern "C" {
     }
 }
 
+struct PendingProperty
+{
+    const char* name_;
+    const char* value_;
+    PendingProperty* next_;
+    PendingProperty(const char* n, const char* v, PendingProperty* nx) : name_(n), value_(v), next_(nx) {}
+};
+
 class JUnitTestOutputTestRunner
 {
     TestResult result_;
@@ -159,11 +167,13 @@ class JUnitTestOutputTestRunner
     unsigned int timeTheTestTakes_;
     unsigned int numberOfChecksInTest_;
     TestFailure* testFailure_;
+    PendingProperty* pendingProperties_;
+    PendingProperty* pendingPropertiesTail_;
 
 public:
 
     explicit JUnitTestOutputTestRunner(const TestResult& result) :
-        result_(result), currentGroupName_(NULLPTR), currentTest_(NULLPTR), firstTestInGroup_(true), timeTheTestTakes_(0), numberOfChecksInTest_(0), testFailure_(NULLPTR)
+        result_(result), currentGroupName_(NULLPTR), currentTest_(NULLPTR), firstTestInGroup_(true), timeTheTestTakes_(0), numberOfChecksInTest_(0), testFailure_(NULLPTR), pendingProperties_(NULLPTR), pendingPropertiesTail_(NULLPTR)
     {
         millisTime = 0;
         theTime =  "1978-10-03T00:00:00";
@@ -264,6 +274,16 @@ public:
         }
         numberOfChecksInTest_ = 0;
 
+        PendingProperty* prop = pendingProperties_;
+        pendingProperties_ = NULLPTR;
+        pendingPropertiesTail_ = NULLPTR;
+        while (prop) {
+            PendingProperty* next = prop->next_;
+            result_.addProperty(prop->name_, prop->value_);
+            delete prop;
+            prop = next;
+        }
+
         if (testFailure_) {
             result_.addFailure(*testFailure_);
             delete testFailure_;
@@ -306,6 +326,20 @@ public:
     {
         runPreviousTest();
         result_.print(output);
+        return *this;
+    }
+
+    JUnitTestOutputTestRunner& withProperty(const char* name, const char* value)
+    {
+        PendingProperty* node = new PendingProperty(name, value, NULLPTR);
+        if (pendingPropertiesTail_ == NULLPTR) {
+            pendingProperties_ = node;
+            pendingPropertiesTail_ = node;
+        }
+        else {
+            pendingPropertiesTail_->next_ = node;
+            pendingPropertiesTail_ = node;
+        }
         return *this;
     }
 };
@@ -766,4 +800,85 @@ TEST(JUnitOutputTest, UTPRINTOutputInJUnitOutputWithSpecials)
 
     outputFile = fileSystem.file("cpputest_groupname.xml");
     STRCMP_EQUAL("<system-out>The &lt;rain&gt; in &quot;Spain&quot;&#10;Goes&#13; \\mainly\\ down the Dr&amp;in&#10;</system-out>\n", outputFile->lineFromTheBack(3));
+}
+
+TEST(JUnitOutputTest, TestCaseWithOneProperty)
+{
+    testCaseRunner->start()
+            .withGroup("groupname").withTest("testname").withProperty("key", "val")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<testcase classname=\"groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
+    STRCMP_EQUAL("<properties>\n", outputFile->line(6));
+    STRCMP_EQUAL("<property name=\"key\" value=\"val\"/>\n", outputFile->line(7));
+    STRCMP_EQUAL("</properties>\n", outputFile->line(8));
+    STRCMP_EQUAL("</testcase>\n", outputFile->line(9));
+}
+
+TEST(JUnitOutputTest, TestCaseWithMultiplePropertiesInInsertionOrder)
+{
+    testCaseRunner->start()
+            .withGroup("groupname").withTest("testname")
+                .withProperty("first", "one").withProperty("second", "two")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<property name=\"first\" value=\"one\"/>\n", outputFile->line(7));
+    STRCMP_EQUAL("<property name=\"second\" value=\"two\"/>\n", outputFile->line(8));
+}
+
+TEST(JUnitOutputTest, TestCaseWithNoPropertiesHasNoPropertiesBlock)
+{
+    testCaseRunner->start()
+            .withGroup("groupname").withTest("testname")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<testcase classname=\"groupname\" name=\"testname\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
+    STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
+}
+
+TEST(JUnitOutputTest, TestCasePropertyValuesAreXmlEncoded)
+{
+    testCaseRunner->start()
+            .withGroup("groupname").withTest("testname")
+                .withProperty("a&b", "<val>")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    STRCMP_EQUAL("<property name=\"a&amp;b\" value=\"&lt;val&gt;\"/>\n", outputFile->line(7));
+}
+
+TEST(JUnitOutputTest, PropertiesOnlyAppearOnCorrectTestInGroup)
+{
+    testCaseRunner->start()
+            .withGroup("groupname")
+                .withTest("firstTest")
+                .withTest("secondTest").withProperty("k", "v")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupname.xml");
+    // firstTest: lines 5-6 (no properties block)
+    STRCMP_EQUAL("<testcase classname=\"groupname\" name=\"firstTest\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
+    STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
+    // secondTest: lines 7-11 (with properties)
+    STRCMP_EQUAL("<testcase classname=\"groupname\" name=\"secondTest\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(7));
+    STRCMP_EQUAL("<properties>\n", outputFile->line(8));
+    STRCMP_EQUAL("<property name=\"k\" value=\"v\"/>\n", outputFile->line(9));
+    STRCMP_EQUAL("</properties>\n", outputFile->line(10));
+    STRCMP_EQUAL("</testcase>\n", outputFile->line(11));
+}
+
+TEST(JUnitOutputTest, PropertiesDontLeakAcrossGroups)
+{
+    testCaseRunner->start()
+            .withGroup("groupOne").withTest("testA").withProperty("x", "1")
+            .endGroupAndClearTest()
+            .withGroup("groupTwo").withTest("testB")
+            .end();
+
+    outputFile = fileSystem.file("cpputest_groupTwo.xml");
+    STRCMP_EQUAL("<testcase classname=\"groupTwo\" name=\"testB\" assertions=\"0\" time=\"0.000\" file=\"file\" line=\"1\">\n", outputFile->line(5));
+    STRCMP_EQUAL("</testcase>\n", outputFile->line(6));
 }

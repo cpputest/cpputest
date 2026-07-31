@@ -152,6 +152,7 @@ public:
     virtual void print(const char *text, const char *fileName, size_t lineNumber);
     virtual void print(const SimpleString & text, const char *fileName, size_t lineNumber);
     virtual void printVeryVerbose(const char* text);
+    virtual void addTestProperty(const char* name, const char* value);
 
     void setFileName(const char *fileName);
     void setLineNumber(size_t lineNumber);

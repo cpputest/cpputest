@@ -124,6 +124,11 @@ void CHECK_C_LOCATION(int condition, const char* conditionString, const char* te
     UtestShell::getCurrent()->assertTrue(condition != 0, "CHECK_C", conditionString, text, fileName, lineNumber, UtestShell::getCurrentTestTerminatorWithoutExceptions());
 }
 
+void TEST_PROPERTY_C(const char* name, const char* value)
+{
+    UtestShell::getCurrent()->addTestProperty(name, value);
+}
+
 enum { NO_COUNTDOWN = -1, OUT_OF_MEMORRY = 0 };
 static int malloc_out_of_memory_counter = NO_COUNTDOWN;
 static int malloc_count = 0;

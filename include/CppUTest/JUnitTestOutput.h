@@ -52,6 +52,7 @@ public:
     virtual void print(long) CPPUTEST_OVERRIDE;
     virtual void print(size_t) CPPUTEST_OVERRIDE;
     virtual void printFailure(const TestFailure& failure) CPPUTEST_OVERRIDE;
+    virtual void printTestProperty(const char* name, const char* value) CPPUTEST_OVERRIDE;
 
     virtual void flush() CPPUTEST_OVERRIDE;
 

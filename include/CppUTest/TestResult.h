@@ -58,6 +58,7 @@ public:
     virtual void countFilteredOut();
     virtual void countIgnored();
     virtual void addFailure(const TestFailure& failure);
+    virtual void addProperty(const char* name, const char* value);
     virtual void print(const char* text);
     virtual void printVeryVerbose(const char* text);
 

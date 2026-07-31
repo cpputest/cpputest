@@ -82,6 +82,11 @@ void TestResult::addFailure(const TestFailure& failure)
     failureCount_++;
 }
 
+void TestResult::addProperty(const char* name, const char* value)
+{
+    output_.printTestProperty(name, value);
+}
+
 void TestResult::countTest()
 {
     testCount_++;

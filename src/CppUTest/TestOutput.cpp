@@ -271,6 +271,10 @@ void TestOutput::printVeryVerbose(const char* str)
         printBuffer(str);
 }
 
+void TestOutput::printTestProperty(const char*, const char*)
+{
+}
+
 
 void ConsoleTestOutput::printBuffer(const char* s)
 {
@@ -404,6 +408,12 @@ void CompositeTestOutput::printVeryVerbose(const char* str)
 {
   if (outputOne_) outputOne_->printVeryVerbose(str);
   if (outputTwo_) outputTwo_->printVeryVerbose(str);
+}
+
+void CompositeTestOutput::printTestProperty(const char* name, const char* value)
+{
+  if (outputOne_) outputOne_->printTestProperty(name, value);
+  if (outputTwo_) outputTwo_->printTestProperty(name, value);
 }
 
 void CompositeTestOutput::flush()

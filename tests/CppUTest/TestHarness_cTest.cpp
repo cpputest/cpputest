@@ -28,6 +28,7 @@
 #include "CppUTest/TestHarness_c.h"
 
 #include "CppUTest/TestHarness.h"
+#include "CppUTest/TestPlugin.h"
 #include "CppUTest/TestRegistry.h"
 #include "CppUTest/TestOutput.h"
 #include "CppUTest/TestTestingFixture.h"
@@ -882,3 +883,59 @@ TEST(TestHarness_c, callocShouldReturnNULLWhenOutOfMemory)
     cpputest_malloc_set_not_out_of_memory();
 }
 #endif
+
+class PropertySpyOutput : public StringBufferTestOutput
+{
+public:
+    SimpleString lastPropertyName_;
+    SimpleString lastPropertyValue_;
+    int callCount_;
+
+    PropertySpyOutput() : lastPropertyName_(""), lastPropertyValue_(""), callCount_(0) {}
+
+    virtual void printTestProperty(const char* name, const char* value) CPPUTEST_OVERRIDE
+    {
+        lastPropertyName_ = name;
+        lastPropertyValue_ = value;
+        callCount_++;
+    }
+};
+
+static void callTestPropertyMacro_()
+{
+    TEST_PROPERTY("propname", "propval");
+}
+
+extern "C" void cpputest_test_property_c_caller(void);
+
+TEST(TestHarness_c, testPropertyMacroRoutesToOutput)
+{
+    PropertySpyOutput spy;
+    TestResult spyResult(spy);
+    ExecFunctionTestShell shell;
+    shell.testFunction_ = new ExecFunctionWithoutParameters(callTestPropertyMacro_);
+    NullTestPlugin plugin;
+    shell.runOneTestInCurrentProcess(&plugin, spyResult);
+    delete shell.testFunction_;
+    shell.testFunction_ = NULLPTR;
+
+    LONGS_EQUAL(1, spy.callCount_);
+    STRCMP_EQUAL("propname", spy.lastPropertyName_.asCharString());
+    STRCMP_EQUAL("propval", spy.lastPropertyValue_.asCharString());
+}
+
+TEST(TestHarness_c, testPropertyCMacroRoutesToOutput)
+{
+    PropertySpyOutput spy;
+    TestResult spyResult(spy);
+    ExecFunctionTestShell shell;
+    shell.testFunction_ = new ExecFunctionWithoutParameters(cpputest_test_property_c_caller);
+    NullTestPlugin plugin;
+    shell.runOneTestInCurrentProcess(&plugin, spyResult);
+    delete shell.testFunction_;
+    shell.testFunction_ = NULLPTR;
+
+    LONGS_EQUAL(1, spy.callCount_);
+    STRCMP_EQUAL("ckey", spy.lastPropertyName_.asCharString());
+    STRCMP_EQUAL("cval", spy.lastPropertyValue_.asCharString());
+}
