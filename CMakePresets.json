@@ -168,15 +168,26 @@
       }
     },
     {
-      "name": "DOS",
+      "name": "DOS32",
       "inherits": ["defaults"],
       "generator": "Watcom WMake",
       "cacheVariables": {
         "CMAKE_SYSTEM_NAME": "DOS",
         "CMAKE_BUILD_TYPE": "MinRelSize",
         "CMAKE_CXX_STANDARD": "98",
+        "CMAKE_CXX_FLAGS": "-bt=dos -xds",
         "CPPUTEST_MEM_LEAK_DETECTION_DISABLED": true,
-        "CPPUTEST_STD_CPP_LIB_DISABLED": true
+        "CPPUTEST_EXAMPLES": false
+      }
+    },
+    {
+      "name": "DOS16",
+      "inherits": ["DOS32"],
+      "cacheVariables": {
+        "CMAKE_SYSTEM_PROCESSOR": "I86",
+        "CMAKE_CXX_FLAGS": "-bt=dos -ml -we -oc -os -zm -xds",
+        "CMAKE_C_FLAGS": "-bt=dos -ml -we -oc -os -zm",
+        "CPPUTEST_SPLIT_TESTS": true
       }
     }
   ]

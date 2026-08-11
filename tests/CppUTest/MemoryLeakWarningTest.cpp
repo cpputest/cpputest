@@ -372,6 +372,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, threadSafeMemoryLeakDetectorOverloadsA
 
 #if CPPUTEST_USE_STD_CPP_LIB
 
+#if CPPUTEST_HAVE_EXCEPTIONS
 TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAdditionalLeaks)
 {
 #undef new
@@ -390,6 +391,7 @@ TEST(MemoryLeakWarningGlobalDetectorTest, turnOffNewOverloadsNoThrowCausesNoAddi
     #include "CppUTest/MemoryLeakDetectorNewMacros.h"
 #endif
 }
+#endif
 
 #if CPPUTEST_USE_MEM_LEAK_DETECTION
 
