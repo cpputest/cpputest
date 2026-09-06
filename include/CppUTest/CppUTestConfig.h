@@ -340,9 +340,15 @@ typedef struct
   #if (__cplusplus >= 201103L) || (defined(_MSC_VER) && (_MSC_VER >= 1600))
     #define CPPUTEST_OVERRIDE override
     #define NULLPTR nullptr
+    #ifndef CPPUTEST_HAVE_AUTO_TYPE
+      #define CPPUTEST_HAVE_AUTO_TYPE 1
+    #endif
   #else
     #define CPPUTEST_OVERRIDE
     #define NULLPTR NULL
+    #ifndef CPPUTEST_HAVE_AUTO_TYPE
+      #define CPPUTEST_HAVE_AUTO_TYPE 0
+    #endif
   #endif
 #endif
 
