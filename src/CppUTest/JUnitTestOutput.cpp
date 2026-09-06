@@ -51,27 +51,51 @@ struct JUnitTestCaseResultNode
 struct JUnitTestGroupResult
 {
     JUnitTestGroupResult() :
-        testCount_(0), failureCount_(0), totalCheckCount_(0), startTime_(0), groupExecTime_(0), head_(NULLPTR), tail_(NULLPTR)
+        testCount_(0), failureCount_(0), startTime_(0), groupExecTime_(0), head_(NULLPTR), tail_(NULLPTR), next_(NULLPTR)
     {
     }
 
     size_t testCount_;
     size_t failureCount_;
-    size_t totalCheckCount_;
     size_t startTime_;
     size_t groupExecTime_;
     SimpleString group_;
     JUnitTestCaseResultNode* head_;
     JUnitTestCaseResultNode* tail_;
+    JUnitTestGroupResult* next_;
 };
 
 struct JUnitTestOutputImpl
 {
-    JUnitTestGroupResult results_;
+    JUnitTestGroupResult* groups_;
+    JUnitTestGroupResult* current_;
+    size_t lastGlobalCheckCount_;
     PlatformSpecificFile file_;
     SimpleString package_;
     SimpleString stdOutput_;
+
+    JUnitTestOutputImpl() :
+        groups_(NULLPTR), current_(NULLPTR), lastGlobalCheckCount_(0), file_(NULLPTR)
+    {
+    }
 };
+
+static JUnitTestGroupResult* findOrCreateGroup(JUnitTestOutputImpl* impl, const SimpleString& group)
+{
+    JUnitTestGroupResult* cur = impl->groups_;
+    JUnitTestGroupResult* last = NULLPTR;
+    while (cur) {
+        if (cur->group_ == group) return cur;
+        last = cur;
+        cur = cur->next_;
+    }
+
+    JUnitTestGroupResult* created = new JUnitTestGroupResult;
+    created->group_ = group;
+    if (last) last->next_ = created;
+    else impl->groups_ = created;
+    return created;
+}
 
 JUnitTestOutput::JUnitTestOutput() :
     impl_(new JUnitTestOutputImpl)
@@ -86,18 +110,21 @@ JUnitTestOutput::~JUnitTestOutput()
 
 void JUnitTestOutput::resetTestGroupResult()
 {
-    impl_->results_.testCount_ = 0;
-    impl_->results_.failureCount_ = 0;
-    impl_->results_.group_ = "";
-    JUnitTestCaseResultNode* cur = impl_->results_.head_;
-    while (cur) {
-        JUnitTestCaseResultNode* tmp = cur->next_;
-        delete cur->failure_;
-        delete cur;
-        cur = tmp;
+    JUnitTestGroupResult* group = impl_->groups_;
+    while (group) {
+        JUnitTestCaseResultNode* cur = group->head_;
+        while (cur) {
+            JUnitTestCaseResultNode* tmp = cur->next_;
+            delete cur->failure_;
+            delete cur;
+            cur = tmp;
+        }
+        JUnitTestGroupResult* next = group->next_;
+        delete group;
+        group = next;
     }
-    impl_->results_.head_ = NULLPTR;
-    impl_->results_.tail_ = NULLPTR;
+    impl_->groups_ = NULLPTR;
+    impl_->current_ = NULLPTR;
 }
 
 void JUnitTestOutput::printTestsStarted()
@@ -110,8 +137,10 @@ void JUnitTestOutput::printCurrentGroupStarted(const UtestShell& /*test*/)
 
 void JUnitTestOutput::printCurrentTestEnded(const TestResult& result)
 {
-    impl_->results_.tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
-    impl_->results_.tail_->checkCount_ = result.getCheckCount();
+    const size_t globalChecks = result.getCheckCount();
+    impl_->current_->tail_->execTime_ = result.getCurrentTestTotalExecutionTime();
+    impl_->current_->tail_->checkCount_ = globalChecks - impl_->lastGlobalCheckCount_;
+    impl_->lastGlobalCheckCount_ = globalChecks;
 }
 
 void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
@@ -120,30 +149,30 @@ void JUnitTestOutput::printTestsEnded(const TestResult& /*result*/)
 
 void JUnitTestOutput::printCurrentGroupEnded(const TestResult& result)
 {
-    impl_->results_.groupExecTime_ = result.getCurrentGroupTotalExecutionTime();
+    if (impl_->current_ == NULLPTR) return;
+    impl_->current_->groupExecTime_ += result.getCurrentGroupTotalExecutionTime();
     writeTestGroupToFile();
-    resetTestGroupResult();
 }
 
 void JUnitTestOutput::printCurrentTestStarted(const UtestShell& test)
 {
-    impl_->results_.testCount_++;
-    impl_->results_.group_ = test.getGroup();
-    impl_->results_.startTime_ = (size_t) GetPlatformSpecificTimeInMillis();
+    impl_->current_ = findOrCreateGroup(impl_, test.getGroup());
+    impl_->current_->testCount_++;
+    impl_->current_->startTime_ = (size_t) GetPlatformSpecificTimeInMillis();
 
-    if (impl_->results_.tail_ == NULLPTR) {
-        impl_->results_.head_ = impl_->results_.tail_
+    if (impl_->current_->tail_ == NULLPTR) {
+        impl_->current_->head_ = impl_->current_->tail_
                 = new JUnitTestCaseResultNode;
     }
     else {
-        impl_->results_.tail_->next_ = new JUnitTestCaseResultNode;
-        impl_->results_.tail_ = impl_->results_.tail_->next_;
+        impl_->current_->tail_->next_ = new JUnitTestCaseResultNode;
+        impl_->current_->tail_ = impl_->current_->tail_->next_;
     }
-    impl_->results_.tail_->name_ = test.getName();
-    impl_->results_.tail_->file_ = test.getFile();
-    impl_->results_.tail_->lineNumber_ = test.getLineNumber();
+    impl_->current_->tail_->name_ = test.getName();
+    impl_->current_->tail_->file_ = test.getFile();
+    impl_->current_->tail_->lineNumber_ = test.getLineNumber();
     if (!test.willRun()) {
-        impl_->results_.tail_->ignored_ = true;
+        impl_->current_->tail_->ignored_ = true;
     }
 }
 
@@ -188,10 +217,10 @@ void JUnitTestOutput::writeTestSuiteSummary()
             buf =
                     StringFromFormat(
                             "<testsuite errors=\"0\" failures=\"%d\" hostname=\"localhost\" name=\"%s\" tests=\"%d\" time=\"%d.%03d\" timestamp=\"%s\">\n",
-                            (int)impl_->results_.failureCount_,
-                            impl_->results_.group_.asCharString(),
-                            (int) impl_->results_.testCount_,
-                            (int) (impl_->results_.groupExecTime_ / 1000), (int) (impl_->results_.groupExecTime_ % 1000),
+                            (int)impl_->current_->failureCount_,
+                            impl_->current_->group_.asCharString(),
+                            (int) impl_->current_->testCount_,
+                            (int) (impl_->current_->groupExecTime_ / 1000), (int) (impl_->current_->groupExecTime_ % 1000),
                             GetPlatformSpecificTimeString());
     writeToFile(buf.asCharString());
 }
@@ -216,22 +245,20 @@ SimpleString JUnitTestOutput::encodeXmlText(const SimpleString& textbody)
 
 void JUnitTestOutput::writeTestCases()
 {
-    JUnitTestCaseResultNode* cur = impl_->results_.head_;
+    JUnitTestCaseResultNode* cur = impl_->current_->head_;
 
     while (cur) {
         SimpleString buf = StringFromFormat(
                 "<testcase classname=\"%s%s%s\" name=\"%s\" assertions=\"%d\" time=\"%d.%03d\" file=\"%s\" line=\"%d\">\n",
                 impl_->package_.asCharString(),
                 impl_->package_.isEmpty() ? "" : ".",
-                impl_->results_.group_.asCharString(),
+                impl_->current_->group_.asCharString(),
                 cur->name_.asCharString(),
-                (int) (cur->checkCount_ - impl_->results_.totalCheckCount_),
+                (int) cur->checkCount_,
                 (int) (cur->execTime_ / 1000), (int)(cur->execTime_ % 1000),
                 cur->file_.asCharString(),
                 (int) cur->lineNumber_);
         writeToFile(buf.asCharString());
-
-        impl_->results_.totalCheckCount_ = cur->checkCount_;
 
         if (cur->failure_) {
             writeFailure(cur);
@@ -267,7 +294,7 @@ void JUnitTestOutput::writeFileEnding()
 
 void JUnitTestOutput::writeTestGroupToFile()
 {
-    openFileForWrite(createFileName(impl_->results_.group_));
+    openFileForWrite(createFileName(impl_->current_->group_));
     writeXmlHeader();
     writeTestSuiteSummary();
     writeProperties();
@@ -303,9 +330,9 @@ void JUnitTestOutput::flush()
 
 void JUnitTestOutput::printFailure(const TestFailure& failure)
 {
-    if (impl_->results_.tail_->failure_ == NULLPTR) {
-        impl_->results_.failureCount_++;
-        impl_->results_.tail_->failure_ = new TestFailure(failure);
+    if (impl_->current_->tail_->failure_ == NULLPTR) {
+        impl_->current_->failureCount_++;
+        impl_->current_->tail_->failure_ = new TestFailure(failure);
     }
 }
 
