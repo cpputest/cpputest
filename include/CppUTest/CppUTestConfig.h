@@ -116,7 +116,7 @@
    #define CPPUTEST_NORETURN
 #endif
 
-#if defined(__MINGW32__)
+#if defined(__MINGW32__) && defined(__USE_MINGW_ANSI_STDIO) && (__USE_MINGW_ANSI_STDIO > 0)
 #define CPPUTEST_CHECK_FORMAT_TYPE __MINGW_PRINTF_FORMAT
 #else
 #define CPPUTEST_CHECK_FORMAT_TYPE printf
