@@ -117,9 +117,15 @@
 #endif
 
 #if defined(__MINGW32__)
-#define CPPUTEST_CHECK_FORMAT_TYPE __MINGW_PRINTF_FORMAT
+  #if defined(__clang__)
+    #define CPPUTEST_CHECK_FORMAT_TYPE __printf__
+  #elif defined(__MINGW_PRINTF_FORMAT)
+      #define CPPUTEST_CHECK_FORMAT_TYPE __MINGW_PRINTF_FORMAT
+  #else
+    #define CPPUTEST_CHECK_FORMAT_TYPE printf
+  #endif
 #else
-#define CPPUTEST_CHECK_FORMAT_TYPE printf
+  #define CPPUTEST_CHECK_FORMAT_TYPE printf
 #endif
 
 #if CPPUTEST_HAS_ATTRIBUTE(format)
