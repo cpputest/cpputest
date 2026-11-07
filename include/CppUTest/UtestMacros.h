@@ -152,6 +152,21 @@
 #define CHECK_COMPARE_TEXT(first, relop, second, text)\
   CHECK_COMPARE_LOCATION(first, relop, second, text, __FILE__, __LINE__)
 
+#if CPPUTEST_HAVE_AUTO_TYPE
+#define CHECK_COMPARE_LOCATION(first, relop, second, text, file, line)\
+ do {\
+      const auto& cpputest_first_ = (first);\
+      const auto& cpputest_second_ = (second);\
+      bool success = cpputest_first_ relop cpputest_second_;\
+      if (!success) {\
+          SimpleString conditionString;\
+          conditionString += StringFrom(cpputest_first_); conditionString += " ";\
+          conditionString += #relop; conditionString += " ";\
+          conditionString += StringFrom(cpputest_second_);\
+          UtestShell::getCurrent()->assertCompare(false, "CHECK_COMPARE", conditionString.asCharString(), text, file, line);\
+      }\
+ } while(0)
+#else
 #define CHECK_COMPARE_LOCATION(first, relop, second, text, file, line)\
  do {\
       bool success = (first) relop (second);\
@@ -160,9 +175,10 @@
           conditionString += StringFrom(first); conditionString += " ";\
           conditionString += #relop; conditionString += " ";\
           conditionString += StringFrom(second);\
-          UtestShell::getCurrent()->assertCompare(false, "CHECK_COMPARE", conditionString.asCharString(), text, __FILE__, __LINE__);\
+          UtestShell::getCurrent()->assertCompare(false, "CHECK_COMPARE", conditionString.asCharString(), text, file, line);\
       }\
  } while(0)
+#endif
 
 //This check checks for char* string equality using strcmp.
 //This makes up for the fact that CHECK_EQUAL only compares the pointers to char*'s

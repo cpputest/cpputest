@@ -437,6 +437,47 @@ static int countingMethod_()
     return countInCountingMethod++;
 }
 
+#if CPPUTEST_HAVE_AUTO_TYPE
+static void failingTestMethodWithCHECK_COMPARESideEffect_()
+{
+    countInCountingMethod = 0;
+    CHECK_COMPARE(countingMethod_(), >, 100);
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, CHECK_COMPAREEvaluatesOperandsOnceOnFailure)
+{
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_COMPARESideEffect_);
+    CHECK_TEST_FAILS_PROPER_WITH_TEXT("CHECK_COMPARE(0 > 100)");
+    LONGS_EQUAL(1, countInCountingMethod);
+}
+#endif
+
+static void failingTestMethodWithCHECK_COMPARE_LOCATION_()
+{
+    CHECK_COMPARE_LOCATION(1, >, 2, NULLPTR, "wrapper.cpp", 1234);
+    TestTestingFixture::lineExecutedAfterCheck(); // LCOV_EXCL_LINE
+} // LCOV_EXCL_LINE
+
+TEST(UnitTestMacros, FailureWithCHECK_COMPARE_LOCATIONUsesPassedFileAndLine)
+{
+    fixture.runTestWithMethod(failingTestMethodWithCHECK_COMPARE_LOCATION_);
+    fixture.assertPrintContains("wrapper.cpp");
+    fixture.assertPrintContains("1234");
+}
+
+TEST(UnitTestMacros, CHECK_COMPAREWorksWithBitfields)
+{
+    struct Bitfields
+    {
+        unsigned small : 3;
+        unsigned big : 3;
+    } values;
+    values.small = 1;
+    values.big = 4;
+    CHECK_COMPARE(values.small, <, values.big);
+}
+
 TEST(UnitTestMacros, LONGS_EQUAL_macroExpressionSafety)
 {
     LONGS_EQUAL(1, 0.4 + 0.7);
